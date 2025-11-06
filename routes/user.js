@@ -12,6 +12,8 @@ router.get('/onboarding', protect, userController.onboardingpage);
 
 router.post('/save-onboarding', protect, userController.saveOnboardingData);
 router.get('/homepage', protect, userController.homePage);
+router.get('/explore', protect, tripcontroller.explorePage);
+
 router.get('/aitripplan', protect,tripcontroller.aiTripPlannerPage);
 
 

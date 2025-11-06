@@ -304,6 +304,28 @@
       align-items: center;
       gap: var(--space-3);
     }
+    .filter-item {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .filter-item label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--c-text-muted);
+      padding-left: var(--space-2);
+    }
+    .filter-item select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+      background-position: right 0.5rem center;
+      background-repeat: no-repeat;
+      background-size: 1.5em 1.5em;
+      padding-right: 2.5rem;
+      text-align: left;
+    }
 
 
     /* Card Grid */
@@ -678,26 +700,55 @@
         <!-- Filters -->
         <section class="filters-panel" aria-labelledby="filters-title">
           <h2 id="filters-title" class="filters-panel__title">⚙️ Filters</h2>
-          <div class="filters-panel__grid">
-            <button class="btn btn--secondary" data-filter="category">
-              <span>📁 Category: Nature, All</span><span>▼</span>
-            </button>
-            <button class="btn btn--secondary" data-filter="activity">
-              <span>⚡ Activity: Moderate</span><span>▼</span>
-            </button>
-            <button class="btn btn--secondary" data-filter="time">
-              <span>📅 Time Range: Full Year</span><span>▼</span>
-            </button>
-            <button class="btn btn--secondary" data-filter="distance">
-              <span>📍 Distance: 50 km</span><span>▼</span>
-            </button>
+        <div class="filters-panel__grid">
+          <div class="filter-item">
+            <label for="filter-category">Category</label>
+            <select id="filter-category" class="btn btn--secondary" style="width: 100%;">
+              <option value="">All</option>
+              <option value="Nature">Nature</option>
+              <option value="Beach">Beach</option>
+              <option value="Adventure">Adventure</option>
+              <option value="Cultural">Cultural</option>
+            </select>
           </div>
+
+  <div class="filter-item">
+    <label>Activity</label>
+    <select id="filter-activity" class="btn btn--secondary" style="width: 100%;">
+      <option value="">All</option>
+      <option value="Easy">Easy</option>
+      <option value="Moderate">Moderate</option>
+      <option value="Hard">Hard</option>
+    </select>
+  </div>
+
+  <div class="filter-item">
+    <label>Time Range</label>
+    <select id="filter-time" class="btn btn--secondary" style="width: 100%;">
+      <option value="">Anytime</option>
+      <option value="Morning">Morning</option>
+      <option value="Afternoon">Afternoon</option>
+      <option value="Evening">Evening</option>
+    </select>
+  </div>
+
+  <div class="filter-item">
+    <label>Distance</label>
+    <select id="filter-distance" class="btn btn--secondary" style="width: 100%;">
+      <option value="">All</option>
+      <option value="10">Within 10 km</option>
+      <option value="50">Within 50 km</option>
+      <option value="100">Within 100 km</option>
+    </select>
+  </div>
+</div>
+
           <div class="filters-panel__footer">
             <button class="btn btn--primary" data-action="apply-filters">Apply Filters</button>
-            <div class="filters-panel__sort">
+            <div class="filters-panel__sort" style="margin-left: auto;">
               <label for="sort-by" class="filters-panel__sort-label">Sort By:</label>
               <button id="sort-by" class="btn btn--secondary" data-filter="sort">
-                <span>Recommended</span><span>▼</span>
+                <span>Recommended</span><span style="margin-left: auto;">▼</span>
               </button>
             </div>
           </div>

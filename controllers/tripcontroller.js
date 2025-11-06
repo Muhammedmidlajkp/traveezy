@@ -176,3 +176,31 @@ const normalizedPlaces = await Promise.all(
     });
   }
 };
+
+
+
+exports.explorePage = async (req, res) => {
+  try {
+    const { category, activity, time, distance } = req.query;
+
+    let filter = {};
+
+    if (category) filter.category = category;
+    if (activity) filter.activity = activity;
+    if (time) filter.bestTime = time;
+    if (distance) filter.distance = { $lte: Number(distance) };
+
+    const places = await Place.find(filter).limit(12);
+
+    res.render("user/Explore", {
+      title: "Explore Destinations",
+      places,
+    });
+  } catch (err) {
+    console.error("Explore filter error:", err);
+    res.render("user/Explore", {
+      title: "Explore Destinations",
+      places: [],
+    });
+  }
+};
