@@ -1,0 +1,53 @@
+<div class="w-64 bg-white border-r border-gray-200 p-6 flex flex-col justify-between">
+  <div>
+    <!-- Logo -->
+    <div class="flex items-center gap-2 mb-8">
+      <div class="logo flex items-center justify-center">
+        <img src="/assets/images/mainlogotz.png" alt="Traveezy logo-icon" class="w-32">
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="space-y-2">
+      <a href="/admin/dashboard" class="sidebar-item p-3 rounded-lg hover:bg-gray-100 flex items-center gap-3 <%= activePage === 'dashboard' ? 'active' : '' %>">
+        <i class="fas fa-home text-gray-600 w-5"></i>
+        <span class="text-gray-700">Overview</span>
+      </a>
+
+      <a href="/admin/analytics" class="sidebar-item p-3 rounded-lg hover:bg-gray-100 flex items-center gap-3 <%= activePage === 'analytics' ? 'active' : '' %>">
+        <i class="fas fa-chart-line text-gray-600 w-5"></i>
+        <span class="text-gray-700">Analytics</span>
+      </a>
+
+      <a href="/admin/contentmanagement" class="sidebar-item p-3 rounded-lg hover:bg-gray-100 flex items-center gap-3 <%= activePage === 'contentmanagement' ? 'active' : '' %>">
+        <i class="fas fa-layer-group text-gray-600 w-5"></i>
+        <span class="text-gray-700">Content Management</span>
+      </a>
+
+      <a href="/admin/usermanagement" class="sidebar-item p-3 rounded-lg hover:bg-gray-100 flex items-center gap-3 <%= activePage === 'usermanagement' ? 'active' : '' %>">
+        <i class="fas fa-users text-gray-600 w-5"></i>
+        <span class="text-gray-700">Users</span>
+      </a>
+
+      <a href="/admin/profile" class="sidebar-item p-3 rounded-lg hover:bg-gray-100 flex items-center gap-3 <%= activePage === 'profile' ? 'active' : '' %>">
+        <i class="fas fa-user-circle text-gray-600 w-5"></i>
+        <span class="text-gray-700">Profile</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- ✅ Admin Profile Section -->
+  <div class="border-t border-gray-200 mt-6 pt-4 flex items-center gap-3">
+    <img
+      src="<%= admin && admin.avatar ? admin.avatar : 'https://i.pravatar.cc/150?u=admin' %>"
+      alt="Admin Avatar"
+      class="w-10 h-10 rounded-full object-cover border"
+    >
+    <div>
+      <p class="font-semibold text-gray-800 text-sm"><%= admin && admin.name ? admin.name : 'Admin' %></p>
+      <p class="text-gray-500 text-xs"><%= admin && admin.email ? admin.email : '' %></p>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,56 @@
+<!-- <div class="bg-white border-b border-gray-200 px-8 py-4 flex justify-between items-center">
+    <h2 class="text-lg font-semibold text-gray-700"></h2>
+    <div class="flex items-center gap-4">
+        <button class="p-2 hover:bg-gray-100 rounded-lg">
+            <i class="fas fa-cog text-gray-600"></i>
+        </button>
+        <button class="p-2 hover:bg-gray-100 rounded-lg">
+            <i class="fas fa-share text-gray-600"></i>
+        </button>
+        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+            <i class="fas fa-user text-gray-600"></i>
+        </div>
+    </div>
+</div> -->
+
+
+<header class="flex items-center justify-between bg-white shadow px-6 py-3">
+  <!-- Left: Page Title -->
+  <h1 class="text-xl font-semibold text-gray-700"><%= title %></h1>
+
+  <!-- Right: Profile Dropdown -->
+  <div class="relative">
+    <button id="profileDropdownBtn" class="flex items-center gap-2 focus:outline-none">
+      <img 
+        src="<%= admin && admin.avatar ? admin.avatar : 'https://i.pravatar.cc/150?u=admin' %>" 
+        alt="Admin Avatar" 
+        class="w-9 h-9 rounded-full border border-gray-300 shadow-sm object-cover"
+      >
+      <span class="text-gray-700 font-medium"><%= admin ? admin.name : 'Admin' %></span>
+      <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </button>
+
+    <div id="profileDropdownMenu" 
+         class="hidden absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg py-2 z-50">
+      <a href="/admin/profile" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
+     <form action="/auth/logout" method="POST">
+  <button type="submit" class="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100">
+    Logout
+  </button>
+</form>
+    </div>
+  </div>
+</header>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('profileDropdownBtn');
+    const menu = document.getElementById('profileDropdownMenu');
+    btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+    document.addEventListener('click', (e) => {
+      if (!btn.contains(e.target) && !menu.contains(e.target)) menu.classList.add('hidden');
+    });
+  });
+</script>

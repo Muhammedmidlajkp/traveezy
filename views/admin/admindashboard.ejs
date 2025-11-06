@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Traveezy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    a { text-decoration: none; color: inherit; }
+    .logo img { width: 130px; }
+    .sidebar-item.active { background-color: #f3f4f6; border-left: 3px solid #14b8a6; }
+    .card { background-color: white; border-radius: 10px; padding: 20px; border: 1px solid #e5e7eb; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="flex h-screen">
+    <!-- Sidebar Partial -->
+    <%- include('../partials/sidebar') %>
+
+    <div class="flex-1 flex flex-col">
+      <!-- Header Partial -->
+      <%- include('../partials/header') %>
+
+      <!-- Dashboard Main Content -->
+      <main class="flex-1 overflow-auto p-8">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
+          <p class="text-gray-600">Overview of Traveezy’s activity, stats, and recent actions.</p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div class="card">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-gray-500 text-sm font-medium">Total Users</h3>
+              <i class="fas fa-users text-teal-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-gray-900"><%= totalUsers || '24,567' %></p>
+            <p class="text-green-500 text-sm">+4.2% since last month</p>
+          </div>
+
+          <div class="card">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-gray-500 text-sm font-medium">Active Bookings</h3>
+              <i class="fas fa-calendar text-teal-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-gray-900"><%= activeBookings || '1,879' %></p>
+            <p class="text-green-500 text-sm">+2.1% since last month</p>
+          </div>
+
+          <div class="card">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-gray-500 text-sm font-medium">Total Revenue</h3>
+              <i class="fas fa-dollar-sign text-teal-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-gray-900">$<%= totalRevenue || '3.2M' %></p>
+            <p class="text-green-500 text-sm">+8.4% since last month</p>
+          </div>
+
+          <div class="card">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-gray-500 text-sm font-medium">New Reviews</h3>
+              <i class="fas fa-star text-teal-500"></i>
+            </div>
+            <p class="text-2xl font-bold text-gray-900"><%= newReviews || '450' %></p>
+            <p class="text-green-500 text-sm">+1.5% since last month</p>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="card text-center">
+            <i class="fas fa-check-circle text-3xl text-teal-500 mb-4"></i>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Content Approval</h3>
+            <p class="text-gray-600 text-sm mb-4">Review and approve new place listings and user submissions.</p>
+            <button class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600">
+              Approve Content
+            </button>
+          </div>
+
+          <div class="card text-center">
+            <i class="fas fa-comments text-3xl text-teal-500 mb-4"></i>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Support Tickets</h3>
+            <p class="text-gray-600 text-sm mb-4">Respond to customer support issues and requests promptly.</p>
+            <button class="bg-teal-500 text-white px-4 py-2 rounded-md hover:bg-teal-600">
+              View Tickets
+            </button>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="card">
+            <h3 class="text-gray-900 font-semibold mb-2">User Growth Trend</h3>
+            <div class="bg-gray-100 rounded-lg h-48 flex items-center justify-center text-gray-400 text-sm">
+              <i class="fas fa-chart-line mr-2"></i> Chart Placeholder
+            </div>
+          </div>
+          <div class="card">
+            <h3 class="text-gray-900 font-semibold mb-2">Booking Category Trend</h3>
+            <div class="bg-gray-100 rounded-lg h-48 flex items-center justify-center text-gray-400 text-sm">
+              <i class="fas fa-chart-bar mr-2"></i> Chart Placeholder
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="card">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+          <% if (activities && activities.length > 0) { %>
+            <ul class="divide-y divide-gray-200">
+              <% activities.forEach(activity => { %>
+                <li class="py-3 flex items-center gap-3">
+                  <div class="bg-teal-100 text-teal-600 w-8 h-8 flex items-center justify-center rounded-full">
+                    <i class="<%= activity.icon %>"></i>
+                  </div>
+                  <div>
+                    <p class="text-gray-800"><%= activity.text %></p>
+                    <p class="text-gray-500 text-sm"><%= activity.time %></p>
+                  </div>
+                </li>
+              <% }) %>
+            </ul>
+          <% } else { %>
+            <p class="text-gray-500 text-center">No recent activity found</p>
+          <% } %>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

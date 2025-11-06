@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pageTitle || 'Traveezy Admin' %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    a { text-decoration: none; color: inherit; }
+    .logo { margin: auto; }
+    .sidebar-item.active { background-color: #f3f4f6; border-left: 3px solid #14b8a6; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <%- include('../partials/admin/sidebar', { activePage: activePage }) %>
+
+    <!-- Main -->
+    <div class="flex-1 flex flex-col">
+      <!-- Header -->
+      <%- include('../partials/admin/header', { pageTitle: pageTitle }) %>
+
+      <!-- Body -->
+      <main class="flex-1 overflow-auto p-8">
+        <%- body %>
+      </main>
+
+      <!-- Footer -->
+      <%- include('../partials/admin/footer') %>
+    </div>
+  </div>
+
+</body>
+</html>

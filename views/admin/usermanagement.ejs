@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Management | Traveezy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    a { text-decoration: none; color: inherit; }
+    .sidebar-item.active { background-color: #f3f4f6; border-left: 3px solid #14b8a6; }
+    .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .status-active { background-color: #10b981; color: white; }
+    .status-inactive { background-color: #6b7280; color: white; }
+    .status-pending { background-color: #fbbf24; color: white; }
+    .status-suspended { background-color: #ef4444; color: white; }
+    .action-btn { padding: 6px 12px; border: 1px solid #e5e7eb; border-radius: 6px; cursor: pointer; font-size: 14px; transition: all 0.2s; display: flex; align-items: center; gap: 4px; }
+    /* .action-btn:hover { background-color: #f9fafb; } */
+    .btn-teal { background-color: #14b8a6; color: white; padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: 500; }
+    .btn-teal:hover { background-color: #0d9488; }
+    .pagination-btn { width: 36px; height: 36px; border: 1px solid #e5e7eb; border-radius: 6px; cursor: pointer; background-color: white; font-size: 14px; }
+    .pagination-btn.active { background-color: #14b8a6; color: white; border-color: #14b8a6; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="flex h-screen">
+    <!-- Sidebar Partial -->
+    <%- include('../partials/sidebar') %>
+
+    <div class="flex-1 flex flex-col">
+      <!-- Header Partial -->
+      <%- include('../partials/header', { userInitials: userInitials }) %>
+
+      <main class="flex-1 overflow-auto p-8">
+        <!-- Page Title -->
+        <div class="mb-6">
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">User Management</h1>
+          <p class="text-gray-600">Manage all users, edit roles, block/unblock, and view details.</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-lg p-6 mb-6 flex flex-wrap gap-4 items-center">
+          <div class="flex-1 relative">
+            <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+            <input type="text" placeholder="Search users..." value="<%= searchQuery || '' %>" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+          </div>
+          <select class="border border-gray-300 rounded-lg p-2">
+            <option>User Role</option>
+            <option <%= filterRole === 'Admin' ? 'selected' : '' %>>Admin</option>
+            <option <%= filterRole === 'Editor' ? 'selected' : '' %>>Editor</option>
+            <option <%= filterRole === 'Viewer' ? 'selected' : '' %>>Viewer</option>
+          </select>
+          <select class="border border-gray-300 rounded-lg p-2">
+            <option>Status</option>
+            <option <%= filterStatus === 'Active' ? 'selected' : '' %>>Active</option>
+            <option <%= filterStatus === 'Inactive' ? 'selected' : '' %>>Inactive</option>
+            <option <%= filterStatus === 'Pending' ? 'selected' : '' %>>Pending</option>
+            <option <%= filterStatus === 'Suspended' ? 'selected' : '' %>>Suspended</option>
+          </select>
+          
+        </div>
+
+        <!-- Users Table -->
+        <div class="bg-white rounded-lg overflow-hidden shadow-sm">
+          <table class="w-full text-left">
+            <thead class="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th class="px-6 py-4 text-sm font-semibold text-gray-700">Name</th>
+                <th class="px-6 py-4 text-sm font-semibold text-gray-700">Email</th>
+                <th class="px-6 py-4 text-sm font-semibold text-gray-700">Role</th>
+                <th class="px-6 py-4 text-sm font-semibold text-gray-700">Status</th>
+                <th class="px-6 py-4 text-sm font-semibold text-gray-700">Last Login</th>
+                <th class="px-6 py-4 text-sm font-semibold text-gray-700">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if(users && users.length > 0){ %>
+                <% users.forEach(user => { %>
+                  <tr class="border-b border-gray-200 hover:bg-gray-50">
+                    <td class="px-6 py-4 font-medium text-gray-900"><%= user.name %></td>
+                    <td class="px-6 py-4 text-gray-600"><%= user.email %></td>
+                    <td class="px-6 py-4 text-gray-600"><%= user.role %></td>
+                    <td class="px-6 py-4">
+                      <span class="status-badge <%= user.status === 'Active' ? 'status-active' :
+                                                     (user.status === 'Blocked' || user.status === 'Suspended') ? 'status-suspended' :
+                                                     user.status === 'Pending' ? 'status-pending' : 'status-inactive' %>">
+                        <%= user.status %>
+                      </span>
+                    </td>
+                    <td class="px-6 py-4 text-gray-600"><%= user.lastLogin ? new Date(user.lastLogin).toLocaleString() : '—' %></td>
+                    <td class="px-6 py-4 flex gap-2">
+                      <button type="button" class="p-2 text-gray-500 hover:text-blue-600 rounded-full hover:bg-blue-100 transition-colors" onclick="viewUser('<%= user._id %>')">
+                        <i class="fas fa-eye"></i>
+                      </button>
+                      <form action="/admin/deleteuser/<%= user._id %>" method="POST" class="flex">
+                        <button type="submit" class="p-2 text-gray-500 hover:text-red-600 rounded-full hover:bg-red-100 transition-colors" onclick="return confirm('Are you sure?')">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </form>
+                      <form action="/admin/users/<%= user._id %>/toggle-block" method="POST" class="flex">
+                        <button type="submit" class="p-2 text-gray-500 <%= user.status === 'Blocked' ? 'hover:text-green-600 hover:bg-green-100' : 'hover:text-red-600 hover:bg-red-100' %> rounded-full transition-colors">
+                          <i class="fas <%= user.status === 'Blocked' ? 'fa-unlock' : 'fa-lock' %>"></i>
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              <% } else { %>
+                <tr>
+                  <td colspan="6" class="text-center py-6 text-gray-500">No users found</td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="flex justify-end mt-6 gap-2">
+          <button class="pagination-btn" <%= currentPage > 1 ? '' : 'disabled' %> onclick="window.location.href='?page=<%= currentPage - 1 %>'">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <% for(let i=1;i<=totalPages;i++){ %>
+            <button class="pagination-btn <%= i === currentPage ? 'active' : '' %>" onclick="window.location.href='?page=<%= i %>'"><%= i %></button>
+          <% } %>
+          <button class="pagination-btn" <%= currentPage < totalPages ? '' : 'disabled' %> onclick="window.location.href='?page=<%= currentPage + 1 %>'">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    async function viewUser(userId){
+      const res = await fetch(`/admin/viewuser/${userId}`);
+      const user = await res.json();
+      const modalEl = document.getElementById('viewUserModal');
+      modalEl.querySelector('#viewName').innerText = user.name;
+      modalEl.querySelector('#viewEmail').innerText = user.email;
+      modalEl.querySelector('#viewRole').innerText = user.role;
+      modalEl.querySelector('#viewStatus').innerText = user.status;
+      modalEl.querySelector('#viewCreated').innerText = new Date(user.createdAt).toLocaleString();
+      modalEl.querySelector('#viewLogin').innerText = user.lastLogin ? new Date(user.lastLogin).toLocaleString() : '—';
+      new bootstrap.Modal(modalEl).show();
+    }
+  </script>
+
+ <!-- Modal -->
+<div id="viewUserModal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-xl shadow-lg w-full max-w-md">
+    <div class="bg-teal-600 text-white px-4 py-3 flex justify-between items-center rounded-t-xl">
+      <h5 class="text-lg font-semibold">View User</h5>
+      <button onclick="closeModal()" class="text-white hover:text-gray-200 text-xl">&times;</button>
+    </div>
+
+    <div class="p-5 space-y-2">
+      <p><strong>Name:</strong> <span id="viewName"></span></p>
+      <p><strong>Email:</strong> <span id="viewEmail"></span></p>
+      <p><strong>Role:</strong> <span id="viewRole"></span></p>
+      <p><strong>Status:</strong> <span id="viewStatus"></span></p>
+      <p><strong>Created At:</strong> <span id="viewCreated"></span></p>
+      <p><strong>Last Login:</strong> <span id="viewLogin"></span></p>
+    </div>
+
+    <div class="flex justify-end px-5 py-3 border-t border-gray-200">
+      <button onclick="closeModal()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function viewUser(userId) {
+    const res = await fetch(`/admin/viewuser/${userId}`);
+    const user = await res.json();
+
+    // Fill modal data
+    document.getElementById('viewName').innerText = user.name;
+    document.getElementById('viewEmail').innerText = user.email;
+    document.getElementById('viewRole').innerText = user.role;
+    document.getElementById('viewStatus').innerText = user.status;
+    document.getElementById('viewCreated').innerText = new Date(user.createdAt).toLocaleString();
+    document.getElementById('viewLogin').innerText = user.lastLogin ? new Date(user.lastLogin).toLocaleString() : '—';
+
+    // Show modal
+    document.getElementById('viewUserModal').classList.remove('hidden');
+    document.getElementById('viewUserModal').classList.add('flex');
+  }
+
+  function closeModal() {
+    document.getElementById('viewUserModal').classList.remove('flex');
+    document.getElementById('viewUserModal').classList.add('hidden');
+  }
+
+  // Close modal when clicking outside
+  window.addEventListener('click', (e) => {
+    const modal = document.getElementById('viewUserModal');
+    if (e.target === modal) closeModal();
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

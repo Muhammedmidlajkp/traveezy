@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title || 'Analytics Dashboard | Traveezy' %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <style>
+    a { text-decoration: none; color: inherit; }
+    .metric-card { background: #fff; border-radius: 8px; padding: 24px; border: 1px solid #f3f4f6; box-shadow: 0 1px 2px rgba(0,0,0,0.03); transition: box-shadow 0.2s; }
+    .metric-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .chart-container { background: #fff; border-radius: 8px; padding: 24px; border: 1px solid #f3f4f6; }
+    .tab-active { color: #14b8a6; border-bottom: 2px solid #14b8a6; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="flex h-screen">
+    <!-- Sidebar partial -->
+    <%- include('../partials/sidebar') %>
+
+    <div class="flex-1 flex flex-col">
+      <!-- Header partial -->
+      <%- include('../partials/header') %>
+
+      <main class="flex-1 overflow-auto p-8 space-y-8">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Analytics Dashboard</h1>
+          <p class="text-gray-600">Analyze user data, performance, and retention trends on Traveezy.</p>
+        </div>
+
+        <!-- Tabs -->
+        <!-- <div class="bg-white border-b border-gray-200 px-6 flex gap-8">
+          <button class="tab-active py-4 text-sm font-medium text-teal-600">User Analytics</button>
+          <button class="py-4 text-sm font-medium text-gray-600 hover:text-gray-900">Place Performance</button>
+          <button class="py-4 text-sm font-medium text-gray-600 hover:text-gray-900">Revenue Tracking</button>
+          <button class="py-4 text-sm font-medium text-gray-600 hover:text-gray-900">Geographic Insights</button>
+          <div class="ml-auto flex items-center">
+            <button class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+              <i class="fas fa-filter"></i>
+              <span>Filter</span>
+            </button>
+          </div>
+        </div> -->
+
+        <!-- Metrics Overview -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">User Overview</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <% const metrics = [
+              { title: 'Total Users', value: '1.5K', desc: 'Total registered users', change: '+12%', icon: 'fa-users', color: 'text-teal-500' },
+              { title: 'Active Users', value: '700', desc: 'Users active in the last 30 days', change: '+8%', icon: 'fa-user-check', color: 'text-teal-500' },
+              { title: 'Retention Rate', value: '78%', desc: 'Monthly user retention', change: '+3%', icon: 'fa-percent', color: 'text-orange-500' },
+              { title: 'New Registrations', value: '350', desc: 'New users this month', change: '+15%', icon: 'fa-user-plus', color: 'text-blue-500' }
+            ]; %>
+
+            <% metrics.forEach(metric => { %>
+              <div class="metric-card">
+                <div class="flex justify-between items-start mb-3">
+                  <span class="text-gray-600 text-sm"><%= metric.title %></span>
+                  <i class="fas <%= metric.icon %> <%= metric.color %> text-lg"></i>
+                </div>
+                <div class="text-3xl font-bold text-gray-900 mb-1"><%= metric.value %></div>
+                <p class="text-xs text-gray-500 mb-2"><%= metric.desc %></p>
+                <p class="text-xs text-teal-600 font-medium"><i class="fas fa-arrow-up"></i> <%= metric.change %> since last month</p>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="chart-container">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">User Growth & Activity</h3>
+            <p class="text-sm text-gray-600 mb-4">Monthly new and active users, and retention rate.</p>
+            <canvas id="growthChart" height="80"></canvas>
+          </div>
+
+          <div class="chart-container">
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">User Demographics</h3>
+            <p class="text-sm text-gray-600 mb-4">Distribution of users by age group.</p>
+            <canvas id="demographicsChart" height="80"></canvas>
+          </div>
+        </div>
+
+        <!-- Retention Table -->
+        <div class="chart-container">
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">User Retention Details</h3>
+          <p class="text-sm text-gray-600 mb-4">Monthly retention cohorts and user activity trends.</p>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-gray-200">
+                  <th class="text-left py-3 px-4 font-semibold text-gray-700">Month</th>
+                  <th class="text-left py-3 px-4 font-semibold text-gray-700">Cohort Size</th>
+                  <th class="text-left py-3 px-4 font-semibold text-gray-700">Month 1 (%)</th>
+                  <th class="text-left py-3 px-4 font-semibold text-gray-700">Month 2 (%)</th>
+                  <th class="text-left py-3 px-4 font-semibold text-gray-700">Month 3 (%)</th>
+                  <th class="text-left py-3 px-4 font-semibold text-gray-700">Month 6 (%)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% const retentionData = [
+                  ['Jan 2024',150,'60%','45%','30%','15%'],
+                  ['Feb 2024',170,'62%','47%','32%','17%'],
+                  ['Mar 2024',210,'65%','50%','35%','20%'],
+                  ['Apr 2024',180,'63%','48%','33%','18%'],
+                  ['May 2024',220,'68%','52%','37%','22%']
+                ]; %>
+                <% retentionData.forEach(row => { %>
+                  <tr class="border-b border-gray-100 hover:bg-gray-50">
+                    <td class="py-3 px-4 text-gray-900"><%= row[0] %></td>
+                    <td class="py-3 px-4 text-gray-600"><%= row[1] %></td>
+                    <td class="py-3 px-4 text-gray-600"><%= row[2] %></td>
+                    <td class="py-3 px-4 text-gray-600"><%= row[3] %></td>
+                    <td class="py-3 px-4 text-gray-600"><%= row[4] %></td>
+                    <td class="py-3 px-4 text-gray-600"><%= row[5] %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Charts Script -->
+  <script>
+    const growthCtx = document.getElementById('growthChart').getContext('2d');
+    new Chart(growthCtx, {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        datasets: [
+          {
+            label: 'New Users',
+            data: [400, 420, 450, 480, 520, 550, 580, 600, 620, 640, 660, 680],
+            borderColor: '#14b8a6',
+            backgroundColor: 'rgba(20, 184, 166, 0.05)',
+            tension: 0.4,
+            fill: true,
+            borderWidth: 2
+          },
+          {
+            label: 'Active Users',
+            data: [200, 220, 250, 280, 320, 350, 380, 400, 420, 440, 460, 480],
+            borderColor: '#64748b',
+            backgroundColor: 'rgba(100, 116, 139, 0.05)',
+            tension: 0.4,
+            fill: true,
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: { legend: { display: true, position: 'bottom' } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    const demographicsCtx = document.getElementById('demographicsChart').getContext('2d');
+    new Chart(demographicsCtx, {
+      type: 'bar',
+      data: {
+        labels: ['18-25', '25-34', '35-44', '45-54', '55+'],
+        datasets: [{
+          label: 'Users',
+          data: [300, 600, 350, 200, 150],
+          backgroundColor: '#14b8a6',
+          borderRadius: 6,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

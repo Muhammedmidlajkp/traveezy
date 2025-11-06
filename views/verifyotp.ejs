@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Your Email</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .otp-container {
+      background: #fff;
+      width: 420px;
+      padding: 40px;
+      text-align: center;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 25px;
+    }
+
+    .otp-boxes {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .otp-input {
+      width: 46px;
+      height: 50px;
+      font-size: 20px;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    .otp-input:focus {
+      outline: none;
+      border-color: #26c0a8;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background: #26c0a8;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .btn:disabled {
+      background: #a4e0d8;
+      cursor: not-allowed;
+    }
+
+    .links {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .links a {
+      text-decoration: none;
+      color: #26c0a8;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="otp-container">
+    <h2>Verify Your Email</h2>
+    <p>A 6-digit code has been sent to your email address.<br>Please enter it below.</p>
+
+    <form id="verifyForm">
+      <input type="hidden" name="email" value="<%= email %>">
+
+      <div class="otp-boxes">
+        <% for(let i = 0; i < 6; i++) { %>
+          <input type="text" maxlength="1" class="otp-input" name="otp" required>
+        <% } %>
+      </div>
+
+      <button type="submit" class="btn" id="verifyBtn">Verify OTP</button>
+    </form>
+
+    <div class="links">
+      <a href="#" id="resend">Resend code</a><br><br>
+      <a href="/auth/reset">Back to Email Verification</a>
+    </div>
+  </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  const inputs = document.querySelectorAll(".otp-input");
+  const resendLink = document.getElementById("resend");
+  const email = "<%= email %>";
+  let resendTimer;
+
+  // Auto move between OTP boxes
+  inputs.forEach((input, index) => {
+    input.addEventListener("keyup", () => {
+      if (input.value.length === 1 && index < inputs.length - 1) {
+        inputs[index + 1].focus();
+      } else if (input.value === "" && index > 0) {
+        inputs[index - 1].focus();
+      }
+    });
+  });
+
+  // Handle OTP verification
+  document.getElementById("verifyForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const otp = Array.from(inputs).map(input => input.value).join('');
+
+    try {
+      const res = await fetch("/auth/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, otp })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        Swal.fire({ icon: "success", text: "OTP Verified!" });
+        setTimeout(() => {
+          window.location.href = "/auth/new-password?email=" + email;
+        }, 1500);
+      } else {
+        Swal.fire({ icon: "error", text: data.message });
+      }
+    } catch (err) {
+      Swal.fire({ icon: "error", text: "Server Error!" });
+    }
+  });
+
+  // --- 🔁 RESEND OTP FUNCTIONALITY ---
+// --- 🔁 RESEND OTP FUNCTIONALITY ---
+function startResendTimer() {
+  let seconds = 30; // ⬅️ change this from 3 to 30
+  resendLink.style.pointerEvents = "none";
+  resendLink.style.color = "#999";
+  resendLink.textContent = `Resend OTP in ${seconds}s`;
+
+  resendTimer = setInterval(() => {
+    seconds--;
+    resendLink.textContent = `Resend OTP in ${seconds}s`;
+
+    if (seconds <= 0) {
+      clearInterval(resendTimer);
+      resendLink.textContent = "Resend OTP";
+      resendLink.style.pointerEvents = "auto";
+      resendLink.style.color = "#26c0a8";
+    }
+  }, 1000);
+}
+
+// Start timer immediately on page load
+startResendTimer();
+
+// When user clicks resend
+resendLink.addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch("/auth/newOtpverification", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, flag: "resend" })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      Swal.fire({ icon: "success", text: "New OTP sent to your email!" });
+
+      // Immediately start the 30s countdown
+      startResendTimer();
+    } else {
+      Swal.fire({ icon: "error", text: data.message || "Failed to resend OTP" });
+    }
+  } catch (err) {
+    Swal.fire({ icon: "error", text: "Server Error!" });
+  }
+});
+
+
+</script>
+
+</body>
+</html>
