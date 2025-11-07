@@ -9,7 +9,10 @@
     /* ==========================================================================
        1. DESIGN TOKENS
        ========================================================================== */
-    :root{
+    
+        .logomain { margin-left: 50px; }
+        .logomain img { width: auto; height: 40px; }
+       :root{
       /* Colors */
       --c-brand-primary: #26C485;
       --c-brand-primary-dark: #1eb06f;
@@ -154,7 +157,7 @@
       justify-content: space-between;
       box-shadow: 0 2px 10px rgba(0,0,0,.05);
     }
-    .header__left { display: flex; align-items: center; gap: var(--space-10); }
+    .header__left { display: flex; align-items: center; }
     .header__logo {
       display: flex;
       align-items: center;
@@ -303,28 +306,6 @@
       display: flex;
       align-items: center;
       gap: var(--space-3);
-    }
-    .filter-item {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-2);
-    }
-    .filter-item label {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--c-text-muted);
-      padding-left: var(--space-2);
-    }
-    .filter-item select {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
-      background-position: right 0.5rem center;
-      background-repeat: no-repeat;
-      background-size: 1.5em 1.5em;
-      padding-right: 2.5rem;
-      text-align: left;
     }
 
 
@@ -514,6 +495,7 @@
       background-color: #22c55e; /* Completed color */
       box-shadow: 0 0 0 2px #22c55e;
     }
+
     .journey-item--completed::before {
       background-color: #22c55e; /* Green line for completed items */
     }
@@ -521,6 +503,7 @@
       background-color: #3b82f6; /* Current color */
       box-shadow: 0 0 0 2px #3b82f6;
     }
+
     @keyframes pulse {
       0%, 100% { box-shadow: 0 0 0 2px #3b82f6; }
       50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.4); }
@@ -668,20 +651,18 @@
      ======================================================================== -->
   <header class="header" role="banner">
     <div class="header__left">
-      <a href="/" class="header__logo" aria-label="Traveezy Homepage">
-        <div class="header__logo-icon" aria-hidden="true">🧭</div>
-        <span>Traveezy</span>
-      </a>
-      <nav class="header__nav" role="navigation" aria-label="Main Navigation">
-        <a href="#" class="header__nav-link header__nav-link--active">Home</a>
-        <a href="#" class="header__nav-link">Explore</a>
-        <a href="#" class="header__nav-link">Map</a>
-        <a href="#" class="header__nav-link">Booking</a>
-        <a href="#" class="header__nav-link">Support</a>
-      </nav>
+           <div class="logomain"><img src="/assets/images/mainlogotz.png" alt=""></div>
     </div>
+
+    <nav class="header__nav" role="navigation" aria-label="Main Navigation">
+      <a href="#" class="header__nav-link header__nav-link--active">Home</a>
+      <a href="#" class="header__nav-link">Explore</a>
+      <a href="#" class="header__nav-link">Map</a>
+      <a href="#" class="header__nav-link">Booking</a>
+      <a href="#" class="header__nav-link">Support</a>
+    </nav>
+
     <div class="header__right">
-      <button class="btn btn--primary" data-action="toggle-filters">Filters</button>
       <label class="search-bar" role="search">
         <span class="search-bar__icon" aria-hidden="true">🔍</span>
         <input class="search-bar__input" type="search" placeholder="Search destinations..." aria-label="Search destinations" />
@@ -700,55 +681,26 @@
         <!-- Filters -->
         <section class="filters-panel" aria-labelledby="filters-title">
           <h2 id="filters-title" class="filters-panel__title">⚙️ Filters</h2>
-        <div class="filters-panel__grid">
-          <div class="filter-item">
-            <label for="filter-category">Category</label>
-            <select id="filter-category" class="btn btn--secondary" style="width: 100%;">
-              <option value="">All</option>
-              <option value="Nature">Nature</option>
-              <option value="Beach">Beach</option>
-              <option value="Adventure">Adventure</option>
-              <option value="Cultural">Cultural</option>
-            </select>
+          <div class="filters-panel__grid">
+            <button class="btn btn--secondary" data-filter="category">
+              <span>📁 Category: Nature, All</span><span>▼</span>
+            </button>
+            <button class="btn btn--secondary" data-filter="activity">
+              <span>⚡ Activity: Moderate</span><span>▼</span>
+            </button>
+            <button class="btn btn--secondary" data-filter="time">
+              <span>📅 Time Range: Full Year</span><span>▼</span>
+            </button>
+            <button class="btn btn--secondary" data-filter="distance">
+              <span>📍 Distance: 50 km</span><span>▼</span>
+            </button>
           </div>
-
-  <div class="filter-item">
-    <label>Activity</label>
-    <select id="filter-activity" class="btn btn--secondary" style="width: 100%;">
-      <option value="">All</option>
-      <option value="Easy">Easy</option>
-      <option value="Moderate">Moderate</option>
-      <option value="Hard">Hard</option>
-    </select>
-  </div>
-
-  <div class="filter-item">
-    <label>Time Range</label>
-    <select id="filter-time" class="btn btn--secondary" style="width: 100%;">
-      <option value="">Anytime</option>
-      <option value="Morning">Morning</option>
-      <option value="Afternoon">Afternoon</option>
-      <option value="Evening">Evening</option>
-    </select>
-  </div>
-
-  <div class="filter-item">
-    <label>Distance</label>
-    <select id="filter-distance" class="btn btn--secondary" style="width: 100%;">
-      <option value="">All</option>
-      <option value="10">Within 10 km</option>
-      <option value="50">Within 50 km</option>
-      <option value="100">Within 100 km</option>
-    </select>
-  </div>
-</div>
-
           <div class="filters-panel__footer">
             <button class="btn btn--primary" data-action="apply-filters">Apply Filters</button>
-            <div class="filters-panel__sort" style="margin-left: auto;">
+            <div class="filters-panel__sort">
               <label for="sort-by" class="filters-panel__sort-label">Sort By:</label>
               <button id="sort-by" class="btn btn--secondary" data-filter="sort">
-                <span>Recommended</span><span style="margin-left: auto;">▼</span>
+                <span>Recommended</span><span>▼</span>
               </button>
             </div>
           </div>
@@ -765,9 +717,7 @@
                   <div class="card__thumb">
                     <button class="card__close-btn" data-action="remove-card" title="Remove <%= place.name %>" aria-label="Remove <%= place.name %>">×</button>
                     <div class="card__rating" aria-label="Rating: <%= place.rating %> out of 5 stars">⭐ <%= place.rating %></div>
-<img class="card__image" 
-     src="<%= place.image || 'https://via.placeholder.com/400x250?text=' + encodeURIComponent(place.name) %>" 
-     alt="A scenic view of <%= place.name %>">
+                    <img class="card__image" src="<%= place.image || generateSVGPlaceholder(place.name, index) %>" alt="A scenic view of <%= place.name %>">
                   </div>
                   <div class="card__slot" aria-label="Scheduled time: <%= place.time %>">🕐 <%= place.time %></div>
                   <div class="card__body">
@@ -796,7 +746,7 @@
             <!-- Render timeline items dynamically with EJS -->
             <% if (places && places.length > 0) { %>
               <% places.forEach((place) => { %>
-                <div class="journey-item journey-item--<%= place.status %>" data-status="<%= place.status %>"   id="journey-item-<%= (place.name || place.title || 'unknown').replace(/\s+/g, '-') %>">
+                <div class="journey-item journey-item--<%= place.status %>" data-status="<%= place.status %>" id="journey-item-<%= place.name.replace(/\s+/g, '-') %>">
                   <div class="journey-item__dot"></div>
                   <div class="journey-item__content">
                     <div class="journey-item__header">
@@ -885,87 +835,156 @@
   </footer>
 
   <script>
-    /**
-     * =========================================================================
-     * Traveezy Itinerary Planner - EJS Version
-     * =========================================================================
-     */
-
-     async function fetchTripPlan() {
-  const query = document.getElementById("search-input").value;
-  const res = await fetch(`/user/ai-trip?q=${encodeURIComponent(query)}`);
-  const data = await res.json();
-  console.log(data);
-}
-
-    // Event handlers
     document.addEventListener('DOMContentLoaded', () => {
-      const handleCardClose = (closeButton) => {
-        const card = closeButton.closest('.card');
-        if (card) {
-          card.setAttribute('data-removed', 'true');
-          console.log(`Card for "${card.dataset.placeName}" removed.`);
+      /**
+       * =========================================================================
+       * DYNAMIC JOURNEY TRACKING LOGIC
+       * =========================================================================
+       */
+
+      const journeyItemsState = {};
+
+
+      // Helper to parse "HH:MM AM/PM" from a string like "8:00 AM – 9:00 AM"
+      function extractTimesFromDisplay(displayTimeString) {
+        const parts = displayTimeString.split('–').map(s => s.trim());
+        if (parts.length < 2) return { start: null, end: null };
+
+        const parseDisplayTime = (timeStr) => {
+          const match = timeStr.match(/(\d{1,2}:\d{2})\s*(AM|PM)/i);
+          if (!match) return null;
+
+          let [_, time, period] = match;
+          let [hours, minutes] = time.split(':').map(Number);
+
+          if (period.toUpperCase() === 'PM' && hours < 12) hours += 12;
+          if (period.toUpperCase() === 'AM' && hours === 12) hours = 0; // Midnight case
+
+          return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+        };
+
+        return { start: parseDisplayTime(parts[0]), end: parseDisplayTime(parts[1]) };
+      }
+
+      // Helper to convert "HH:MM" string to a Date object for today
+      function parse24HourTime(timeString) {
+        if (!timeString) return null;
+        const [hours, minutes] = timeString.split(':').map(Number);
+        const date = new Date();
+        date.setHours(hours, minutes, 0, 0);
+        return date;
+      }
+
+
+      // Function to show the confirmation popup
+      function showConfirmationPopup(item) {
+        // Use a simple `confirm` dialog. This can be replaced with a custom modal.
+        const userResponse = confirm(`Did you reach ${item.name}?`);
+
+        if (userResponse) {
+          item.isConfirmed = true;
         }
-      };
+        // If 'No', we do nothing, and it will remain active for the next check.
+        item.popupShown = true; // Mark that we've asked, to avoid repeated popups
+        updateTimeline(); // Re-run the timeline update immediately after user interaction
+      }
 
-      const handleFilterClick = (filterButton) => {
-        const filterType = filterButton.dataset.filter;
-        alert(`Filter option clicked: ${filterType}. Modal functionality to be implemented.`);
-      };
 
-      const handleCardClick = (card) => {
-        const placeName = card.dataset.placeName;
-        alert(`Viewing details for: ${placeName}. Modal functionality to be implemented.`);
-      };
+      // The main function to update the timeline's state and appearance
+      function updateTimeline() {
+        const now = new Date();
 
-      // Event delegation
+        Object.values(journeyItemsState).forEach(item => {
+          const element = item.element;
+
+          // Determine the status of the item
+          let currentStatus = 'upcoming';
+          if (item.isConfirmed) {
+            currentStatus = 'completed';
+          } else if (item.startTime && item.endTime) {
+            if (now >= item.startTime && now < item.endTime) {
+              currentStatus = 'active';
+            } else if (now >= item.endTime) {
+              // Time has passed, but it's not confirmed.
+              // We'll show a popup if we haven't already.
+              currentStatus = 'pending_confirmation';
+            }
+          }
+
+          // Reset classes
+          element.classList.remove('journey-item--active', 'journey-item--completed', 'journey-item--upcoming');
+
+          // Apply the correct class based on status
+          if (currentStatus === 'completed') {
+            element.classList.add('journey-item--completed');
+          } else if (currentStatus === 'active' || currentStatus === 'pending_confirmation') {
+            element.classList.add('journey-item--active');
+          } else {
+            element.classList.add('journey-item--upcoming');
+          }
+
+          // Trigger popup if needed
+          if (currentStatus === 'pending_confirmation' && !item.popupShown) {
+            showConfirmationPopup(item);
+          }
+        });
+      }
+
+
+      // --- Initialization ---
+
+      // 1. Populate the state object from the DOM
+      document.querySelectorAll('.journey-timeline .journey-item').forEach(element => {
+        const id = element.id;
+        if (!id) return;
+
+        const name = element.querySelector('.journey-item__title')?.textContent.trim().replace(/^[\u26A0-\u26FF]+/g, '') || 'Unnamed Stop';
+        const timeString = element.querySelector('.journey-item__time')?.textContent.trim();
+
+        if (!timeString) {
+            console.warn(`Journey item "${name}" is missing a time display.`);
+            return;
+        }
+
+        const { start, end } = extractTimesFromDisplay(timeString);
+
+        journeyItemsState[id] = {
+          id,
+          name,
+          element,
+          startTime: parse24HourTime(start),
+          endTime: parse24HourTime(end),
+          isConfirmed: false, // Initially, no item is confirmed
+          popupShown: false,  // To prevent asking multiple times
+        };
+      });
+
+
+      // 2. Run the initial update
+      updateTimeline();
+
+      // 3. Set it to update every minute
+      setInterval(updateTimeline, 60 * 1000);
+
+      console.log('Dynamic Journey Tracking initialized.');
+
+
+      // --- Other existing event listeners (like card removal) can go here ---
       document.body.addEventListener('click', (event) => {
-        const target = event.target;
-
-        // Card close button
-        const closeButton = target.closest('[data-action="remove-card"]');
-        if (closeButton) {
-          event.stopPropagation();
-          handleCardClose(closeButton);
-          return;
-        }
-
-        // Card click
-        const card = target.closest('.card');
-        if (card && card.dataset.removed !== 'true') {
-          handleCardClick(card);
-          return;
-        }
-
-        // Filter button
-        const filterButton = target.closest('[data-filter]');
-        if (filterButton) {
-          handleFilterClick(filterButton);
-          return;
-        }
-
-        // Action buttons
-        const actionButton = target.closest('[data-action]');
-        if (actionButton) {
-          const action = actionButton.dataset.action;
-          if (action === 'apply-filters') {
-            alert('Applying filters...');
+        const cardCloseButton = event.target.closest('[data-action="remove-card"]');
+        if (cardCloseButton) {
+          const card = cardCloseButton.closest('.card');
+          const placeName = card?.dataset.placeName;
+          if (placeName) {
+            card.setAttribute('data-removed', 'true');
+            const journeyItemId = `journey-item-${placeName.replace(/\s+/g, '-')}`;
+            const journeyItem = document.getElementById(journeyItemId);
+            if (journeyItem) {
+              journeyItem.style.display = 'none'; // Or remove it completely
+            }
           }
         }
       });
-
-      // Keyboard accessibility
-      document.body.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          const card = event.target.closest('.card');
-          if (card && card.dataset.removed !== 'true') {
-            event.preventDefault();
-            handleCardClick(card);
-          }
-        }
-      });
-
-      console.log('Traveezy Itinerary Planner initialized successfully.');
     });
   </script>
 </body>

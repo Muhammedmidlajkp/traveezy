@@ -32,330 +32,172 @@
   </style>
 </head>
 <body class="bg-white text-gray-800">
-  <!-- Header -->
-  <header id="siteHeader" class="bg-white/90 glass sticky top-0 z-50 border-b border-gray-100">
-      <div class="flex justify-between items-center h-16">
-        <!-- Logo -->
-        <!-- <a href="#" class="flex items-center gap-2 group">
-          <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-orange-500 to-orange-400 flex items-center justify-center shadow-soft transition">
-            <span class="text-white font-extrabold text-sm">T</span>
-          </div> -->
-          <!-- <span class="font-extrabold text-lg tracking-tight group-hover:text-gray-900 transition">Traveezy</span> -->
-          <div class="logomain"><img src="/assets/images/mainlogotz.png" alt=""></div>
-          
+  <%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="relative h-[440px] md:h-[520px] overflow-hidden">
+  <div class="absolute inset-0">
+    <img src="/assets/images/homebg.png" alt="Vythiri Hills" class="w-full h-full object-cover will-change-transform" />
+    <div class="absolute inset-0 bg-gradient-to-b from-black/25 via-black/20 to-white/0"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0)_0%,rgba(0,0,0,0.15)_65%,rgba(0,0,0,0.35)_100%)] pointer-events-none"></div>
+  </div>
+
+  <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center text-center">
+    <div class="max-w-2xl section-fade text-center">
+      <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-white/70 glass text-gray-700 shadow-soft">
+        <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+        Trending Destination
+      </span>
+      <h1 class="mt-4 text-4xl md:text-5xl font-extrabold leading-tight text-white">
+        Discover <%= heroPlace %>
+      </h1>
+      <p class="mt-3 text-white/90 md:text-base text-sm max-w-lg mx-auto">
+        Explore the misty mountains, lush landscapes, and serene beauty of <%= heroPlace %>
+      </p>
+
+      <div class="mt-8 flex items-center justify-center gap-3">
+        <a href="/user/aitripplan" class="btn inline-flex items-center gap-2 bg-[#35D6A7] hover:bg-[#2ac597] text-white px-6 md:px-8 py-2.5 rounded-full text-sm font-semibold shadow-soft-lg">
+          Explore Destination
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
         </a>
 
-        <!-- Nav -->
-        <nav class="hidden md:flex items-center gap-8">
-          <a href="#top-spots" class="text-sm text-gray-600 hover:text-gray-900 transition">Explore</a>
-          <a href="#trending-food" class="text-sm text-gray-600 hover:text-gray-900 transition">Inspire</a>
-          <a href="#" class="text-sm text-gray-600 hover:text-gray-900 transition">Booking Confirmation</a>
-          <a href="#resorts" class="text-sm text-gray-600 hover:text-gray-900 transition">Best Deals</a>
-          <a href="#map" class="text-sm text-gray-600 hover:text-gray-900 transition">Support</a>
-        </nav>
-
-        <!-- Right Icons -->
-        <div class="flex items-center gap-3">
-          <button class="text-gray-600 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 transition" aria-label="Search">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-          </button>
-          <button class="text-gray-600 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 transition" aria-label="Account">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-            </svg>
-          </button>
-        </div>
+        <a href="#map" class="btn inline-flex items-center gap-2 bg-white/90 hover:bg-white text-gray-800 px-6 py-2.5 rounded-full text-sm font-semibold glass">
+          View Map
+        </a>
       </div>
     </div>
-  </header>
+  </div>
+</section>
 
-  <!-- Hero -->
-  <section class="relative h-[440px] md:h-[520px] overflow-hidden">
-    <div class="absolute inset-0">
-      <img src="/assets/images/homebg.png" alt="Vythiri Hills" class="w-full h-full object-cover will-change-transform" />
-      <div class="absolute inset-0 bg-gradient-to-b from-black/25 via-black/20 to-white/0"></div>
-      <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0)_0%,rgba(0,0,0,0.15)_65%,rgba(0,0,0,0.35)_100%)] pointer-events-none"></div>
-    </div>
+<!-- Top Spots Section -->
+<section id="top-spots" class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto section-fade">
+  <div class="text-center mb-10">
+    <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Top Spots in <%= heroPlace %></h2>
+    <p class="text-gray-600 text-sm">Popular destinations hand-picked for your next adventure</p>
+  </div>
 
-    <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-center text-center">
-      <div class="max-w-2xl section-fade text-center">
-        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-white/70 glass text-gray-700 shadow-soft">
-          <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-          Trending Destination
-        </span>
-        <h1 class="mt-4 text-4xl md:text-5xl font-extrabold leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
-          Discover Vythiri
-        </h1>
-        <p class="mt-3 text-white/90 md:text-base text-sm max-w-lg mx-auto">
-          Explore the misty mountains, lush landscapes, and serene beauty of Vythiri
-        </p>
-        <div class="mt-8 flex items-center justify-center gap-3">
-          <a href="/user/aitripplan" class="btn inline-flex items-center gap-2 bg-[#35D6A7] hover:bg-[#2ac597] text-white px-6 md:px-8 py-2.5 rounded-full text-sm font-semibold shadow-soft-lg">
-  Explore Destination
-  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/>
-  </svg>
-</a>
-
-          <a href="#map" class="btn inline-flex items-center gap-2 bg-white/90 hover:bg-white text-gray-800 px-6 py-2.5 rounded-full text-sm font-semibold glass">
-            View Map
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Top Spots -->
-  <section id="top-spots" class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto section-fade">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Top Spots</h2>
-      <p class="text-gray-600 text-sm">Popular destinations hand-picked for your next adventure</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-      <!-- Card -->
-      <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
-        <div class="relative h-48">
-          <img class="w-full h-full object-cover img-zoom" src="/assets/images/waterfalls.png" alt="Idamalaythi Falls"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
-          <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass">Waterfall</span>
-        </div>
-        <div class="p-5">
-          <h3 class="font-semibold text-gray-900 mb-1">Idamalaythi Falls</h3>
-          <p class="text-xs text-gray-600 mb-3">Majestic Waterfall</p>
-          <div class="flex items-center gap-1 text-xs text-gray-700">
-            <span class="text-yellow-400">★</span><span>4.5 • 234 reviews</span>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+    <% if (topSpots && topSpots.length > 0) { %>
+      <% topSpots.forEach(spot => { %>
+        <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
+          <div class="relative h-48">
+            <img class="w-full h-full object-cover img-zoom" src="<%= spot.image %>" alt="<%= spot.name %>"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass">Spot</span>
           </div>
-        </div>
-      </article>
-
-      <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
-        <div class="relative h-48">
-          <img class="w-full h-full object-cover img-zoom" src="/assets/images/teaplantation.png" alt="Lal Foresthaven"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
-          <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass">Valley</span>
-        </div>
-        <div class="p-5">
-          <h3 class="font-semibold text-gray-900 mb-1">Lal Foresthaven</h3>
-          <p class="text-xs text-gray-600 mb-3">Tropical Valley</p>
-          <div class="flex items-center gap-1 text-xs text-gray-700">
-            <span class="text-yellow-400">★</span><span>4.3 • 189 reviews</span>
+          <div class="p-5">
+            <h3 class="font-semibold text-gray-900 mb-1"><%= spot.name %></h3>
+            <p class="text-xs text-gray-600 mb-3"><%= spot.description || 'A must-visit spot in ' + heroPlace %></p>
+            <div class="flex items-center gap-1 text-xs text-gray-700">
+              <span class="text-yellow-400">★</span>
+              <span><%= spot.rating || '4.5' %> • Based on reviews</span>
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
+      <% }) %>
+    <% } else { %>
+      <p class="text-gray-500 text-center col-span-3">
+        No top spots available for <%= heroPlace %> yet.
+      </p>
+    <% } %>
+  </div>
+</section>
 
-      <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
-        <div class="relative h-48">
-          <img class="w-full h-full object-cover img-zoom" src="/assets/images/pookodelakke.png" alt="Irrikkulam Lake"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
-          <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass">Lake</span>
-        </div>
-        <div class="p-5">
-          <h3 class="font-semibold text-gray-900 mb-1">Irrikkulam Lake</h3>
-          <p class="text-xs text-gray-600 mb-3">Serene Waters</p>
-          <div class="flex items-center gap-1 text-xs text-gray-700">
-            <span class="text-yellow-400">★</span><span>4.7 • 312 reviews</span>
+<!-- Top Foods Section -->
+<section id="trending-food" class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto section-fade">
+  <div class="text-center mb-10">
+    <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Top Foods in <%= heroPlace %></h2>
+    <p class="text-gray-600 text-sm">Discover the most loved dishes from <%= heroPlace %></p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+    <% if (topFoods && topFoods.length > 0) { %>
+      <% topFoods.forEach(food => { %>
+        <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
+          <div class="relative h-48">
+            <img class="w-full h-full object-cover img-zoom" src="<%= food.image %>" alt="<%= food.name %>" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass">Food</span>
           </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- Trending Food -->
-  <section id="trending-food" class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto section-fade">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Trending Food</h2>
-      <p class="text-gray-600 text-sm">Savor the flavors of local cooking and delightful meals</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-      <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
-        <div class="relative h-48">
-          <img class="w-full h-full object-cover img-zoom" src="https://images.unsplash.com/photo-1542272201-b1ca555f8505?q=80&w=1200&auto=format&fit=crop" alt="Appam Curry"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
-          <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass">Local Cuisine</span>
-        </div>
-        <div class="p-5">
-          <h3 class="font-semibold text-gray-900 mb-1">Appam Curry (Thaal)</h3>
-          <p class="text-xs text-gray-600 mb-3">Local Cuisine</p>
-          <div class="flex items-center gap-1 text-xs text-gray-700">
-            <span class="text-yellow-400">★</span><span>4.6 • 156 reviews</span>
+          <div class="p-5">
+            <h3 class="font-semibold text-gray-900 mb-1"><%= food.name %></h3>
+            <p class="text-xs text-gray-600 mb-3"><%= food.description || 'A local favorite in ' + heroPlace %></p>
+            <div class="flex items-center gap-1 text-xs text-gray-700">
+              <span class="text-yellow-400">★</span>
+              <span><%= food.rating || '4.6' %> • Highly Rated</span>
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
+      <% }) %>
+    <% } else { %>
+      <p class="text-gray-500 text-center col-span-3">
+        No trending foods available for <%= heroPlace %> yet.
+      </p>
+    <% } %>
+  </div>
+</section>
 
-      <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
-        <div class="relative h-48">
-          <img class="w-full h-full object-cover img-zoom" src="https://images.unsplash.com/photo-1583624360973-16b64c4973a1?q=80&w=1200&auto=format&fit=crop" alt="Puttu Payasam"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
-          <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass">Sweet Treat</span>
-        </div>
-        <div class="p-5">
-          <h3 class="font-semibold text-gray-900 mb-1">Puttu Payasam</h3>
-          <p class="text-xs text-gray-600 mb-3">Sweet Treat</p>
-          <div class="flex items-center gap-1 text-xs text-gray-700">
-            <span class="text-yellow-400">★</span><span>4.8 • 203 reviews</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
-        <div class="relative h-48">
-          <img class="w-full h-full object-cover img-zoom" src="https://images.unsplash.com/photo-1517701604599-bb29b565090c?q=80&w=1200&auto=format&fit=crop" alt="Filter Coffee"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
-          <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass">Morning Brew</span>
-        </div>
-        <div class="p-5">
-          <h3 class="font-semibold text-gray-900 mb-1">Filter Coffee</h3>
-          <p class="text-xs text-gray-600 mb-3">Morning Brew</p>
-          <div class="flex items-center gap-1 text-xs text-gray-700">
-            <span class="text-yellow-400">★</span><span>4.4 • 178 reviews</span>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
-  <!-- Resorts -->
-  <!-- <section id="resorts" class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto section-fade">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Resorts</h2>
-      <p class="text-gray-600 text-sm">Discover luxurious and serene resorts for your perfect getaway</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-      <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
-        <div class="relative h-48">
-          <img class="w-full h-full object-cover img-zoom" src="https://images.unsplash.com/photo-1519823551278-64ac92734fb1?q=80&w=1200&auto=format&fit=crop" alt="Vythiri Village Resort"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
-          <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass">Luxury</span>
-        </div>
-        <div class="p-5">
-          <h3 class="font-semibold text-gray-900 mb-1">Vythiri Village Resort</h3>
-          <p class="text-xs text-gray-600 mb-3">Luxury Retreat</p>
-          <div class="flex items-center gap-1 text-xs text-gray-700">
-            <span class="text-yellow-400">★</span><span>4.9 • 445 reviews</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
-        <div class="relative h-48">
-          <img class="w-full h-full object-cover img-zoom" src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1200&auto=format&fit=crop" alt="The Gateway Hotel"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
-          <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass">Modern</span>
-        </div>
-        <div class="p-5">
-          <h3 class="font-semibold text-gray-900 mb-1">The Gateway Hotel</h3>
-          <p class="text-xs text-gray-600 mb-3">Modern Comfort</p>
-          <div class="flex items-center gap-1 text-xs text-gray-700">
-            <span class="text-yellow-400">★</span><span>4.7 • 389 reviews</span>
-          </div>
-        </div>
-      </article>
-
-      <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
-        <div class="relative h-48">
-          <img class="w-full h-full object-cover img-zoom" src="https://images.unsplash.com/photo-1538334421852-6872f2f90f68?q=80&w=1200&auto=format&fit=crop" alt="Rainforest Season"/>
-          <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
-          <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass">Nature</span>
-        </div>
-        <div class="p-5">
-          <h3 class="font-semibold text-gray-900 mb-1">Rainforest Season</h3>
-          <p class="text-xs text-gray-600 mb-3">Nature Escape</p>
-          <div class="flex items-center gap-1 text-xs text-gray-700">
-            <span class="text-yellow-400">★</span><span>4.6 • 267 reviews</span>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section> -->
+<!-- Top Resorts Section -->
 <section id="top-resorts" class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto section-fade">
   <div class="text-center mb-10">
     <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Top Resorts</h2>
     <p class="text-gray-600 text-sm">Explore our curated list of top-rated resorts</p>
   </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-      <% if (resorts && resorts.length > 0) { %>
-        <% resorts.forEach(resort => { %>
-          <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
-            <div class="relative h-48">
-              <img class="w-full h-full object-cover img-zoom" src="<%= resort.image %>" alt="<%= resort.name %>"/>
-              <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
-              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass"><%= resort.category %></span>
-            </div>
-            <div class="p-5">
-              <div class="flex-grow">
-                <h3 class="font-semibold text-gray-900 mb-1"><%= resort.name %></h3>
-                <p class="text-xs text-gray-600 mb-3">Added on: <%= resort.createdAt.toDateString() %></p>
-                <div class="flex items-center gap-1 text-xs text-gray-700">
-                  <span class="text-yellow-400">★</span><span><%= resort.rating %> • Based on user reviews</span>
-                </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+    <% if (resorts && resorts.length > 0) { %>
+      <% resorts.forEach(resort => { %>
+        <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
+          <div class="relative h-48">
+            <img class="w-full h-full object-cover img-zoom" src="<%= resort.image %>" alt="<%= resort.name %>"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass"><%= resort.category %></span>
+          </div>
+          <div class="p-5">
+            <div class="flex-grow">
+              <h3 class="font-semibold text-gray-900 mb-1"><%= resort.name %></h3>
+              <p class="text-xs text-gray-600 mb-3">Added on: <%= resort.createdAt.toDateString() %></p>
+              <div class="flex items-center gap-1 text-xs text-gray-700">
+                <span class="text-yellow-400">★</span>
+                <span><%= resort.rating %> • Based on user reviews</span>
               </div>
-              <a href="/user/place/<%= resort._id %>" class="mt-4 w-full btn bg-[#35D6A7] hover:bg-[#2ac597] text-white px-6 py-2.5 rounded-full text-sm font-semibold text-center inline-block">View Details</a>
             </div>
-          </article>
-        <% }) %>
-      <% } else { %>
-        <p class="text-gray-500">No resorts available yet.</p>
-      <% } %>
-    </div>
+            <a href="/user/place/<%= resort._id %>" class="mt-4 w-full btn bg-[#35D6A7] hover:bg-[#2ac597] text-white px-6 py-2.5 rounded-full text-sm font-semibold text-center inline-block">View Details</a>
+          </div>
+        </article>
+      <% }) %>
+    <% } else { %>
+      <p class="text-gray-500">No resorts available yet.</p>
+    <% } %>
+  </div>
 </section>
 
-  <!-- Map -->
-  <section id="map" class="py-16 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto section-fade">
-    <div class="text-center mb-10">
-      <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Explore on Map</h2>
-      <p class="text-gray-600 text-sm">Discover new places and plan your route with our interactive map</p>
-    </div>
+<!-- Map Section -->
+<section id="map" class="py-16 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto section-fade">
+  <div class="text-center mb-10">
+    <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Explore on Map</h2>
+    <p class="text-gray-600 text-sm">Discover new places and plan your route with our interactive map</p>
+  </div>
 
-    <div class="relative h-96 rounded-2xl overflow-hidden shadow-soft-lg">
-      <img src="/assets/images/map.png" class="w-full h-full object-cover" alt="Map"/>
-      <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 via-transparent to-orange-500/10 pointer-events-none"></div>
+  <div class="relative h-96 rounded-2xl overflow-hidden shadow-soft-lg">
+    <img src="/assets/images/map.png" class="w-full h-full object-cover" alt="Map"/>
+    <div class="absolute inset-0 bg-gradient-to-tr from-emerald-500/10 via-transparent to-orange-500/10 pointer-events-none"></div>
 
-      <div class="absolute inset-0 flex items-center justify-center p-4">
-        <div class="glass bg-white/85 rounded-xl p-8 text-center shadow-soft max-w-md w-full">
-          <h3 class="text-2xl font-bold text-gray-900 mb-2">Wayaroad on the Map</h3>
-          <p class="text-gray-600 text-sm mb-6">Explore the beautiful routes and hidden gems of Wayanad</p>
-          <button class="btn bg-[#35D6A7] hover:bg-[#2ac597] text-white px-6 py-2.5 rounded-full text-sm font-semibold">
-            View on Map
-          </button>
-        </div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="glass bg-white/85 rounded-xl p-8 text-center shadow-soft max-w-md w-full">
+        <h3 class="text-2xl font-bold text-gray-900 mb-2">Wayaroad on the Map</h3>
+        <p class="text-gray-600 text-sm mb-6">Explore the beautiful routes and hidden gems of Wayanad</p>
+        <button class="btn bg-[#35D6A7] hover:bg-[#2ac597] text-white px-6 py-2.5 rounded-full text-sm font-semibold">
+          View on Map
+        </button>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Footer -->
-  <footer class="bg-gray-50 border-t border-gray-200 mt-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
-        <div class="flex gap-6 text-sm text-gray-600">
-          <a href="#" class="hover:text-gray-900">Discover</a>
-          <a href="#" class="hover:text-gray-900">Plan</a>
-          <a href="#" class="hover:text-gray-900">Support</a>
-          <a href="#" class="hover:text-gray-900">Company</a>
-        </div>
-        <div class="flex gap-4">
-          <a href="#" class="text-gray-600 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100" aria-label="Facebook">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12S0 5.446 0 12.073c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-          </a>
-          <a href="#" class="text-gray-600 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100" aria-label="Twitter">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2s9 5 20 5a9.5 9.5 0 00-9-5.5c4.75 2.25 7-7 7-7"/></svg>
-          </a>
-          <a href="#" class="text-gray-600 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100" aria-label="Instagram">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1112.63 8" stroke="white" stroke-width="2" fill="none"></path></svg>
-          </a>
-          <a href="#" class="text-gray-600 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100" aria-label="LinkedIn">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.39m0-5.13v5.5"></path></svg>
-          </a>
-        </div>
-      </div>
-      <div class="mt-6 text-center text-xs text-gray-500">© <span id="year"></span> Traveezy. All rights reserved.</div>
-    </div>
-  </footer>
+<%- include('partials/footer') %>
 
   <script>
     // Header shadow on scroll + year + hero parallax
