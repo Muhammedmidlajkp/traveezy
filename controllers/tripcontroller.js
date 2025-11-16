@@ -165,6 +165,7 @@ const normalizedPlaces = await Promise.all(
       title: `AI Trip Planner - ${user.name}`,
       query: q,
       places: normalizedPlaces,
+      user: req.user, // ✅ Pass user object to the template
       error: null,
     });
   } catch (error) {
@@ -173,6 +174,7 @@ const normalizedPlaces = await Promise.all(
       title: "AI Trip Planner - Error",
       error: "Something went wrong with the AI service or database.",
       places: [],
+      user: req.user || null, // ✅ Pass user object even on error
     });
   }
 };
@@ -195,12 +197,14 @@ exports.explorePage = async (req, res) => {
     res.render("user/Explore", {
       title: "Explore Destinations",
       places,
+      user: req.user || null, // ✅ Pass user object to the template
     });
   } catch (err) {
     console.error("Explore filter error:", err);
     res.render("user/Explore", {
       title: "Explore Destinations",
       places: [],
+      user: req.user || null, // ✅ Pass user object even on error
     });
   }
 };

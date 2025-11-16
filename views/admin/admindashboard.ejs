@@ -4,14 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Traveezy</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     a { text-decoration: none; color: inherit; }
     .logo img { width: 130px; }
     .sidebar-item.active { background-color: #f3f4f6; border-left: 3px solid #14b8a6; }
     .card { background-color: white; border-radius: 10px; padding: 20px; border: 1px solid #e5e7eb; }
   </style>
+
 </head>
 <body class="bg-gray-50">
   <div class="flex h-screen">
@@ -54,18 +57,28 @@
               <h3 class="text-gray-500 text-sm font-medium">Total Revenue</h3>
               <i class="fas fa-dollar-sign text-teal-500"></i>
             </div>
-            <p class="text-2xl font-bold text-gray-900">$<%= totalRevenue || '3.2M' %></p>
+            <p class="text-2xl font-bold text-gray-900"><%= totalRevenue || '3.2M' %></p>
             <p class="text-green-500 text-sm">+8.4% since last month</p>
           </div>
 
-          <div class="card">
+          <!-- <div class="card">
             <div class="flex items-center justify-between mb-2">
               <h3 class="text-gray-500 text-sm font-medium">New Reviews</h3>
               <i class="fas fa-star text-teal-500"></i>
             </div>
             <p class="text-2xl font-bold text-gray-900"><%= newReviews || '450' %></p>
             <p class="text-green-500 text-sm">+1.5% since last month</p>
-          </div>
+          </div> -->
+        <div class="card">
+  <div class="flex items-center justify-between mb-2">
+    <h3 class="text-gray-500 text-sm font-medium">Total Orders</h3>
+    <i class="fas fa-shopping-cart text-teal-500"></i>
+  </div>
+  <p class="text-2xl font-bold text-gray-900"><%= totalBookings || '0' %></p>
+  <p class="text-green-500 text-sm">+3.7% since last month</p>
+</div>
+
+
         </div>
 
         <!-- Quick Actions -->
@@ -90,7 +103,7 @@
         </div>
 
         <!-- Charts -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div class="card">
             <h3 class="text-gray-900 font-semibold mb-2">User Growth Trend</h3>
             <div class="bg-gray-100 rounded-lg h-48 flex items-center justify-center text-gray-400 text-sm">
@@ -103,7 +116,32 @@
               <i class="fas fa-chart-bar mr-2"></i> Chart Placeholder
             </div>
           </div>
-        </div>
+        </div> -->
+
+        <!-- <div class="card">
+  <h3 class="text-gray-900 font-semibold mb-2">User Growth Trend</h3>
+  <canvas id="userGrowthChart" height="200"></canvas>
+</div>
+
+<div class="card">
+  <h3 class="text-gray-900 font-semibold mb-2">Booking Category Trend</h3>
+  <canvas id="bookingCategoryChart" height="200"></canvas>
+</div> -->
+
+
+<!-- Charts Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+  <div class="card">
+    <h3 class="text-gray-900 font-semibold mb-2">User Growth Trend</h3>
+    <canvas id="userGrowthChart" height="200"></canvas>
+  </div>
+
+  <div class="card">
+    <h3 class="text-gray-900 font-semibold mb-2">Booking Category Trend</h3>
+    <canvas id="bookingCategoryChart" height="200"></canvas>
+  </div>
+</div>
+
 
         <!-- Recent Activities -->
         <div class="card">
@@ -129,5 +167,65 @@
       </main>
     </div>
   </div>
+  
+
+  <script>
+  const userGrowthLabels = <%- JSON.stringify(userGrowthLabels) %>;
+  const userGrowthData = <%- JSON.stringify(userGrowthData) %>;
+  const bookingCategories = <%- JSON.stringify(bookingCategories) %>;
+  const bookingCounts = <%- JSON.stringify(bookingCounts) %>;
+
+  // --- User Growth Chart ---
+  new Chart(document.getElementById('userGrowthChart'), {
+    type: 'line',
+    data: {
+      labels: userGrowthLabels,
+      datasets: [{
+        label: 'New Users',
+        data: userGrowthData,
+        borderColor: '#14b8a6',
+        backgroundColor: 'rgba(20, 184, 166, 0.2)',
+        fill: true,
+        tension: 0.3,
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+
+  // --- Booking Category Chart ---
+  new Chart(document.getElementById('bookingCategoryChart'), {
+    type: 'bar',
+    data: {
+      labels: bookingCategories,
+      datasets: [{
+        label: 'Bookings by Category',
+        data: bookingCounts,
+        backgroundColor: 'rgba(20, 184, 166, 0.5)',
+        borderColor: '#14b8a6',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+</script>
+
+
 </body>
 </html>

@@ -140,39 +140,50 @@
 </section>
 
 <!-- Top Resorts Section -->
-<section id="top-resorts" class="py-12 md:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto section-fade">
-  <div class="text-center mb-10">
-    <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Top Resorts</h2>
-    <p class="text-gray-600 text-sm">Explore our curated list of top-rated resorts</p>
-  </div>
+<div class="bg-gray-50/70 py-16 sm:py-20">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Top Rated Resorts</h2>
+      <p class="mt-3 max-w-2xl mx-auto text-lg text-gray-600">Handpicked resorts offering the best comfort and luxury.</p>
+    </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-    <% if (resorts && resorts.length > 0) { %>
-      <% resorts.forEach(resort => { %>
-        <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
-          <div class="relative h-48">
-            <img class="w-full h-full object-cover img-zoom" src="<%= resort.image %>" alt="<%= resort.name %>"/>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
-            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass"><%= resort.category %></span>
-          </div>
-          <div class="p-5">
-            <div class="flex-grow">
-              <h3 class="font-semibold text-gray-900 mb-1"><%= resort.name %></h3>
-              <p class="text-xs text-gray-600 mb-3">Added on: <%= resort.createdAt.toDateString() %></p>
-              <div class="flex items-center gap-1 text-xs text-gray-700">
-                <span class="text-yellow-400">★</span>
-                <span><%= resort.rating %> • Based on user reviews</span>
+    <!-- Resorts Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+      <% if (resorts && resorts.length > 0) { %>
+        <% resorts.forEach(resort => { %>
+          <article class="group bg-white rounded-xl overflow-hidden shadow-soft card-hover">
+            <div class="relative h-48">
+              <img class="w-full h-full object-cover img-zoom" src="<%= resort.image %>" alt="<%= resort.name %>"/>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent"></div>
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-medium bg-white/85 glass"><%= resort.category %></span>
+            </div>
+            <div class="p-5">
+              <h3 class="font-semibold text-gray-900 mb-1 truncate"><%= resort.name %></h3>
+              <p class="text-xs text-gray-600 mb-3 truncate"><%= resort.location ? resort.location.split(',')[0] : 'Location not specified' %></p>
+              <div class="flex justify-between items-center">
+                <div class="flex items-center gap-1 text-xs text-gray-700">
+                  <span class="text-yellow-400">★</span>
+                  <span><%= resort.rating.toFixed(1) %> • Based on reviews</span>
+                </div>
+                <div class="text-lg font-bold text-teal-600">
+                  ₹<%= resort.price ? resort.price.toLocaleString('en-IN') : 'N/A' %>
+                </div>
               </div>
             </div>
-            <a href="/user/place/<%= resort._id %>" class="mt-4 w-full btn bg-[#35D6A7] hover:bg-[#2ac597] text-white px-6 py-2.5 rounded-full text-sm font-semibold text-center inline-block">View Details</a>
-          </div>
-        </article>
-      <% }) %>
-    <% } else { %>
-      <p class="text-gray-500">No resorts available yet.</p>
-    <% } %>
+          </article>
+        <% }) %>
+      <% } else { %>
+        <p class="text-center text-gray-500 col-span-full">No resorts available at the moment.</p>
+      <% } %>
+    </div>
+
+    <div class="text-center mt-12">
+      <a href="/user/resorts" class="btn inline-flex items-center gap-2 bg-[#35D6A7] hover:bg-[#2ac597] text-white px-8 py-2.5 rounded-full text-sm font-semibold shadow-soft-lg">
+        View All Resorts
+      </a>
+    </div>
   </div>
-</section>
+</div>
 
 <!-- Map Section -->
 <section id="map" class="py-16 md:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto section-fade">
@@ -199,25 +210,25 @@
 
 <%- include('partials/footer') %>
 
-  <script>
-    // Header shadow on scroll + year + hero parallax
-    const header = document.getElementById('siteHeader');
-    const year = document.getElementById('year');
-    year.textContent = new Date().getFullYear();
+<script>
+  // Header shadow on scroll + year + hero parallax
+  const header = document.getElementById('siteHeader');
+  const year = document.getElementById('year');
+  year.textContent = new Date().getFullYear();
 
-    window.addEventListener('scroll', () => {
-      const y = window.scrollY || document.documentElement.scrollTop;
-      if (y > 8) {
-        header.classList.add('shadow-md');
-      } else {
-        header.classList.remove('shadow-md');
-      }
-      const heroImg = document.querySelector('section.relative img');
-      if (heroImg) {
-        const d = Math.min(30, Math.max(0, y * 0.08));
-        heroImg.style.transform = `translateY(${d}px) scale(1.03)`;
-      }
-    }, { passive: true });
-  </script>
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY || document.documentElement.scrollTop;
+    if (y > 8) {
+      header.classList.add('shadow-md');
+    } else {
+      header.classList.remove('shadow-md');
+    }
+    const heroImg = document.querySelector('section.relative img');
+    if (heroImg) {
+      const d = Math.min(30, Math.max(0, y * 0.08));
+      heroImg.style.transform = `translateY(${d}px) scale(1.03)`;
+    }
+  }, { passive: true });
+</script>
 </body>
 </html>

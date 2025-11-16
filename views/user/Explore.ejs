@@ -1,991 +1,1036 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Traveezy - Your Perfect Travel Plan</title>
-  <meta name="description" content="Discover and plan your perfect journey with Traveezy. Explore destinations, build your itinerary, and track your adventure in real-time."/>
-  <style>
-    /* ==========================================================================
-       1. DESIGN TOKENS
-       ========================================================================== */
-    
-        .logomain { margin-left: 50px; }
-        .logomain img { width: auto; height: 40px; }
-       :root{
-      /* Colors */
-      --c-brand-primary: #26C485;
-      --c-brand-primary-dark: #1eb06f;
-      --c-brand-secondary: #FF6B35;
-      --c-brand-secondary-dark: #FF8A5B;
-      --c-active: #2563eb;
-      --c-bg: #f8f9fa;
-      --c-surface: #fff;
-      --c-text-primary: #333;
-      --c-text-muted: #666;
-      --c-text-subtle: #999;
-      --c-border: #e8e8e8;
-      --c-white: #fff;
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Traveezy - Your Perfect Travel Plan</title>
+    <meta name="description" content="Discover and plan your perfect journey with Traveezy. Explore destinations, build your itinerary, and track your adventure in real-time."/>
+    <style>
+      /* ==========================================================================
+        1. DESIGN TOKENS
+        ========================================================================== */
+
+          .logomain { margin-left: 50px; }
+          .logomain img { width: auto; height: 40px; }
+        :root{
+        /* Colors */
+        --c-brand-primary: #26C485;
+        --c-brand-primary-dark: #1eb06f;
+        --c-brand-secondary: #FF6B35;
+        --c-brand-secondary-dark: #FF8A5B;
+        --c-active: #2563eb;
+        --c-bg: #f8f9fa;
+        --c-surface: #fff;
+        --c-text-primary: #333;
+        --c-text-muted: #666;
+        --c-text-subtle: #999;
+        --c-border: #e8e8e8;
+        --c-white: #fff;
 
 
-      /* Typography */
-      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        /* Typography */
+        --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 
 
-      /* Spacing */
-      --space-1: 4px;
-      --space-2: 8px;
-      --space-3: 12px;
-      --space-4: 16px;
-      --space-5: 20px;
-      --space-6: 24px;
-      --space-8: 32px;
-      --space-10: 40px;
+        /* Spacing */
+        --space-1: 4px;
+        --space-2: 8px;
+        --space-3: 12px;
+        --space-4: 16px;
+        --space-5: 20px;
+        --space-6: 24px;
+        --space-8: 32px;
+        --space-10: 40px;
 
 
-      /* Sizing */
-      --max-width: 1400px;
+        /* Sizing */
+        --max-width: 1400px;
 
 
-      /* Borders */
-      --radius-md: 8px;
-      --radius-lg: 12px;
+        /* Borders */
+        --radius-md: 8px;
+        --radius-lg: 12px;
 
 
-      /* Shadows */
-      --shadow-md: 0 8px 20px rgba(0,0,0,.08);
-      --shadow-lg: 0 12px 28px rgba(0,0,0,.12);
-      --shadow-brand: 0 4px 12px rgba(38, 196, 133, .3);
+        /* Shadows */
+        --shadow-md: 0 8px 20px rgba(0,0,0,.08);
+        --shadow-lg: 0 12px 28px rgba(0,0,0,.12);
+        --shadow-brand: 0 4px 12px rgba(38, 196, 133, .3);
 
 
-      /* Journey Colors */
-      --c-journey-trekking: #4CAF50;
-      --c-journey-water: #2196F3;
-      --c-journey-wildlife: #8B6F47;
-      --c-journey-cultural: #FF9800;
-      --c-journey-active-bg: #E0F7F4;
-      --c-journey-active-border: #009688;
-      --c-journey-completed: #26A69A;
-      --c-journey-pending: #BDBDBD;
-      /* Transitions */
-      --transition-base: all 0.3s ease;
-    }
-
-
-    /* ==========================================================================
-       2. BASE & RESET STYLES
-       ========================================================================== */
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-    html {
-      scroll-behavior: smooth;
-    }
-    body, h1, h2, h3, p, ul, li {
-      margin: 0;
-      padding: 0;
-    }
-    body{
-      font-family: var(--font-sans);
-      color: var(--c-text-primary);
-      background-color: var(--c-bg);
-      line-height: 1.6;
-    }
-    img { display: block; max-width: 100%; }
-    button { cursor: pointer; font-family: inherit; }
-    a { text-decoration: none; color: inherit; }
-    ul { list-style: none; }
-    input { font-family: inherit; }
-
-
-    /* Accessibility */
-    .skip-link {
-      position: absolute;
-      top: -40px;
-      left: 0;
-      background: var(--c-active);
-      color: white;
-      padding: var(--space-2) var(--space-4);
-      z-index: 100;
-      transition: top 0.3s;
-    }
-    .skip-link:focus {
-      top: 0;
-    }
-    :focus-visible {
-      outline: 2px solid var(--c-active);
-      outline-offset: 2px;
-      border-radius: var(--space-1);
-    }
-
-
-    /* ==========================================================================
-       3. LAYOUT & STRUCTURE
-       ========================================================================== */
-    .page-wrapper {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: var(--space-8) var(--space-10);
-    }
-    .main-layout {
-      display: flex;
-      gap: var(--space-8);
-    }
-    .main-content {
-      flex: 1;
-      min-width: 0;
-    }
-    .sidebar {
-      width: 320px;
-      flex: 0 0 320px;
-    }
-
-
-    /* ==========================================================================
-       4. COMPONENTS
-       ========================================================================== */
-
-
-    /* Header */
-    .header {
-      position: sticky; top: 0; z-index: 50;
-      background-color: var(--c-surface);
-      border-bottom: 1px solid var(--c-border);
-      padding: var(--space-4) var(--space-10);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 10px rgba(0,0,0,.05);
-    }
-    .header__left { display: flex; align-items: center; }
-    .header__logo {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      font-weight: 700;
-      font-size: 20px;
-      color: #2d3748;
-    }
-    .header__logo-icon {
-      width: 36px; height: 36px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--c-brand-secondary) 0%, var(--c-brand-secondary-dark) 100%);
-      display: grid;
-      place-items: center;
-      color: var(--c-white);
-      font-size: 20px;
-      box-shadow: 0 4px 12px rgba(255,107,53,.3);
-    }
-    .header__nav { display: flex; gap: var(--space-1); }
-    .header__nav-link {
-      color: var(--c-text-muted);
-      font-size: 14px;
-      padding: var(--space-2) var(--space-3);
-      border-radius: var(--radius-md);
-      transition: var(--transition-base);
-      font-weight: 500;
-    }
-    .header__nav-link:hover { background-color: #f0f0f0; color: var(--c-text-primary); }
-    .header__nav-link--active {
-      background-color: rgba(38,196,133,.1);
-      color: var(--c-brand-primary);
-    }
-    .header__right { display: flex; align-items: center; gap: var(--space-4); }
-    .header__profile {
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #FFB366 0%, var(--c-brand-secondary-dark) 100%);
-      cursor: pointer;
-      transition: var(--transition-base);
-      border: none;
-      padding: 0;
-    }
-    .header__profile:hover { transform: scale(1.05); }
-
-
-    /* Search Component */
-    .search-bar {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      background-color: var(--c-bg);
-      border: 1px solid #e0e0e0;
-      border-radius: var(--radius-md);
-      padding: var(--space-2) var(--space-3);
-      transition: var(--transition-base);
-    }
-    .search-bar:focus-within {
-      border-color: var(--c-brand-primary);
-      box-shadow: 0 0 0 2px rgba(38,196,133,.2);
-    }
-    .search-bar__input {
-      border: none;
-      outline: none;
-      background-color: transparent;
-      width: 200px;
-      font-size: 14px;
-      color: var(--c-text-primary);
-    }
-    .search-bar__icon { font-size: 16px; color: #888; }
-
-
-    /* Button Component */
-    .btn {
-      border: none;
-      border-radius: var(--radius-md);
-      padding: var(--space-3) var(--space-5);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition-base);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-2);
-    }
-    .btn--primary {
-      background-color: var(--c-brand-primary);
-      color: var(--c-white);
-      box-shadow: var(--shadow-brand);
-    }
-    .btn--primary:hover {
-      background-color: var(--c-brand-primary-dark);
-      transform: translateY(-2px);
-    }
-    .btn--secondary {
-      background-color: var(--c-surface);
-      border: 1px solid #e0e0e0;
-      color: var(--c-text-primary);
-    }
-    .btn--secondary:hover { border-color: var(--c-brand-primary); }
-
-
-    /* Filters Panel */
-    .filters-panel {
-      background-color: var(--c-surface);
-      border-radius: var(--radius-lg);
-      padding: var(--space-6);
-      margin-bottom: var(--space-8);
-      border: 1px solid var(--c-border);
-      box-shadow: var(--shadow-md);
-    }
-    .filters-panel__title {
-      font-weight: 700;
-      font-size: 18px;
-      margin-bottom: var(--space-5);
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-    .filters-panel__grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: var(--space-4);
-      margin-bottom: var(--space-5);
-    }
-    .filters-panel__footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: var(--space-4);
-    }
-    .filters-panel__sort {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-    .filters-panel__sort-label { font-size: 14px; color: var(--c-text-muted); }
-    .filters-panel__sort .btn--secondary { width: 160px; }
-
-
-    /* Section Heading */
-    .section-heading {
-      font-size: 22px;
-      font-weight: 700;
-      margin: var(--space-5) 0 var(--space-6);
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-    }
-
-
-    /* Card Grid */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-6);
-    }
-
-
-    /* Destination Card */
-    .card {
-      background-color: var(--c-surface);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--c-border);
-      overflow: hidden;
-      transition: var(--transition-base);
-      cursor: pointer;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-lg);
-    }
-    .card[data-removed="true"] {
-      opacity: 0.45;
-      pointer-events: none;
-    }
-    .card__thumb {
-      position: relative;
-      height: 200px;
-      overflow: hidden;
-    }
-    .card__image { width: 100%; height: 100%; object-fit: cover; }
-    .card__close-btn {
-      position: absolute;
-      left: var(--space-3);
-      top: var(--space-3);
-      width: 30px; height: 30px;
-      border-radius: 50%;
-      background-color: rgba(0,0,0,.6);
-      color: var(--c-white);
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      font-size: 16px;
-      transition: var(--transition-base);
-      opacity: 0.8;
-      border: none;
-      padding: 0;
-    }
-    .card__close-btn:hover { opacity: 1; transform: scale(1.1); }
-    .card__rating {
-      position: absolute;
-      right: var(--space-3);
-      top: var(--space-3);
-      background-color: var(--c-brand-primary);
-      color: var(--c-white);
-      font-weight: 700;
-      font-size: 13px;
-      padding: 6px 12px;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      gap: var(--space-1);
-    }
-    .card__slot {
-      background: linear-gradient(135deg, #f0f9ff 0%, #e1f7e9 100%);
-      color: var(--c-brand-primary);
-      font-weight: 700;
-      font-size: 13px;
-      padding: var(--space-3) var(--space-4);
-      border-top: 1px solid var(--c-border);
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-    .card__body { padding: 18px 20px 20px; flex-grow: 1; display: flex; flex-direction: column; }
-    .card__title { font-size: 16px; font-weight: 700; margin-bottom: var(--space-2); }
-    .card__location {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--c-text-muted);
-      font-size: 13px;
-      margin-bottom: var(--space-3);
-    }
-    .card__description {
-      color: var(--c-text-muted);
-      font-size: 13px;
-      line-height: 1.6;
-      margin-bottom: var(--space-4);
-      flex-grow: 1;
-    }
-    .card__stats {
-      display: flex;
-      justify-content: space-between;
-      color: var(--c-text-subtle);
-      font-size: 13px;
-      padding-top: var(--space-4);
-      border-top: 1px solid var(--c-border);
-    }
-    .card__stat-item { display: flex; align-items: center; gap: var(--space-1); }
-
-
-    /* Sidebar Panel */
-    .sidebar-panel {
-      background-color: var(--c-surface);
-      border: 1px solid var(--c-border);
-      border-radius: var(--radius-lg);
-      padding: var(--space-6);
-      padding: 32px; /* Increased padding */
-      position: sticky;
-      top: 90px;
-      box-shadow: var(--shadow-md);
-    }
-    .sidebar-panel__title {
-      font-weight: 700;
-      font-size: 24px; /* Larger and bolder */
-      margin-bottom: 32px; /* More space below */
-      display: flex;
-      align-items: center;
-      justify-content: center; /* Center align */
-      gap: var(--space-3);
-    }
-
-
-    /* New Journey Timeline Component */
-    .journey-timeline {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-4);
-      position: relative; /* For the main timeline line */
-      gap: 28px; /* Increased spacing between items */
-    }
-    /* The main continuous timeline line */
-    .journey-item {
-      display: flex;
-      gap: var(--space-4);
-      position: relative;
-      padding-left: 44px; /* Space for dot and line */
-      transition: var(--transition-base);
-      cursor: pointer;
-      padding-bottom: 28px; /* Match gap to ensure line connects */
-    }
-    .journey-item:last-child {
-      padding-bottom: 0;
-    }
-    .journey-item:hover {
-      transform: scale(1.02);
-      background-color: #f9f9f9;
-      border-radius: var(--radius-md);
-    }
-
-
-    /* Individual line segment for each item */
-    .journey-item::before {
-      content: '';
-      position: absolute;
-      left: 10px;
-      top: 12px; /* Start below the dot's center */
-      bottom: -28px; /* Extend to the next item's top */
-      width: 4px;
-      background-color: #d1d5db; /* Default gray for upcoming */
-      z-index: 0;
-    }
-    .journey-item:last-child::before {
-      display: none; /* No line after the last item */
-    }
-    .journey-item__dot {
-      position: absolute;
-      left: 0;
-      top: 2px; /* Align with title */
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      background-color: #d1d5db; /* Upcoming color */
-      border: 3px solid var(--c-white);
-      box-shadow: 0 0 0 2px #d1d5db;
-      z-index: 2;
-      transition: var(--transition-base);
-    }
-    .journey-item:hover .journey-item__dot { transform: scale(1.15); }
-    .journey-item--completed .journey-item__dot {
-      background-color: #22c55e; /* Completed color */
-      box-shadow: 0 0 0 2px #22c55e;
-    }
-
-    .journey-item--completed::before {
-      background-color: #22c55e; /* Green line for completed items */
-    }
-    .journey-item--active .journey-item__dot {
-      background-color: #3b82f6; /* Current color */
-      box-shadow: 0 0 0 2px #3b82f6;
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 2px #3b82f6; }
-      50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.4); }
-    }
-    .journey-item--active .journey-item__dot { animation: pulse 2s infinite; }
-
-
-    .journey-item__content { width: 100%; }
-    .journey-item__header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: var(--space-1);
-    }
-    .journey-item__time {
-      font-size: 14px; /* Smaller, subtle time */
-      font-weight: 500;
-      color: var(--c-text-muted);
-    }
-    .journey-item__duration {
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--c-text-subtle);
-    }
-    .journey-item__title {
-      font-size: 20px; /* Larger, bolder location */
-      font-weight: 600;
-      color: var(--c-text-primary);
-      margin-bottom: var(--space-1);
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-    .journey-item--active .journey-item__title {
-      color: #3b82f6; /* Current location highlight */
-    }
-    .journey-item__description {
-      font-size: 14px;
-      color: var(--c-text-muted);
-      line-height: 1.5;
-    }
-
-
-    /* Footer */
-    .footer {
-      background-color: var(--c-surface);
-      border-top: 1px solid var(--c-border);
-      margin-top: 60px;
-    }
-    .footer__inner {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 50px var(--space-10);
-    }
-    .footer__grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr;
-      gap: var(--space-10);
-    }
-    .footer__brand-info .brand-row {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      margin-bottom: var(--space-4);
-    }
-    .footer__brand-info .brand-row .logo-icon { width: 40px; height: 40px; }
-    .footer__brand-info .brand-row strong { font-size: 22px; }
-    .footer__brand-info p { color: var(--c-text-muted); font-size: 14px; margin-bottom: var(--space-4); }
-    .footer__socials { display: flex; gap: var(--space-3); }
-    .footer__social-link {
-      width: 34px; height: 34px;
-      border-radius: var(--radius-md);
-      background-color: #f0f0f0;
-      display: grid;
-      place-items: center;
-      color: var(--c-text-muted);
-      font-size: 16px;
-      transition: var(--transition-base);
-    }
-    .footer__social-link:hover {
-      background-color: var(--c-brand-primary);
-      color: var(--c-white);
-      transform: translateY(-2px);
-    }
-    .footer__column h3 { font-size: 16px; font-weight: 700; margin: 0 0 var(--space-4); }
-    .footer__column li { margin: 0 0 var(--space-3); }
-    .footer__column a { color: var(--c-text-muted); font-size: 14px; transition: var(--transition-base); }
-    .footer__column a:hover { color: var(--c-text-primary); padding-left: var(--space-1); }
-    .footer__bottom {
-      margin-top: var(--space-8);
-      padding-top: var(--space-5);
-      border-top: 1px solid var(--c-border);
-      color: var(--c-text-subtle);
-      font-size: 13px;
-      text-align: center;
-    }
-
-
-    /* ==========================================================================
-       5. RESPONSIVE STYLES
-       ========================================================================== */
-    @media (max-width: 1200px) {
-      .card-grid { grid-template-columns: repeat(2, 1fr); }
-      .sidebar { display: none; }
-      .main-layout { gap: 0; }
-      .footer__grid { grid-template-columns: 1.5fr 1fr 1fr; }
-    }
-
-
-    @media (max-width: 768px) {
-      .header { padding: var(--space-4) var(--space-5); }
-      .header__left { gap: var(--space-5); }
-      .header__nav { display: none; } /* Example: hide for a burger menu */
-      .page-wrapper { padding: var(--space-5); }
-      .filters-panel__grid { grid-template-columns: repeat(2, 1fr); }
-      .card-grid { grid-template-columns: 1fr; }
-      .footer__grid { grid-template-columns: 1fr 1fr; }
-      .filters-panel__footer { flex-direction: column; align-items: flex-start; }
-      .filters-panel__sort { width: 100%; justify-content: space-between; }
-    }
-
-
-    @media (max-width: 520px) {
-      .filters-panel__grid { grid-template-columns: 1fr; }
-      .footer__grid { grid-template-columns: 1fr; }
-      .search-bar__input { width: 150px; }
-      .header__right { gap: var(--space-3); }
-      .journey-item__dot {
-        width: 18px; height: 18px;
+        /* Journey Colors */
+        --c-journey-trekking: #4CAF50;
+        --c-journey-water: #2196F3;
+        --c-journey-wildlife: #8B6F47;
+        --c-journey-cultural: #FF9800;
+        --c-journey-active-bg: #E0F7F4;
+        --c-journey-active-border: #009688;
+        --c-journey-completed: #26A69A;
+        --c-journey-pending: #BDBDBD;
+        /* Transitions */
+        --transition-base: all 0.3s ease;
       }
-      .journey-timeline::before, .journey-timeline__completed-line {
-        left: 8px;
+
+
+      /* ==========================================================================
+        2. BASE & RESET STYLES
+        ========================================================================== */
+      *, *::before, *::after {
+        box-sizing: border-box;
       }
+      html {
+        scroll-behavior: smooth;
+      }
+      body, h1, h2, h3, p, ul, li {
+        margin: 0;
+        padding: 0;
+      }
+      body{
+        font-family: var(--font-sans);
+        color: var(--c-text-primary);
+        background-color: var(--c-bg);
+        line-height: 1.6;
+      }
+      img { display: block; max-width: 100%; }
+      button { cursor: pointer; font-family: inherit; }
+      a { text-decoration: none; color: inherit; }
+      ul { list-style: none; }
+      input { font-family: inherit; }
+
+
+      /* Accessibility */
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: var(--c-active);
+        color: white;
+        padding: var(--space-2) var(--space-4);
+        z-index: 100;
+        transition: top 0.3s;
+      }
+      .skip-link:focus {
+        top: 0;
+      }
+      :focus-visible {
+        outline: 2px solid var(--c-active);
+        outline-offset: 2px;
+        border-radius: var(--space-1);
+      }
+
+
+      /* ==========================================================================
+        3. LAYOUT & STRUCTURE
+        ========================================================================== */
+      .page-wrapper {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: var(--space-8) var(--space-10);
+      }
+      .main-layout {
+        display: flex;
+        gap: var(--space-8);
+      }
+      .main-content {
+        flex: 1;
+        min-width: 0;
+      }
+      .sidebar {
+        width: 320px;
+        flex: 0 0 320px;
+      }
+
+
+      /* ==========================================================================
+        4. COMPONENTS
+        ========================================================================== */
+
+
+      /* Header */
+
+
+      /* Search Component */
+      .search-bar {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        background-color: var(--c-bg);
+        border: 1px solid #e0e0e0;
+        border-radius: var(--radius-md);
+        padding: var(--space-2) var(--space-3);
+        transition: var(--transition-base);
+      }
+      .search-bar:focus-within {
+        border-color: var(--c-brand-primary);
+        box-shadow: 0 0 0 2px rgba(38,196,133,.2);
+      }
+      .search-bar__input {
+        border: none;
+        outline: none;
+        background-color: transparent;
+        width: 200px;
+        font-size: 14px;
+        color: var(--c-text-primary);
+      }
+      .search-bar__icon { font-size: 16px; color: #888; }
+
+
+      /* Button Component */
+      .btn {
+        border: none;
+        border-radius: var(--radius-md);
+        padding: var(--space-3) var(--space-5);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition-base);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+      }
+      .btn--primary {
+        background-color: var(--c-brand-primary);
+        color: var(--c-white);
+        box-shadow: var(--shadow-brand);
+      }
+      .btn--primary:hover {
+        background-color: var(--c-brand-primary-dark);
+        transform: translateY(-2px);
+      }
+      .btn--secondary {
+        background-color: var(--c-surface);
+        border: 1px solid #e0e0e0;
+        color: var(--c-text-primary);
+      }
+      .btn--secondary:hover { border-color: var(--c-brand-primary); }
+
+
+      /* Filters Panel */
+      .filters-panel {
+        background-color: var(--c-surface);
+        border-radius: var(--radius-lg);
+        padding: var(--space-6);
+        margin-bottom: var(--space-8);
+        border: 1px solid var(--c-border);
+        box-shadow: var(--shadow-md);
+      }
+      .filters-panel__title {
+        font-weight: 700;
+        font-size: 18px;
+        margin-bottom: var(--space-5);
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+      }
+      .filters-panel__grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-4);
+        margin-bottom: var(--space-5);
+      }
+      .filters-panel__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-4);
+      }
+      .filters-panel__sort {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+      }
+      .filters-panel__sort-label { font-size: 14px; color: var(--c-text-muted); }
+      .filters-panel__sort .btn--secondary { width: 160px; }
+
+
+      /* Section Heading */
+      .section-heading {
+        font-size: 22px;
+        font-weight: 700;
+        margin: var(--space-5) 0 var(--space-6);
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+      }
+
+
+      /* Card Grid */
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-6);
+      }
+
+
+      /* Destination Card */
+      .card {
+        background-color: var(--c-surface);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--c-border);
+        overflow: hidden;
+        transition: var(--transition-base);
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+      }
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--shadow-lg);
+      }
+      .card[data-removed="true"] {
+        opacity: 0.45;
+        pointer-events: none;
+      }
+      .card__thumb {
+        position: relative;
+        height: 200px;
+        overflow: hidden;
+      }
+      .card__image { width: 100%; height: 100%; object-fit: cover; }
+      .card__close-btn {
+        position: absolute;
+        left: var(--space-3);
+        top: var(--space-3);
+        width: 30px; height: 30px;
+        border-radius: 50%;
+        background-color: rgba(0,0,0,.6);
+        color: var(--c-white);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 16px;
+        transition: var(--transition-base);
+        opacity: 0.8;
+        border: none;
+        padding: 0;
+      }
+      .card__close-btn:hover { opacity: 1; transform: scale(1.1); }
+      .card__rating {
+        position: absolute;
+        right: var(--space-3);
+        top: var(--space-3);
+        background-color: var(--c-brand-primary);
+        color: var(--c-white);
+        font-weight: 700;
+        font-size: 13px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: var(--space-1);
+      }
+      .card__slot {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e1f7e9 100%);
+        color: var(--c-brand-primary);
+        font-weight: 700;
+        font-size: 13px;
+        padding: var(--space-3) var(--space-4);
+        border-top: 1px solid var(--c-border);
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+      }
+      .card__body { padding: 18px 20px 20px; flex-grow: 1; display: flex; flex-direction: column; }
+      .card__title { font-size: 16px; font-weight: 700; margin-bottom: var(--space-2); }
+      .card__location {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--c-text-muted);
+        font-size: 13px;
+        margin-bottom: var(--space-3);
+      }
+      .card__description {
+        color: var(--c-text-muted);
+        font-size: 13px;
+        line-height: 1.6;
+        margin-bottom: var(--space-4);
+        flex-grow: 1;
+      }
+      .card__stats {
+        display: flex;
+        justify-content: space-between;
+        color: var(--c-text-subtle);
+        font-size: 13px;
+        padding-top: var(--space-4);
+        border-top: 1px solid var(--c-border);
+      }
+      .card__stat-item { display: flex; align-items: center; gap: var(--space-1); }
+
+
+      /* Sidebar Panel */
+      .sidebar-panel {
+        background-color: var(--c-surface);
+        border: 1px solid var(--c-border);
+        border-radius: var(--radius-lg);
+        padding: var(--space-6);
+        padding: 32px; /* Increased padding */
+        position: sticky;
+        top: 90px;
+        box-shadow: var(--shadow-md);
+      }
+      .sidebar-panel__title {
+        font-weight: 700;
+        font-size: 24px; /* Larger and bolder */
+        margin-bottom: 32px; /* More space below */
+        display: flex;
+        align-items: center;
+        justify-content: center; /* Center align */
+        gap: var(--space-3);
+      }
+
+
+      /* New Journey Timeline Component */
+      .journey-timeline {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-4);
+        position: relative; /* For the main timeline line */
+        gap: 28px; /* Increased spacing between items */
+      }
+      /* The main continuous timeline line */
       .journey-item {
-        padding-left: 36px;
+        display: flex;
+        gap: var(--space-4);
+        position: relative;
+        padding-left: 44px; /* Space for dot and line */
+        transition: var(--transition-base);
+        cursor: pointer;
+        padding-bottom: 28px; /* Match gap to ensure line connects */
       }
-    }
-  </style>
-</head>
-<body>
-  <a href="#main-content" class="skip-link">Skip to main content</a>
+      .journey-item:last-child {
+        padding-bottom: 0;
+      }
+      .journey-item:hover {
+        transform: scale(1.02);
+        background-color: #f9f9f9;
+        border-radius: var(--radius-md);
+      }
 
-  <!-- ========================================================================
-     HEADER
-     ======================================================================== -->
-  <header class="header" role="banner">
-    <div class="header__left">
-           <div class="logomain"><img src="/assets/images/mainlogotz.png" alt=""></div>
-    </div>
 
-    <nav class="header__nav" role="navigation" aria-label="Main Navigation">
-      <a href="#" class="header__nav-link header__nav-link--active">Home</a>
-      <a href="#" class="header__nav-link">Explore</a>
-      <a href="#" class="header__nav-link">Map</a>
-      <a href="#" class="header__nav-link">Booking</a>
-      <a href="#" class="header__nav-link">Support</a>
-    </nav>
+      /* Individual line segment for each item */
+      .journey-item::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 12px; /* Start below the dot's center */
+        bottom: -28px; /* Extend to the next item's top */
+        width: 4px;
+        background-color: #d1d5db; /* Default gray for upcoming */
+        z-index: 0;
+      }
+      .journey-item:last-child::before {
+        display: none; /* No line after the last item */
+      }
+      .journey-item__dot {
+        position: absolute;
+        left: 0;
+        top: 2px; /* Align with title */
+        width: 22px; height: 22px;
+        border-radius: 50%;
+        background-color: #d1d5db; /* Upcoming color */
+        border: 3px solid var(--c-white);
+        box-shadow: 0 0 0 2px #d1d5db;
+        z-index: 2;
+        transition: var(--transition-base);
+      }
+      .journey-item:hover .journey-item__dot { transform: scale(1.15); }
+      .journey-item--completed .journey-item__dot {
+        background-color: #22c55e; /* Completed color */
+        box-shadow: 0 0 0 2px #22c55e;
+      }
 
-    <div class="header__right">
-      <label class="search-bar" role="search">
-        <span class="search-bar__icon" aria-hidden="true">🔍</span>
-        <input class="search-bar__input" type="search" placeholder="Search destinations..." aria-label="Search destinations" />
-      </label>
-      <button class="header__profile" aria-label="User Profile"></button>
-    </div>
-  </header>
+      .journey-item--completed::before {
+        background-color: #22c55e; /* Green line for completed items */
+      }
+      .journey-item--active .journey-item__dot {
+        background-color: #3b82f6; /* Current color */
+        box-shadow: 0 0 0 2px #3b82f6;
+      }
 
-  <!-- ========================================================================
-     MAIN CONTENT
-     ======================================================================== -->
-  <main id="main-content" class="page-wrapper">
-    <div class="main-layout">
-      <!-- Primary Content Area -->
-      <div class="main-content">
-        <!-- Filters -->
-        <section class="filters-panel" aria-labelledby="filters-title">
-          <h2 id="filters-title" class="filters-panel__title">⚙️ Filters</h2>
-          <div class="filters-panel__grid">
-            <button class="btn btn--secondary" data-filter="category">
-              <span>📁 Category: Nature, All</span><span>▼</span>
-            </button>
-            <button class="btn btn--secondary" data-filter="activity">
-              <span>⚡ Activity: Moderate</span><span>▼</span>
-            </button>
-            <button class="btn btn--secondary" data-filter="time">
-              <span>📅 Time Range: Full Year</span><span>▼</span>
-            </button>
-            <button class="btn btn--secondary" data-filter="distance">
-              <span>📍 Distance: 50 km</span><span>▼</span>
-            </button>
+      @keyframes pulse {
+        0%, 100% { box-shadow: 0 0 0 2px #3b82f6; }
+        50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0.4); }
+      }
+      .journey-item--active .journey-item__dot { animation: pulse 2s infinite; }
+
+
+      .journey-item__content { width: 100%; }
+      .journey-item__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--space-1);
+      }
+      .journey-item__time {
+        font-size: 14px; /* Smaller, subtle time */
+        font-weight: 500;
+        color: var(--c-text-muted);
+      }
+      .journey-item__duration {
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--c-text-subtle);
+      }
+      .journey-item__title {
+        font-size: 20px; /* Larger, bolder location */
+        font-weight: 600;
+        color: var(--c-text-primary);
+        margin-bottom: var(--space-1);
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+      }
+      .journey-item--active .journey-item__title {
+        color: #3b82f6; /* Current location highlight */
+      }
+      .journey-item__description {
+        font-size: 14px;
+        color: var(--c-text-muted);
+        line-height: 1.5;
+      }
+
+
+      /* Footer */
+      .footer {
+        background-color: var(--c-surface);
+        border-top: 1px solid var(--c-border);
+        margin-top: 60px;
+      }
+      .footer__inner {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 50px var(--space-10);
+      }
+      .footer__grid {
+        display: grid;
+        grid-template-columns: 1.2fr 1fr 1fr 1fr 1fr;
+        gap: var(--space-10);
+      }
+      .footer__brand-info .brand-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        margin-bottom: var(--space-4);
+      }
+      .footer__brand-info .brand-row .logo-icon { width: 40px; height: 40px; }
+      .footer__brand-info .brand-row strong { font-size: 22px; }
+      .footer__brand-info p { color: var(--c-text-muted); font-size: 14px; margin-bottom: var(--space-4); }
+      .footer__socials { display: flex; gap: var(--space-3); }
+      .footer__social-link {
+        width: 34px; height: 34px;
+        border-radius: var(--radius-md);
+        background-color: #f0f0f0;
+        display: grid;
+        place-items: center;
+        color: var(--c-text-muted);
+        font-size: 16px;
+        transition: var(--transition-base);
+      }
+      .footer__social-link:hover {
+        background-color: var(--c-brand-primary);
+        color: var(--c-white);
+        transform: translateY(-2px);
+      }
+      .footer__column h3 { font-size: 16px; font-weight: 700; margin: 0 0 var(--space-4); }
+      .footer__column li { margin: 0 0 var(--space-3); }
+      .footer__column a { color: var(--c-text-muted); font-size: 14px; transition: var(--transition-base); }
+      .footer__column a:hover { color: var(--c-text-primary); padding-left: var(--space-1); }
+      .footer__bottom {
+        margin-top: var(--space-8);
+        padding-top: var(--space-5);
+        border-top: 1px solid var(--c-border);
+        color: var(--c-text-subtle);
+        font-size: 13px;
+        text-align: center;
+      }
+
+
+      /* ==========================================================================
+        5. RESPONSIVE STYLES
+        ========================================================================== */
+      @media (max-width: 1200px) {
+        .card-grid { grid-template-columns: repeat(2, 1fr); }
+        .sidebar { display: none; }
+        .main-layout { gap: 0; }
+        .footer__grid { grid-template-columns: 1.5fr 1fr 1fr; }
+      }
+
+
+      @media (max-width: 768px) {
+        .header { padding: var(--space-4) var(--space-5); }
+        .header__left { gap: var(--space-5); }
+        .header__nav { display: none; } /* Example: hide for a burger menu */
+        .page-wrapper { padding: var(--space-5); }
+        .filters-panel__grid { grid-template-columns: repeat(2, 1fr); }
+        .card-grid { grid-template-columns: 1fr; }
+        .footer__grid { grid-template-columns: 1fr 1fr; }
+        .filters-panel__footer { flex-direction: column; align-items: flex-start; }
+        .filters-panel__sort { width: 100%; justify-content: space-between; }
+      }
+
+
+      @media (max-width: 520px) {
+        .filters-panel__grid { grid-template-columns: 1fr; }
+        .footer__grid { grid-template-columns: 1fr; }
+        .search-bar__input { width: 150px; }
+        .header__right { gap: var(--space-3); }
+        .journey-item__dot {
+          width: 18px; height: 18px;
+        }
+        .journey-timeline::before, .journey-timeline__completed-line {
+          left: 8px;
+        }
+        .journey-item {
+          padding-left: 36px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+
+    <%- include('partials/header') %>
+    <%- include('partials/loader') %>
+
+    
+    <main id="main-content" class="page-wrapper">
+      <div class="main-layout">
+        <!-- Primary Content Area -->
+        <div class="main-content">
+          
+
+          <!-- ========================= FILTERS SECTION ========================= -->
+  <section class="bg-gray-50/80 py-6 px-4 sm:px-6 lg:px-8 section-fade">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <!-- Left: Filter Buttons -->
+      <div class="flex flex-wrap gap-3 items-center">
+        
+        <!-- Category -->
+        <div class="relative">
+          <button id="filter-category-btn" class="btn bg-white border border-gray-300 text-gray-700 rounded-full px-4 py-2 flex items-center gap-2 hover:border-emerald-400 transition">
+            📁 Category: <span class="text-emerald-600 font-medium" id="selected-category">All</span>
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="dropdown-category" class="hidden absolute mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+            <ul class="py-1 text-sm text-gray-700">
+              <li><a href="#" data-value="All" class="block px-4 py-2 hover:bg-gray-100">All</a></li>
+              <li><a href="#" data-value="Adventure" class="block px-4 py-2 hover:bg-gray-100">Adventure</a></li>
+              <li><a href="#" data-value="Nature" class="block px-4 py-2 hover:bg-gray-100">Nature</a></li>
+              <li><a href="#" data-value="Wildlife" class="block px-4 py-2 hover:bg-gray-100">Wildlife</a></li>
+              <li><a href="#" data-value="Beach" class="block px-4 py-2 hover:bg-gray-100">Beach</a></li>
+              <li><a href="#" data-value="Beach" class="block px-4 py-2 hover:bg-gray-100">Food&Drink</a></li>
+            </ul>
           </div>
-          <div class="filters-panel__footer">
-            <button class="btn btn--primary" data-action="apply-filters">Apply Filters</button>
-            <div class="filters-panel__sort">
-              <label for="sort-by" class="filters-panel__sort-label">Sort By:</label>
-              <button id="sort-by" class="btn btn--secondary" data-filter="sort">
-                <span>Recommended</span><span>▼</span>
-              </button>
+        </div>
+
+        <!-- Activity -->
+        <div class="relative">
+          <button id="filter-activity-btn" class="btn bg-white border border-gray-300 text-gray-700 rounded-full px-4 py-2 flex items-center gap-2 hover:border-emerald-400 transition">
+            ⚡ Activity: <span class="text-emerald-600 font-medium" id="selected-activity">All</span>
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="dropdown-activity" class="hidden absolute mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+            <ul class="py-1 text-sm text-gray-700">
+              <li><a href="#" data-value="All" class="block px-4 py-2 hover:bg-gray-100">All</a></li>
+              <li><a href="#" data-value="Easy" class="block px-4 py-2 hover:bg-gray-100">Easy</a></li>
+              <li><a href="#" data-value="Moderate" class="block px-4 py-2 hover:bg-gray-100">Moderate</a></li>
+              <li><a href="#" data-value="Hard" class="block px-4 py-2 hover:bg-gray-100">Hard</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Time -->
+        <div class="relative">
+          <button id="filter-time-btn" class="btn bg-white border border-gray-300 text-gray-700 rounded-full px-4 py-2 flex items-center gap-2 hover:border-emerald-400 transition">
+            📅 Time: <span class="text-emerald-600 font-medium" id="selected-time">Any</span>
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="dropdown-time" class="hidden absolute mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+            <ul class="py-1 text-sm text-gray-700">
+              <li><a href="#" data-value="Any" class="block px-4 py-2 hover:bg-gray-100">Any</a></li>
+              <li><a href="#" data-value="Morning" class="block px-4 py-2 hover:bg-gray-100">Morning</a></li>
+              <li><a href="#" data-value="Afternoon" class="block px-4 py-2 hover:bg-gray-100">Afternoon</a></li>
+              <li><a href="#" data-value="Evening" class="block px-4 py-2 hover:bg-gray-100">Evening</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Distance -->
+        <div class="relative">
+          <button id="filter-distance-btn" class="btn bg-white border border-gray-300 text-gray-700 rounded-full px-4 py-2 flex items-center gap-2 hover:border-emerald-400 transition">
+            📍 Distance: <span class="text-emerald-600 font-medium" id="selected-distance">Any</span>
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="dropdown-distance" class="hidden absolute mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+            <ul class="py-1 text-sm text-gray-700">
+              <li><a href="#" data-value="Any" class="block px-4 py-2 hover:bg-gray-100">Any</a></li>
+              <li><a href="#" data-value="10 km" class="block px-4 py-2 hover:bg-gray-100">10 km</a></li>
+              <li><a href="#" data-value="25 km" class="block px-4 py-2 hover:bg-gray-100">25 km</a></li>
+              <li><a href="#" data-value="50 km" class="block px-4 py-2 hover:bg-gray-100">50 km</a></li>
+              <li><a href="#" data-value="100 km" class="block px-4 py-2 hover:bg-gray-100">100 km</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Apply Button -->
+      <button class="btn bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2.5 rounded-full font-semibold shadow-soft-lg" id="apply-filters-btn">
+        Apply Filters
+      </button>
+    </div>
+  </section>
+
+
+          <!-- Destinations Section -->
+          <section aria-labelledby="stops-heading">
+            <h2 id="stops-heading" class="section-heading">📍 <%= places.length %> Stops Planned</h2>
+            <div class="card-grid" id="card-grid-container">
+              <!-- Render cards dynamically with EJS -->
+              <% if (places && places.length > 0) { %>
+                <% places.forEach((place, index) => { %>
+                  <article class="card" data-place-name="<%= place.name %>" role="button" tabindex="0" aria-label="View details for <%= place.name %>">
+                    <div class="card__thumb">
+                      <button class="card__close-btn" data-action="remove-card" title="Remove <%= place.name %>" aria-label="Remove <%= place.name %>">×</button>
+                      <div class="card__rating" aria-label="Rating: <%= place.rating %> out of 5 stars">⭐ <%= place.rating %></div>
+                      <img class="card__image" src="<%= place.image || generateSVGPlaceholder(place.name, index) %>" alt="A scenic view of <%= place.name %>">
+                    </div>
+                    <div class="card__slot" aria-label="Scheduled time: <%= place.time %>">🕐 <%= place.time %></div>
+                    <div class="card__body">
+                      <h3 class="card__title"><%= place.name %></h3>
+                      <div class="card__location">📍 <span><%= place.loc %></span></div>
+                      <p class="card__description"><%= place.desc %></p>
+                      <div class="card__stats">
+                        <span class="card__stat-item" aria-label="<%= place.reviews %> reviews">📝 <%= place.reviews %> reviews</span>
+                        <span class="card__stat-item" aria-label="Distance: <%= place.dist %>">🗺️ <%= place.dist %></span>
+                      </div>
+                    </div>
+                  </article>
+                <% }); %>
+              <% } else { %>
+                <p>No destinations found. Try adjusting your filters.</p>
+              <% } %>
+            </div>
+          </section>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar" aria-label="Journey Timeline">
+          <div class="sidebar-panel">
+            <h2 class="sidebar-panel__title">🗺️ Journey Tracking</h2>
+            <div class="journey-timeline" id="timeline-container">
+              <!-- Render timeline items dynamically with EJS -->
+              <% if (places && places.length > 0) { %>
+                <% places.forEach((place) => { %>
+                  <div class="journey-item journey-item--<%= place.status %>" data-status="<%= place.status %>" id="journey-item-<%= place.name.replace(/\s+/g, '-') %>">
+                    <div class="journey-item__dot"></div>
+                    <div class="journey-item__content">
+                      <div class="journey-item__header">
+                        <div class="journey-item__time"><%= place.time %></div>
+                        <div class="journey-item__duration"><%= place.dur %></div>
+                      </div>
+                      <h3 class="journey-item__title"><%= place.icon %> <%= place.name %></h3>
+                      <p class="journey-item__description"><%= place.desc %></p>
+                    </div>
+                  </div>
+                <% }); %>
+              <% } else { %>
+                <p>Your itinerary is empty.</p>
+              <% } %>
             </div>
           </div>
-        </section>
-
-        <!-- Destinations Section -->
-        <section aria-labelledby="stops-heading">
-          <h2 id="stops-heading" class="section-heading">📍 <%= places.length %> Stops Planned</h2>
-          <div class="card-grid" id="card-grid-container">
-            <!-- Render cards dynamically with EJS -->
-            <% if (places && places.length > 0) { %>
-              <% places.forEach((place, index) => { %>
-                <article class="card" data-place-name="<%= place.name %>" role="button" tabindex="0" aria-label="View details for <%= place.name %>">
-                  <div class="card__thumb">
-                    <button class="card__close-btn" data-action="remove-card" title="Remove <%= place.name %>" aria-label="Remove <%= place.name %>">×</button>
-                    <div class="card__rating" aria-label="Rating: <%= place.rating %> out of 5 stars">⭐ <%= place.rating %></div>
-                    <img class="card__image" src="<%= place.image || generateSVGPlaceholder(place.name, index) %>" alt="A scenic view of <%= place.name %>">
-                  </div>
-                  <div class="card__slot" aria-label="Scheduled time: <%= place.time %>">🕐 <%= place.time %></div>
-                  <div class="card__body">
-                    <h3 class="card__title"><%= place.name %></h3>
-                    <div class="card__location">📍 <span><%= place.loc %></span></div>
-                    <p class="card__description"><%= place.desc %></p>
-                    <div class="card__stats">
-                      <span class="card__stat-item" aria-label="<%= place.reviews %> reviews">📝 <%= place.reviews %> reviews</span>
-                      <span class="card__stat-item" aria-label="Distance: <%= place.dist %>">🗺️ <%= place.dist %></span>
-                    </div>
-                  </div>
-                </article>
-              <% }); %>
-            <% } else { %>
-              <p>No destinations found. Try adjusting your filters.</p>
-            <% } %>
-          </div>
-        </section>
+        </aside>
       </div>
+    </main>
 
-      <!-- Sidebar -->
-      <aside class="sidebar" aria-label="Journey Timeline">
-        <div class="sidebar-panel">
-          <h2 class="sidebar-panel__title">🗺️ Journey Tracking</h2>
-          <div class="journey-timeline" id="timeline-container">
-            <!-- Render timeline items dynamically with EJS -->
-            <% if (places && places.length > 0) { %>
-              <% places.forEach((place) => { %>
-                <div class="journey-item journey-item--<%= place.status %>" data-status="<%= place.status %>" id="journey-item-<%= place.name.replace(/\s+/g, '-') %>">
-                  <div class="journey-item__dot"></div>
-                  <div class="journey-item__content">
-                    <div class="journey-item__header">
-                      <div class="journey-item__time"><%= place.time %></div>
-                      <div class="journey-item__duration"><%= place.dur %></div>
-                    </div>
-                    <h3 class="journey-item__title"><%= place.icon %> <%= place.name %></h3>
-                    <p class="journey-item__description"><%= place.desc %></p>
-                  </div>
-                </div>
-              <% }); %>
-            <% } else { %>
-              <p>Your itinerary is empty.</p>
-            <% } %>
+    <!-- ========================================================================
+      FOOTER
+      ======================================================================== -->
+    <%- include('partials/footer') %>
+
+    <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    /**
+     * =========================================================================
+     * ENHANCED DYNAMIC JOURNEY TRACKING LOGIC (with modal + localStorage)
+     * =========================================================================
+     */
+
+    const journeyItemsState = {};
+    const modal = createConfirmationModal();
+    document.body.appendChild(modal);
+
+    // Parse "8:00 AM – 9:00 AM" → { start: "08:00", end: "09:00" }
+    function extractTimesFromDisplay(displayTimeString) {
+      const parts = displayTimeString.split('–').map(s => s.trim());
+      if (parts.length < 2) return { start: null, end: null };
+
+      const parseDisplayTime = (timeStr) => {
+        const match = timeStr.match(/(\d{1,2}:\d{2})\s*(AM|PM)/i);
+        if (!match) return null;
+
+        let [_, time, period] = match;
+        let [hours, minutes] = time.split(':').map(Number);
+
+        if (period.toUpperCase() === 'PM' && hours < 12) hours += 12;
+        if (period.toUpperCase() === 'AM' && hours === 12) hours = 0;
+
+        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+      };
+      return { start: parseDisplayTime(parts[0]), end: parseDisplayTime(parts[1]) };
+    }
+
+    function parse24HourTime(timeString) {
+      if (!timeString) return null;
+      const [hours, minutes] = timeString.split(':').map(Number);
+      const date = new Date();
+      date.setHours(hours, minutes, 0, 0);
+      return date;
+    }
+
+    // =================== MODAL CREATION ===================
+    function createConfirmationModal() {
+      const wrapper = document.createElement('div');
+      wrapper.id = 'confirmationModal';
+      wrapper.className = 'hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50';
+      wrapper.innerHTML = `
+        <div class="bg-white rounded-xl shadow-lg p-6 max-w-sm w-full text-center">
+          <h3 class="text-lg font-semibold text-gray-800 mb-3">Mark Stop as Completed?</h3>
+          <p class="text-sm text-gray-600 mb-6">Did you reach this destination?</p>
+          <div class="flex justify-center gap-3">
+            <button id="confirmYes" class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md">Yes</button>
+            <button id="confirmNo" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">No</button>
           </div>
         </div>
-      </aside>
-    </div>
-  </main>
+      `;
+      return wrapper;
+    }
 
-  <!-- ========================================================================
-     FOOTER
-     ======================================================================== -->
-  <footer class="footer" role="contentinfo">
-    <div class="footer__inner">
-      <div class="footer__grid">
-        <div class="footer__brand-info">
-          <div class="brand-row">
-            <div class="header__logo-icon">🧭</div>
-            <strong>Traveezy</strong>
-          </div>
-          <p>Explore, Plan, Discover. Your adventure starts here.</p>
-          <div class="footer__socials">
-            <a href="#" class="footer__social-link" aria-label="Facebook">f</a>
-            <a href="#" class="footer__social-link" aria-label="Twitter">𝕏</a>
-            <a href="#" class="footer__social-link" aria-label="Instagram">📷</a>
-            <a href="#" class="footer__social-link" aria-label="LinkedIn">in</a>
-          </div>
-        </div>
+    function showConfirmationPopup(item) {
+      const modal = document.getElementById('confirmationModal');
+      modal.classList.remove('hidden');
 
-        <div class="footer__column">
-          <h3>Discover</h3>
-          <ul>
-            <li><a href="#">Destinations</a></li>
-            <li><a href="#">Experiences</a></li>
-            <li><a href="#">Tours</a></li>
-            <li><a href="#">Guides</a></li>
-          </ul>
-        </div>
+      const yesBtn = document.getElementById('confirmYes');
+      const noBtn = document.getElementById('confirmNo');
 
-        <div class="footer__column">
-          <h3>Plan</h3>
-          <ul>
-            <li><a href="#">Create Itinerary</a></li>
-            <li><a href="#">Booking</a></li>
-            <li><a href="#">Calendar</a></li>
-            <li><a href="#">Reminders</a></li>
-          </ul>
-        </div>
+      const handleYes = () => {
+        item.isConfirmed = true;
+        localStorage.setItem(`journey_${item.id}`, 'completed');
+        modal.classList.add('hidden');
+        cleanup();
+        updateTimeline();
+      };
 
-        <div class="footer__column">
-          <h3>Support</h3>
-          <ul>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Contact Us</a></li>
-            <li><a href="#">Help Center</a></li>
-            <li><a href="#">Accessibility</a></li>
-          </ul>
-        </div>
+      const handleNo = () => {
+        modal.classList.add('hidden');
+        item.popupShown = true;
+        cleanup();
+      };
 
-        <div class="footer__column">
-          <h3>Company</h3>
-          <ul>
-            <li><a href="#">About Us</a></li>
-            <li><a href="#">Careers</a></li>
-            <li><a href="#">Partnerships</a></li>
-            <li><a href="#">Press</a></li>
-          </ul>
-        </div>
-      </div>
+      const cleanup = () => {
+        yesBtn.removeEventListener('click', handleYes);
+        noBtn.removeEventListener('click', handleNo);
+      };
 
-      <div class="footer__bottom">
-        &copy; <span id="current-year"><%= new Date().getFullYear() %></span> Traveezy Inc. All rights reserved.
-      </div>
-    </div>
-  </footer>
+      yesBtn.addEventListener('click', handleYes);
+      noBtn.addEventListener('click', handleNo);
+    }
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      /**
-       * =========================================================================
-       * DYNAMIC JOURNEY TRACKING LOGIC
-       * =========================================================================
-       */
+    // =================== TIMELINE UPDATE ===================
+    function updateTimeline() {
+      const now = new Date();
 
-      const journeyItemsState = {};
+      Object.values(journeyItemsState).forEach(item => {
+        const element = item.element;
+        let currentStatus = 'upcoming';
 
-
-      // Helper to parse "HH:MM AM/PM" from a string like "8:00 AM – 9:00 AM"
-      function extractTimesFromDisplay(displayTimeString) {
-        const parts = displayTimeString.split('–').map(s => s.trim());
-        if (parts.length < 2) return { start: null, end: null };
-
-        const parseDisplayTime = (timeStr) => {
-          const match = timeStr.match(/(\d{1,2}:\d{2})\s*(AM|PM)/i);
-          if (!match) return null;
-
-          let [_, time, period] = match;
-          let [hours, minutes] = time.split(':').map(Number);
-
-          if (period.toUpperCase() === 'PM' && hours < 12) hours += 12;
-          if (period.toUpperCase() === 'AM' && hours === 12) hours = 0; // Midnight case
-
-          return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-        };
-
-        return { start: parseDisplayTime(parts[0]), end: parseDisplayTime(parts[1]) };
-      }
-
-      // Helper to convert "HH:MM" string to a Date object for today
-      function parse24HourTime(timeString) {
-        if (!timeString) return null;
-        const [hours, minutes] = timeString.split(':').map(Number);
-        const date = new Date();
-        date.setHours(hours, minutes, 0, 0);
-        return date;
-      }
-
-
-      // Function to show the confirmation popup
-      function showConfirmationPopup(item) {
-        // Use a simple `confirm` dialog. This can be replaced with a custom modal.
-        const userResponse = confirm(`Did you reach ${item.name}?`);
-
-        if (userResponse) {
+        if (item.isConfirmed || localStorage.getItem(`journey_${item.id}`) === 'completed') {
+          currentStatus = 'completed';
           item.isConfirmed = true;
+        } else if (item.startTime && item.endTime) {
+          if (now >= item.startTime && now < item.endTime) {
+            currentStatus = 'active';
+          } else if (now >= item.endTime) {
+            currentStatus = 'pending_confirmation';
+          }
         }
-        // If 'No', we do nothing, and it will remain active for the next check.
-        item.popupShown = true; // Mark that we've asked, to avoid repeated popups
-        updateTimeline(); // Re-run the timeline update immediately after user interaction
+
+        element.classList.remove('journey-item--active', 'journey-item--completed', 'journey-item--upcoming');
+
+        if (currentStatus === 'completed') {
+          element.classList.add('journey-item--completed');
+        } else if (currentStatus === 'active' || currentStatus === 'pending_confirmation') {
+          element.classList.add('journey-item--active');
+        } else {
+          element.classList.add('journey-item--upcoming');
+        }
+
+        // Only show popup once per pending item
+        if (currentStatus === 'pending_confirmation' && !item.popupShown && !item.isConfirmed) {
+          item.popupShown = true;
+          setTimeout(() => showConfirmationPopup(item), 800); // small delay for UX
+        }
+      });
+    }
+
+    // =================== INIT ===================
+    document.querySelectorAll('.journey-timeline .journey-item').forEach(element => {
+      const id = element.id;
+      if (!id) return;
+
+      const name = element.querySelector('.journey-item__title')?.textContent.trim() || 'Unnamed Stop';
+      const timeString = element.querySelector('.journey-item__time')?.textContent.trim();
+
+      if (!timeString) return;
+
+      const { start, end } = extractTimesFromDisplay(timeString);
+
+      journeyItemsState[id] = {
+        id,
+        name,
+        element,
+        startTime: parse24HourTime(start),
+        endTime: parse24HourTime(end),
+        isConfirmed: localStorage.getItem(`journey_${id}`) === 'completed',
+        popupShown: false,
+      };
+    });
+
+    updateTimeline();
+    setInterval(updateTimeline, 60 * 1000);
+    console.log('✅ Journey Tracking initialized.');
+
+    // =================== CARD REMOVAL ===================
+    document.body.addEventListener('click', (event) => {
+      const cardCloseButton = event.target.closest('[data-action="remove-card"]');
+      if (cardCloseButton) {
+        const card = cardCloseButton.closest('.card');
+        const placeName = card?.dataset.placeName;
+        if (placeName) {
+          card.setAttribute('data-removed', 'true');
+          const journeyItemId = `journey-item-${placeName.replace(/\s+/g, '-')}`;
+          const journeyItem = document.getElementById(journeyItemId);
+          if (journeyItem) journeyItem.style.display = 'none';
+        }
       }
+    });
 
+    // =================== FILTER DROPDOWN LOGIC ===================
+    const filters = {
+      category: 'All',
+      activity: 'All',
+      time: 'Any',
+      distance: 'Any'
+    };
 
-      // The main function to update the timeline's state and appearance
-      function updateTimeline() {
-        const now = new Date();
+    function setupDropdown(btnId, dropdownId, selectedId, filterKey) {
+      const btn = document.getElementById(btnId);
+      const dropdown = document.getElementById(dropdownId);
+      const selectedEl = document.getElementById(selectedId);
 
-        Object.values(journeyItemsState).forEach(item => {
-          const element = item.element;
+      if (!btn || !dropdown || !selectedEl) return;
 
-          // Determine the status of the item
-          let currentStatus = 'upcoming';
-          if (item.isConfirmed) {
-            currentStatus = 'completed';
-          } else if (item.startTime && item.endTime) {
-            if (now >= item.startTime && now < item.endTime) {
-              currentStatus = 'active';
-            } else if (now >= item.endTime) {
-              // Time has passed, but it's not confirmed.
-              // We'll show a popup if we haven't already.
-              currentStatus = 'pending_confirmation';
-            }
-          }
-
-          // Reset classes
-          element.classList.remove('journey-item--active', 'journey-item--completed', 'journey-item--upcoming');
-
-          // Apply the correct class based on status
-          if (currentStatus === 'completed') {
-            element.classList.add('journey-item--completed');
-          } else if (currentStatus === 'active' || currentStatus === 'pending_confirmation') {
-            element.classList.add('journey-item--active');
-          } else {
-            element.classList.add('journey-item--upcoming');
-          }
-
-          // Trigger popup if needed
-          if (currentStatus === 'pending_confirmation' && !item.popupShown) {
-            showConfirmationPopup(item);
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        // Hide other dropdowns
+        document.querySelectorAll('.absolute.hidden').forEach(el => {
+          if (el.id !== dropdownId) {
+            el.classList.add('hidden');
           }
         });
-      }
-
-
-      // --- Initialization ---
-
-      // 1. Populate the state object from the DOM
-      document.querySelectorAll('.journey-timeline .journey-item').forEach(element => {
-        const id = element.id;
-        if (!id) return;
-
-        const name = element.querySelector('.journey-item__title')?.textContent.trim().replace(/^[\u26A0-\u26FF]+/g, '') || 'Unnamed Stop';
-        const timeString = element.querySelector('.journey-item__time')?.textContent.trim();
-
-        if (!timeString) {
-            console.warn(`Journey item "${name}" is missing a time display.`);
-            return;
-        }
-
-        const { start, end } = extractTimesFromDisplay(timeString);
-
-        journeyItemsState[id] = {
-          id,
-          name,
-          element,
-          startTime: parse24HourTime(start),
-          endTime: parse24HourTime(end),
-          isConfirmed: false, // Initially, no item is confirmed
-          popupShown: false,  // To prevent asking multiple times
-        };
+        dropdown.classList.toggle('hidden');
       });
 
-
-      // 2. Run the initial update
-      updateTimeline();
-
-      // 3. Set it to update every minute
-      setInterval(updateTimeline, 60 * 1000);
-
-      console.log('Dynamic Journey Tracking initialized.');
-
-
-      // --- Other existing event listeners (like card removal) can go here ---
-      document.body.addEventListener('click', (event) => {
-        const cardCloseButton = event.target.closest('[data-action="remove-card"]');
-        if (cardCloseButton) {
-          const card = cardCloseButton.closest('.card');
-          const placeName = card?.dataset.placeName;
-          if (placeName) {
-            card.setAttribute('data-removed', 'true');
-            const journeyItemId = `journey-item-${placeName.replace(/\s+/g, '-')}`;
-            const journeyItem = document.getElementById(journeyItemId);
-            if (journeyItem) {
-              journeyItem.style.display = 'none'; // Or remove it completely
-            }
-          }
+      dropdown.addEventListener('click', (e) => {
+        e.preventDefault();
+        const link = e.target.closest('a[data-value]');
+        if (link) {
+          const value = link.dataset.value;
+          filters[filterKey] = value;
+          selectedEl.textContent = value;
+          dropdown.classList.add('hidden');
         }
+      });
+    }
+
+    setupDropdown('filter-category-btn', 'dropdown-category', 'selected-category', 'category');
+    setupDropdown('filter-activity-btn', 'dropdown-activity', 'selected-activity', 'activity');
+    setupDropdown('filter-time-btn', 'dropdown-time', 'selected-time', 'time');
+    setupDropdown('filter-distance-btn', 'dropdown-distance', 'selected-distance', 'distance');
+
+    // Hide dropdowns if clicked outside
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.absolute.hidden:not(.hidden)').forEach(el => {
+        el.classList.add('hidden');
       });
     });
+
+    // =================== APPLY FILTERS LOGIC ===================
+    document.getElementById('apply-filters-btn').addEventListener('click', async () => {
+      console.log('Applying filters:', filters);
+
+      try {
+        const response = await fetch('/user/apply-filters', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(filters)
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.places) {
+          updateCardGrid(data.places);
+        } else {
+          document.getElementById('card-grid-container').innerHTML = `<p class="col-span-full text-center text-gray-600">${data.message || 'No destinations found for the selected filters.'}</p>`;
+        }
+      } catch (err) {
+        console.error('Error applying filters:', err);
+        document.getElementById('card-grid-container').innerHTML = `<p class="col-span-full text-center text-red-500">An error occurred while filtering.</p>`;
+      }
+    });
+
+    function updateCardGrid(places) {
+      const grid = document.getElementById('card-grid-container');
+      const stopsHeading = document.getElementById('stops-heading');
+      grid.innerHTML = ''; // Clear current cards
+
+      if (places.length === 0) {
+        grid.innerHTML = `<p class="col-span-full text-center text-gray-600">No destinations found for the selected filters.</p>`;
+        stopsHeading.innerHTML = `📍 0 Stops Found`;
+        return;
+      }
+
+      stopsHeading.innerHTML = `📍 ${places.length} Stops Found`;
+
+      places.forEach((place, index) => {
+        const cardHTML = `
+          <article class="card" data-place-name="${place.name}" role="button" tabindex="0" aria-label="View details for ${place.name}">
+            <div class="card__thumb">
+              <div class="card__rating" aria-label="Rating: ${place.rating} out of 5 stars">⭐ ${place.rating}</div>
+              <img class="card__image" src="${place.image}" alt="A scenic view of ${place.name}">
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">${place.name}</h3>
+              <div class="card__location">📍 <span>${place.location}</span></div>
+              <p class="card__description">${place.description || 'A wonderful place to visit.'}</p>
+            </div>
+          </article>`;
+        grid.insertAdjacentHTML('beforeend', cardHTML);
+      });
+    }
+  });
   </script>
-</body>
-</html>
+
+  </body>
+  </html>

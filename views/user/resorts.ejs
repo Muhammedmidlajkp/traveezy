@@ -1,0 +1,335 @@
+
+
+<%- include('partials/header') %>
+<%- include('partials/loader') %>
+
+
+<div class="bg-gray-50/70">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    
+    <!-- Page Header -->
+    <div class="text-center mb-12">
+      <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-4xl">All Resorts</h1>
+      <p class="mt-3 max-w-xl mx-auto text-M text-gray-600">Find your perfect getaway from our curated list of top-rated resorts.</p>
+    </div>
+
+    <!-- Resorts Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <% if (resorts && resorts.length > 0) { %>
+        <% resorts.forEach(resort => { %>
+          <div class="group bg-white rounded-xl shadow-soft overflow-hidden flex flex-col card-hover transition-all duration-300">
+            <div class="relative">
+              <img class="h-48 w-full object-cover img-zoom" src="<%= resort.image %>" alt="<%= resort.name %>">
+              <div class="absolute top-0 right-0 m-3 bg-yellow-400 text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                <i class="fas fa-star text-xs"></i>
+                <span><%= resort.rating.toFixed(1) %></span>
+              </div>
+            </div>
+            
+            <div class="p-5 flex flex-col flex-grow">
+              <h3 class="font-semibold text-gray-900 mb-1 truncate"><%= resort.name %></h3>
+              
+              <!-- Location -->
+              <div class="flex items-center text-gray-600 mb-3">
+                <svg class="w-4 h-4 mr-1.5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                <span class="text-xs truncate"><%= resort.location ? resort.location.split(',')[0] : 'Location not specified' %></span>
+              </div>
+
+              <!-- Price -->
+              <div class="mb-4">
+                <span class="text-xl font-bold text-teal-600">₹<%= resort.price ? resort.price.toLocaleString('en-IN') : 'N/A' %></span>
+                <span class="text-xs text-gray-500 ml-1.5">/ night</span>
+              </div>
+
+              <!-- Buttons -->
+              <div class="mt-auto pt-4 border-t border-gray-100 flex gap-3">
+                <% if (user && resort.bookedByUser) { %>
+                  <!-- Cancel Booking -->
+                  <button
+                    class="btn flex-1 text-center bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-lg text-xs font-semibold"
+                    onclick="cancelBooking('<%= resort._id %>', '<%= resort.name %>')">
+                    Cancel Booking
+                  </button>
+                <% } else { %>
+                  <!-- Book Now -->
+                  <button
+                    class="btn flex-1 text-center bg-[#35D6A7] hover:bg-[#2ac597] text-white px-4 py-1.5 rounded-lg text-xs font-semibold"
+                    onclick="startPayment(<%= resort.price %>, '<%= resort._id %>', '<%= resort.name %>')">
+                    Book Now
+                  </button>
+                <% } %>
+
+                <a href="https://wa.me/+918589824287?text=Hi, I'm interested in booking <%= encodeURIComponent(resort.name) %>."
+                   target="_blank"
+                   class="btn flex-1 text-center bg-green-500 hover:bg-green-600 text-white px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-2">
+                  <i class="fab fa-whatsapp"></i>
+                  WhatsApp
+                </a>
+              </div>
+
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <p class="text-center text-gray-500 col-span-full">No resorts available at the moment. Please check back later.</p>
+      <% } %>
+    </div>
+
+  </div>
+</div>
+
+<!-- Font Awesome for WhatsApp Icon -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- Razorpay Checkout -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<%- include('partials/footer') %>
+
+<script>
+async function startPayment(amount, resortId, resortName) {
+  try {
+    const userId = "<%= user ? user._id : '' %>";
+    
+    // Check if user is logged in
+    if (!userId) {
+      await Swal.fire({
+        icon: 'warning',
+        title: 'Login Required',
+        text: 'Please login to book a resort',
+        confirmButtonText: 'Go to Login',
+        confirmButtonColor: '#35D6A7',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel'
+      });
+      return;
+    }
+
+    // Show loading alert
+    Swal.fire({
+      title: 'Processing Payment',
+      html: 'Please wait while we prepare your booking...',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    // Create order
+    const orderRes = await fetch("/user/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount, resortId, userId }),
+    });
+
+    const data = await orderRes.json();
+    
+    if (!data.success) {
+      throw new Error("Order creation failed");
+    }
+
+    // Close loading alert
+    Swal.close();
+
+    // Configure Razorpay options
+    const options = {
+      key: "<%= process.env.RAZORPAY_KEY_ID %>",
+      amount: data.order.amount,
+      currency: "INR",
+      name: "Traveezy",
+      description: `Booking for ${resortName}`,
+      order_id: data.order.id,
+      handler: async function (response) {
+        // Show loading during booking save
+        Swal.fire({
+          title: 'Confirming Booking',
+          html: 'Please wait...',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          showConfirmButton: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+
+        try {
+          const saveRes = await fetch("/user/save-booking", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              userId,
+              resortId,
+              paymentId: response.razorpay_payment_id,
+              amount,
+            }),
+          });
+
+          const saveData = await saveRes.json();
+
+          if (saveData.success) {
+            // Success alert
+            await Swal.fire({
+              icon: 'success',
+              title: 'Booking Confirmed!',
+              html: `
+                <p><strong>${resortName}</strong> has been booked successfully!</p>
+                <p class="text-sm text-gray-600 mt-2">Payment ID: ${response.razorpay_payment_id}</p>
+              `,
+              confirmButtonText: 'Great!',
+              confirmButtonColor: '#35D6A7',
+              showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+              },
+              hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+              }
+            });
+            location.reload();
+          } else {
+            throw new Error("Failed to save booking");
+          }
+        } catch (err) {
+          // Error saving booking
+          await Swal.fire({
+            icon: 'error',
+            title: 'Booking Failed',
+            text: 'Payment received but booking could not be confirmed. Please contact support.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#d33'
+          });
+        }
+      },
+      prefill: {
+        name: "<%= user ? user.name : 'Guest' %>",
+        email: "<%= user ? user.email : '' %>",
+        contact: "<%= user ? user.phone : '' %>"
+      },
+      theme: {
+        color: "#35D6A7"
+      },
+      modal: {
+        ondismiss: function() {
+          // Payment cancelled by user
+          Swal.fire({
+            icon: 'info',
+            title: 'Payment Cancelled',
+            text: 'You have cancelled the payment process.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#35D6A7'
+          });
+        }
+      }
+    };
+
+    // Open Razorpay checkout
+    const rzp = new Razorpay(options);
+    
+    rzp.on('payment.failed', async function (response) {
+      // Payment failed
+      await Swal.fire({
+        icon: 'error',
+        title: 'Payment Failed!',
+        html: `
+          <p><strong>Reason:</strong> ${response.error.description}</p>
+          <p class="text-sm text-gray-600 mt-2">Code: ${response.error.code}</p>
+        `,
+        confirmButtonText: 'Try Again',
+        confirmButtonColor: '#35D6A7',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel'
+      });
+    });
+
+    rzp.open();
+
+  } catch (err) {
+    console.error('Payment Error:', err);
+    
+    // General error alert
+    await Swal.fire({
+      icon: 'error',
+      title: 'Oops!',
+      text: 'Failed to initialize payment. Please try again.',
+      footer: '<a href="/support">Need help? Contact support</a>',
+      confirmButtonText: 'OK',
+      confirmButtonColor: '#d33'
+    });
+  }
+}
+
+async function cancelBooking(resortId, resortName) {
+  const userId = "<%= user ? user._id : '' %>";
+  
+  // Confirmation alert
+  const result = await Swal.fire({
+    icon: 'warning',
+    title: 'Cancel Booking?',
+    html: `Are you sure you want to cancel your booking for <strong>${resortName}</strong>?`,
+    text: 'This action cannot be undone.',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, Cancel It',
+    cancelButtonText: 'Keep Booking',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#35D6A7',
+    reverseButtons: true
+  });
+
+  if (result.isConfirmed) {
+    // Show loading
+    Swal.fire({
+      title: 'Cancelling Booking',
+      html: 'Please wait...',
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    try {
+      const res = await fetch("/user/cancel-booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, resortId }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        // Cancellation success
+        await Swal.fire({
+          icon: 'success',
+          title: 'Booking Cancelled',
+          text: 'Your booking has been cancelled successfully.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#35D6A7'
+        });
+        location.reload();
+      } else {
+        throw new Error("Cancellation failed");
+      }
+    } catch (err) {
+      // Cancellation error
+      await Swal.fire({
+        icon: 'error',
+        title: 'Cancellation Failed',
+        text: 'Unable to cancel your booking. Please try again or contact support.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#d33'
+      });
+    }
+  }
+}
+</script>
+
+</body>
+</html>

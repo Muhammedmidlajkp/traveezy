@@ -12,12 +12,24 @@
   />
   <style>
     a { text-decoration: none; color: inherit; }
-    .metric-card { background: #fff; border-radius: 8px; padding: 24px; border: 1px solid #f3f4f6; box-shadow: 0 1px 2px rgba(0,0,0,0.03); transition: box-shadow 0.2s; }
+    .metric-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      border: 1px solid #f3f4f6;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+      transition: box-shadow 0.2s;
+    }
     .metric-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-    .chart-container { background: #fff; border-radius: 8px; padding: 24px; border: 1px solid #f3f4f6; }
-    .tab-active { color: #14b8a6; border-bottom: 2px solid #14b8a6; }
+    .chart-container {
+      background: #fff;
+      border-radius: 8px;
+      padding: 24px;
+      border: 1px solid #f3f4f6;
+    }
   </style>
 </head>
+
 <body class="bg-gray-50">
   <div class="flex h-screen">
     <!-- Sidebar partial -->
@@ -28,34 +40,21 @@
       <%- include('../partials/header') %>
 
       <main class="flex-1 overflow-auto p-8 space-y-8">
+        <!-- Header -->
         <div>
           <h1 class="text-3xl font-bold text-gray-900 mb-2">Analytics Dashboard</h1>
           <p class="text-gray-600">Analyze user data, performance, and retention trends on Traveezy.</p>
         </div>
-
-        <!-- Tabs -->
-        <!-- <div class="bg-white border-b border-gray-200 px-6 flex gap-8">
-          <button class="tab-active py-4 text-sm font-medium text-teal-600">User Analytics</button>
-          <button class="py-4 text-sm font-medium text-gray-600 hover:text-gray-900">Place Performance</button>
-          <button class="py-4 text-sm font-medium text-gray-600 hover:text-gray-900">Revenue Tracking</button>
-          <button class="py-4 text-sm font-medium text-gray-600 hover:text-gray-900">Geographic Insights</button>
-          <div class="ml-auto flex items-center">
-            <button class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
-              <i class="fas fa-filter"></i>
-              <span>Filter</span>
-            </button>
-          </div>
-        </div> -->
 
         <!-- Metrics Overview -->
         <div>
           <h2 class="text-lg font-semibold text-gray-900 mb-4">User Overview</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <% const metrics = [
-              { title: 'Total Users', value: '1.5K', desc: 'Total registered users', change: '+12%', icon: 'fa-users', color: 'text-teal-500' },
-              { title: 'Active Users', value: '700', desc: 'Users active in the last 30 days', change: '+8%', icon: 'fa-user-check', color: 'text-teal-500' },
-              { title: 'Retention Rate', value: '78%', desc: 'Monthly user retention', change: '+3%', icon: 'fa-percent', color: 'text-orange-500' },
-              { title: 'New Registrations', value: '350', desc: 'New users this month', change: '+15%', icon: 'fa-user-plus', color: 'text-blue-500' }
+              { title: 'Total Users', value: data.totalUsers.toLocaleString(), desc: 'Total registered users', change: '+12%', icon: 'fa-users', color: 'text-teal-500' },
+              { title: 'Active Users', value: data.activeUsers.toLocaleString(), desc: 'Users active in last 30 days', change: '+8%', icon: 'fa-user-check', color: 'text-teal-500' },
+              { title: 'Retention Rate', value: data.retentionRate + '%', desc: 'Monthly user retention', change: '+3%', icon: 'fa-percent', color: 'text-orange-500' },
+              { title: 'New Registrations', value: data.newUsersLast30Days.toLocaleString(), desc: 'New users this month', change: '+15%', icon: 'fa-user-plus', color: 'text-blue-500' }
             ]; %>
 
             <% metrics.forEach(metric => { %>
@@ -66,31 +65,38 @@
                 </div>
                 <div class="text-3xl font-bold text-gray-900 mb-1"><%= metric.value %></div>
                 <p class="text-xs text-gray-500 mb-2"><%= metric.desc %></p>
-                <p class="text-xs text-teal-600 font-medium"><i class="fas fa-arrow-up"></i> <%= metric.change %> since last month</p>
+                <p class="text-xs text-teal-600 font-medium">
+                  <i class="fas fa-arrow-up"></i> <%= metric.change %> since last month
+                </p>
               </div>
             <% }) %>
           </div>
         </div>
 
-        <!-- Charts -->
+        <!-- Charts Section -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- User Growth Chart -->
           <div class="chart-container">
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">User Growth & Activity</h3>
-            <p class="text-sm text-gray-600 mb-4">Monthly new and active users, and retention rate.</p>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">User Growth</h3>
+            <p class="text-sm text-gray-600 mb-4">New user registrations per month.</p>
             <canvas id="growthChart" height="80"></canvas>
           </div>
 
+          <!-- Revenue Chart (optional placeholder) -->
           <div class="chart-container">
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">User Demographics</h3>
-            <p class="text-sm text-gray-600 mb-4">Distribution of users by age group.</p>
-            <canvas id="demographicsChart" height="80"></canvas>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Revenue Overview</h3>
+            <p class="text-sm text-gray-600 mb-4">Total booking revenue generated.</p>
+            <div class="text-3xl font-bold text-gray-900 mt-6">
+              ₹<%= data.totalRevenue.toLocaleString('en-IN') %>
+            </div>
+            <p class="text-gray-500 text-sm mt-1">Total revenue from paid bookings</p>
           </div>
         </div>
 
         <!-- Retention Table -->
-        <div class="chart-container">
+        <!-- <div class="chart-container">
           <h3 class="text-lg font-semibold text-gray-900 mb-2">User Retention Details</h3>
-          <p class="text-sm text-gray-600 mb-4">Monthly retention cohorts and user activity trends.</p>
+          <p class="text-sm text-gray-600 mb-4">Cohort retention tracking (example static).</p>
           <div class="overflow-x-auto">
             <table class="w-full text-sm">
               <thead>
@@ -127,64 +133,68 @@
         </div>
       </main>
     </div>
-  </div>
+  </div> -->
 
-  <!-- Charts Script -->
+
+  <!-- Retention Table -->
+<div class="chart-container">
+  <h3 class="text-lg font-semibold text-gray-900 mb-2">User Retention Details</h3>
+  <p class="text-sm text-gray-600 mb-4">Cohort retention tracking based on actual user activity.</p>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-gray-200">
+          <th class="text-left py-3 px-4 font-semibold text-gray-700">Month</th>
+          <th class="text-left py-3 px-4 font-semibold text-gray-700">Cohort Size</th>
+          <th class="text-left py-3 px-4 font-semibold text-gray-700">Month 1 (%)</th>
+          <th class="text-left py-3 px-4 font-semibold text-gray-700">Month 2 (%)</th>
+          <th class="text-left py-3 px-4 font-semibold text-gray-700">Month 3 (%)</th>
+          <th class="text-left py-3 px-4 font-semibold text-gray-700">Month 6 (%)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (data.retentionData && data.retentionData.length > 0) { %>
+          <% data.retentionData.forEach(row => { %>
+            <tr class="border-b border-gray-100 hover:bg-gray-50">
+              <td class="py-3 px-4 text-gray-900"><%= row[0] %></td>
+              <td class="py-3 px-4 text-gray-600"><%= row[1] %></td>
+              <td class="py-3 px-4 text-gray-600"><%= row[2] %></td>
+              <td class="py-3 px-4 text-gray-600"><%= row[3] %></td>
+              <td class="py-3 px-4 text-gray-600"><%= row[4] %></td>
+              <td class="py-3 px-4 text-gray-600"><%= row[5] %></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr><td colspan="6" class="text-center py-6 text-gray-500">No retention data available</td></tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+  <!-- Chart Scripts -->
   <script>
     const growthCtx = document.getElementById('growthChart').getContext('2d');
     new Chart(growthCtx, {
       type: 'line',
       data: {
-        labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-        datasets: [
-          {
-            label: 'New Users',
-            data: [400, 420, 450, 480, 520, 550, 580, 600, 620, 640, 660, 680],
-            borderColor: '#14b8a6',
-            backgroundColor: 'rgba(20, 184, 166, 0.05)',
-            tension: 0.4,
-            fill: true,
-            borderWidth: 2
-          },
-          {
-            label: 'Active Users',
-            data: [200, 220, 250, 280, 320, 350, 380, 400, 420, 440, 460, 480],
-            borderColor: '#64748b',
-            backgroundColor: 'rgba(100, 116, 139, 0.05)',
-            tension: 0.4,
-            fill: true,
-            borderWidth: 2
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: { legend: { display: true, position: 'bottom' } },
-        scales: {
-          y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
-          x: { grid: { display: false } }
-        }
-      }
-    });
-
-    const demographicsCtx = document.getElementById('demographicsChart').getContext('2d');
-    new Chart(demographicsCtx, {
-      type: 'bar',
-      data: {
-        labels: ['18-25', '25-34', '35-44', '45-54', '55+'],
+        labels: <%- JSON.stringify(data.monthlyLabels) %>,
         datasets: [{
-          label: 'Users',
-          data: [300, 600, 350, 200, 150],
-          backgroundColor: '#14b8a6',
-          borderRadius: 6,
-          borderSkipped: false
+          label: 'New Users',
+          data: <%- JSON.stringify(data.userGrowthData) %>,
+          borderColor: '#14b8a6',
+          backgroundColor: 'rgba(20, 184, 166, 0.05)',
+          tension: 0.4,
+          fill: true,
+          borderWidth: 2
         }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: true,
-        plugins: { legend: { display: false } },
+        plugins: { legend: { display: true, position: 'bottom' } },
         scales: {
           y: { beginAtZero: true, grid: { color: '#f1f5f9' } },
           x: { grid: { display: false } }

@@ -74,6 +74,11 @@ router.post('/places/:id/toggle-blocked-date', admincontroller.toggleBlockedDate
 router.get('/profile',verifyAdmin, admincontroller.profilePage);
 router.post('/profile/update', uploadAvatar.single('avatar'), admincontroller.updateProfile);
 
+router.get('/bookingmanagement', verifyAdmin, admincontroller.bookingManagementPage);
+router.get("/deletebooking/:id", admincontroller.deleteBooking);
+
+
+
 // 
 
 

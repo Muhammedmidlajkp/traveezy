@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title><%= title %></title>
+  <meta name="description" content="Manage your Traveezy profile, update your details, and view your travel stats."/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* NOTE: For maintainability, these styles should be moved to a shared CSS file. */
+    :root {
+      --c-brand-primary: #26C485; --c-brand-primary-dark: #1eb06f; --c-brand-secondary: #FF6B35;
+      --c-bg: #f8f9fa; --c-surface: #fff; --c-text-primary: #1a1a1a; --c-text-muted: #5a5a5a;
+      --c-border: #e8e8e8; --c-white: #fff;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --space-2: 8px; --space-4: 16px; --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+      --max-width: 1200px; --radius-lg: 12px; --radius-xl: 16px;
+      --shadow-md: 0 8px 20px rgba(0,0,0,.07); --shadow-lg: 0 12px 28px rgba(0,0,0,.1);
+      --transition-base: all 0.3s ease;
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    *, *::before, *::after { box-sizing: border-box; }
+    body, h1, h2, h3, p { margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); color: var(--c-text-primary); background-color: var(--c-bg); line-height: 1.6; }
+    .page-wrapper { max-width: var(--max-width); margin: 0 auto; padding: var(--space-10) var(--space-6); }
+    .page-header { text-align: center; margin-bottom: var(--space-10); }
+    .page-header__title { font-size: 42px; font-weight: 800; color: var(--c-text-primary); }
+    .page-header__subtitle { font-size: 18px; color: var(--c-text-muted); max-width: 600px; margin: var(--space-2) auto 0; }
+
+    /* Profile Layout */
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    /* Base Card Style */
+    .card {
+      background-color: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Profile Card */
+    .profile-card { text-align: center; }
+    .profile-card__avatar-wrapper {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin: 0 auto var(--space-6);
+    }
+    .profile-card__avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--c-white);
+      box-shadow: var(--shadow-lg);
+    }
+    .profile-card__name { font-size: 24px; font-weight: 700; margin-bottom: var(--space-2); }
+    .profile-card__email { font-size: 15px; color: var(--c-text-muted); margin-bottom: var(--space-5); }
+    .profile-card__bio { font-size: 15px; color: var(--c-text-muted); font-style: italic; margin-bottom: var(--space-6); }
+    .profile-stats {
+      display: flex;
+      justify-content: space-around;
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--c-border);
+    }
+    .profile-stat { text-align: center; }
+    .profile-stat__value { font-size: 22px; font-weight: 700; color: var(--c-brand-primary); }
+    .profile-stat__label { font-size: 13px; color: var(--c-text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* Edit Profile Card */
+    .edit-profile-card h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: var(--space-6);
+      padding-bottom: var(--space-4);
+      border-bottom: 1px solid var(--c-border);
+    }
+    .form-group { margin-bottom: var(--space-6); }
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--c-text-muted);
+      margin-bottom: var(--space-2);
+    }
+    .form-control {
+      width: 100%;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      padding: var(--space-4);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-lg);
+      background-color: var(--c-bg);
+      transition: var(--transition-base);
+    }
+    .form-control:focus {
+      outline: none;
+      border-color: var(--c-brand-primary);
+      box-shadow: 0 0 0 3px rgba(38, 196, 133, .15);
+      background-color: var(--c-surface);
+    }
+    textarea.form-control { min-height: 120px; resize: vertical; }
+
+    /* Avatar Upload */
+    .avatar-upload { display: flex; align-items: center; gap: var(--space-5); }
+    .avatar-upload__preview {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--c-border);
+    }
+    .avatar-upload__input { display: none; }
+    .avatar-upload__label {
+      display: inline-block;
+      padding: var(--space-2) var(--space-4);
+      background-color: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition-base);
+    }
+    .avatar-upload__label:hover {
+      background-color: var(--c-bg);
+      border-color: var(--c-brand-primary);
+      color: var(--c-brand-primary);
+    }
+
+    .btn {
+      border: none;
+      border-radius: var(--radius-lg);
+      padding: var(--space-4) var(--space-6);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-base);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+    }
+    .btn--primary {
+      background: linear-gradient(135deg, #26C485 0%, #1eb06f 100%);
+      color: var(--c-white);
+      box-shadow: 0 4px 12px rgba(38, 196, 133, .3);
+    }
+    .btn--primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(38, 196, 133, .3);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .profile-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <%- include('partials/header') %>
+
+  <main id="main-content" class="page-wrapper">
+    <header class="page-header">
+      <h1 class="page-header__title">My Profile</h1>
+      <p class="page-header__subtitle">View and manage your personal information and travel preferences.</p>
+    </header>
+
+    <div class="profile-layout">
+      <!-- Profile Display Card -->
+      <aside class="profile-card card">
+        <div class="profile-card__avatar-wrapper">
+          <img src="<%= user.profileImage || '/assets/images/default-avatar.png' %>" alt="Your Avatar" class="profile-card__avatar" id="avatar-display">
+        </div>
+        <h2 class="profile-card__name"><%= user.name %></h2>
+        <p class="profile-card__email"><%= user.email %></p>
+        <p class="profile-card__bio"><%= user.bio || 'No bio provided. Add one to personalize your profile!' %></p>
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <div class="profile-stat__value">12</div>
+            <div class="profile-stat__label">Journeys</div>
+          </div>
+          <div class="profile-stat">
+            <div class="profile-stat__value">48</div>
+            <div class="profile-stat__label">Places Visited</div>
+          </div>
+          <div class="profile-stat">
+            <div class="profile-stat__value">3</div>
+            <div class="profile-stat__label">Countries</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Edit Profile Form Card -->
+      <section class="edit-profile-card card" aria-labelledby="edit-profile-heading">
+        <h2 id="edit-profile-heading">Edit Your Profile</h2>
+        <form action="/user/profile/update" method="POST" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="profile-avatar">Profile Picture</label>
+            <div class="avatar-upload">
+              <img src="<%= user.profileImage || '/assets/images/default-avatar.png' %>" alt="Current Avatar" class="avatar-upload__preview" id="avatar-preview">
+              <label for="profile-avatar" class="avatar-upload__label">
+                <i class="fas fa-upload"></i> Choose File
+              </label>
+              <input type="file" id="profile-avatar" name="profileImage" class="avatar-upload__input" accept="image/*">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-name">Full Name</label>
+            <input type="text" id="profile-name" name="name" class="form-control" value="<%= user.name %>" required>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-bio">Your Bio</label>
+            <textarea id="profile-bio" name="bio" class="form-control" placeholder="Tell us a little about your travel style..."><%= user.bio || '' %></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const avatarInput = document.getElementById('profile-avatar');
+      const avatarPreview = document.getElementById('avatar-preview');
+      const avatarDisplay = document.getElementById('avatar-display');
+
+      if (avatarInput && avatarPreview) {
+        avatarInput.addEventListener('change', (event) => {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              avatarPreview.src = e.target.result;
+              // Also update the main display for immediate feedback
+              if(avatarDisplay) {
+                avatarDisplay.src = e.target.result;
+              }
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,60 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title><%= title %></title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <style>
-    html { scroll-behavior: smooth; }
-    .logomain { margin-left: 50px; }
-    body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans'; }
-    .glass { background: rgba(255,255,255,0.7); backdrop-filter: saturate(160%) blur(10px); }
-    .card-hover { transition: transform .35s ease, box-shadow .35s ease; }
-    .card-hover:hover { transform: translateY(-6px); box-shadow: 0 22px 40px -16px rgba(0,0,0,0.25); }
-    .img-zoom { transition: transform .6s cubic-bezier(.2,.6,.2,1); }
-    .group:hover .img-zoom { transform: scale(1.06); }
-    .btn { transition: transform .2s ease, box-shadow .3s ease, background-color .3s ease; }
-    .btn:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 18px 30px -12px rgba(16,185,129,.45); }
-    .shadow-soft { box-shadow: 0 8px 28px rgba(0,0,0,0.08); }
-    .shadow-soft-lg { box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
-    .logomain img { width: auto; height: 40px; }
-  </style>
-</head>
+    <style>
+      html { scroll-behavior: smooth; }
+      .logomain { margin-left: 50px; }
+      body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans'; }
+      .glass { background: rgba(255,255,255,0.7); backdrop-filter: saturate(160%) blur(10px); }
+      .card-hover { transition: transform .35s ease, box-shadow .35s ease; }
+      .card-hover:hover { transform: translateY(-6px); box-shadow: 0 22px 40px -16px rgba(0,0,0,0.25); }
+      .img-zoom { transition: transform .6s cubic-bezier(.2,.6,.2,1); }
+      .group:hover .img-zoom { transform: scale(1.06); }
+      .btn { transition: transform .2s ease, box-shadow .3s ease, background-color .3s ease; }
+      .btn:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 18px 30px -12px rgba(16,185,129,.45); }
+      .shadow-soft { box-shadow: 0 8px 28px rgba(0,0,0,0.08); }
+      .shadow-soft-lg { box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
+      .logomain img { width: auto; height: 40px; }
+    </style>
+  </head>
 
-<body class="bg-white text-gray-800">
+  <body class="bg-white text-gray-800">
 
-  <!-- Header -->
-  <header id="siteHeader" class="bg-white/90 glass sticky top-0 z-50 border-b border-gray-100">
-    <div class="flex justify-between items-center h-16">
-      <!-- Logo -->
-      <div class="logomain"><img src="/assets/images/mainlogotz.png" alt=""></div>
+    <!-- Header -->
+    <header id="siteHeader" class="bg-white/95 sticky top-0 z-50 shadow-sm border-b border-gray-100">
+      <div class="container mx-auto flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
+        <!-- Logo -->
+        <a href="/user/homepage" class="flex items-center">
+          <img src="/assets/images/mainlogotz.png" alt="Traveezy Logo" class="h-8 sm:h-9 w-auto">
+        </a>
 
-      <!-- Nav -->
-      <nav class="hidden md:flex items-center gap-8">
-        <a href="#top-spots" class="text-sm text-gray-600 hover:text-gray-900 transition">Explore</a>
-        <a href="#trending-food" class="text-sm text-gray-600 hover:text-gray-900 transition">Inspire</a>
-        <a href="#" class="text-sm text-gray-600 hover:text-gray-900 transition">Booking Confirmation</a>
-        <a href="#resorts" class="text-sm text-gray-600 hover:text-gray-900 transition">Best Deals</a>
-        <a href="#map" class="text-sm text-gray-600 hover:text-gray-900 transition">Support</a>
-      </nav>
+        <!-- Nav -->
+        <nav class="hidden md:flex items-center gap-6 lg:gap-8">
+          <a href="/user/homepage" class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'home') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Home</a>
+          <a href="/user/aitripplan" class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'explore') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Explore</a>
+          <a href="/user/onboarding" class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'explore') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Onboarding</a>
+          <a href="/user/resorts" class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'resorts') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Resorts</a>
+          <a href="/user/support" class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'support') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Support</a>
+        </nav>
 
-      <!-- Icons -->
-      <div class="flex items-center gap-3">
-        <button class="text-gray-600 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 transition" aria-label="Search">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
-        </button>
-        <button class="text-gray-600 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 transition" aria-label="Account">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-          </svg>
-        </button>
+        <!-- Icons -->
+        <div class="flex items-center gap-4">
+          <!-- Search Icon -->
+          <!-- <button class="text-gray-500 hover:text-[#35D6A7] p-2 rounded-full transition" aria-label="Search">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+            </svg>
+          </button> -->
+
+          <!-- Profile Dropdown -->
+          <div class="relative">
+            <button id="profileDropdownBtn" class="flex items-center gap-2 focus:outline-none">
+              <img 
+                src="<%= user?.profileImage || '/assets/images/default-avatar.png' %>" 
+                alt="Profile" 
+                class="w-9 h-9 rounded-full border border-gray-200 object-cover shadow-sm hover:shadow-md transition-all duration-200"
+              >
+              <span class="hidden sm:inline text-sm font-medium text-gray-700"><%= user ? user.name : 'Guest' %></span>
+              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div id="profileDropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-lg shadow-lg py-2 z-50">
+              <a href="/user/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">My Profile</a>
+              <a href="/user/profile#edit-profile-heading" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">Edit Profile</a>
+              <div class="border-t border-gray-100 my-1"></div>
+              <form action="/auth/logout" method="POST">
+                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </header>
+    </header>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('profileDropdownBtn');
+        const menu = document.getElementById('profileDropdownMenu');
+        if (btn && menu) {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.classList.toggle('hidden');
+          });
+          document.addEventListener('click', (e) => {
+            if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !btn.contains(e.target)) {
+              menu.classList.add('hidden');
+            }
+          });
+        }
+      });
+    </script>

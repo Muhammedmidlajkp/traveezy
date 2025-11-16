@@ -39,6 +39,17 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
 
+    // 👤 Profile
+    bio: {
+      type: String,
+      default: '',
+    },
+
+    profileImage: {
+      type: String,
+      default: '/assets/images/default-avatar.png',
+    },
+
     avatar: {
       type: String,
       default: '/assets/images/default-avatar.png',

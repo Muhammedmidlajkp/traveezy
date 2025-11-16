@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Traveezy - Support & FAQ</title>
+  <meta name="description" content="Get help with Traveezy. Find answers in our FAQ or contact our support team directly."/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --c-brand-primary: #26C485;
+      --c-brand-primary-light: rgba(38, 196, 133, 0.1);
+      --c-brand-primary-dark: #1eb06f;
+      --c-brand-secondary: #FF6B35;
+      --c-active: #2563eb;
+      --c-bg: #f8f9fa;
+      --c-surface: #fff;
+      --c-text-primary: #1a1a1a;
+      --c-text-muted: #5a5a5a;
+      --c-text-subtle: #999;
+      --c-border: #e8e8e8;
+      --c-white: #fff;
+      --c-gradient: linear-gradient(135deg, #26C485 0%, #1eb06f 100%);
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+      --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px;
+      --max-width: 1400px;
+      --radius-md: 8px; --radius-lg: 12px; --radius-xl: 16px;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,.05); 
+      --shadow-md: 0 8px 20px rgba(0,0,0,.07); 
+      --shadow-lg: 0 12px 28px rgba(0,0,0,.1);
+      --transition-base: all 0.3s ease;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body, h1, h2, h3, p, ul, li { margin: 0; padding: 0; }
+    body { 
+      font-family: var(--font-sans); 
+      color: var(--c-text-primary); 
+      background-color: var(--c-bg); 
+      line-height: 1.6; 
+    }
+    img { display: block; max-width: 100%; }
+    button { cursor: pointer; font-family: inherit; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    
+    .page-wrapper { 
+      max-width: var(--max-width); 
+      margin: 0 auto; 
+      padding: 0 var(--space-10); 
+    }
+    
+    .main-content { 
+      max-width: 1100px; 
+      margin: 0 auto; 
+    }
+    
+    /* Modern Header */
+    .support-header {
+      text-align: center;
+      padding: var(--space-16) 0;
+      background: linear-gradient(135deg, rgba(38, 196, 133, 0.08) 0%, rgba(255, 107, 53, 0.05) 100%);
+      border-bottom: 1px solid var(--c-border);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .support-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -10%;
+      width: 120%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(38, 196, 133, 0.05) 0%, transparent 70%);
+      z-index: 0;
+    }
+    
+    .support-header__content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .support-header__title { 
+      font-size: 48px; 
+      font-weight: 800; 
+      color: var(--c-text-primary); 
+      margin-bottom: var(--space-4); 
+      background: var(--c-gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .support-header__subtitle { 
+      font-size: 18px; 
+      color: var(--c-text-muted); 
+      max-width: 600px; 
+      margin: 0 auto var(--space-8); 
+      font-weight: 400;
+    }
+    
+    .search-bar { 
+      display: flex; 
+      max-width: 600px; 
+      margin: 0 auto; 
+      border: 1px solid var(--c-border); 
+      border-radius: 50px; 
+      overflow: hidden; 
+      background-color: var(--c-surface); 
+      transition: var(--transition-base);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .search-bar:focus-within { 
+      border-color: var(--c-brand-primary); 
+      box-shadow: 0 0 0 3px rgba(38, 196, 133, .15), var(--shadow-md); 
+    }
+    
+    .search-bar__input { 
+      flex-grow: 1; 
+      border: none; 
+      outline: none; 
+      padding: var(--space-5) var(--space-6); 
+      font-size: 16px; 
+      background: transparent;
+    }
+    
+    .search-bar__btn { 
+      border: none; 
+      background: var(--c-gradient); 
+      color: white; 
+      padding: 0 var(--space-8); 
+      font-size: 18px; 
+      cursor: pointer; 
+      transition: var(--transition-base); 
+    }
+    
+    .search-bar__btn:hover { 
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+    
+    /* Support Body */
+    .support-body { 
+      display: grid; 
+      grid-template-columns: 2fr 1fr; 
+      gap: var(--space-12); 
+      padding: var(--space-16) 0; 
+    }
+    
+    .section-heading { 
+      font-size: 32px; 
+      font-weight: 700; 
+      margin-bottom: var(--space-6); 
+      text-align: left; 
+      color: var(--c-text-primary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    
+    .section-heading i {
+      color: var(--c-brand-primary);
+    }
+    
+    .btn { 
+      border: none; 
+      border-radius: var(--radius-md); 
+      padding: var(--space-4) var(--space-6); 
+      font-size: 16px; 
+      font-weight: 600; 
+      cursor: pointer; 
+      transition: var(--transition-base); 
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: var(--space-2); 
+    }
+    
+    .btn--primary { 
+      background: var(--c-gradient); 
+      color: var(--c-white); 
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn--primary:hover { 
+      opacity: 0.9;
+      transform: translateY(-2px); 
+      box-shadow: var(--shadow-md); 
+    }
+    
+    .no-results {
+      display: none;
+      text-align: center;
+      padding: var(--space-10);
+      background-color: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-xl);
+      color: var(--c-text-muted);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .no-results.visible {
+      display: block;
+    }
+
+    /* FAQ Accordion */
+    .faq-accordion { 
+      display: flex; 
+      flex-direction: column; 
+      gap: var(--space-4); 
+    }
+    
+    .faq-item { 
+      background-color: var(--c-surface); 
+      border: 1px solid var(--c-border); 
+      border-radius: var(--radius-xl); 
+      overflow: hidden;
+      transition: var(--transition-base);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .faq-item:hover {
+      box-shadow: var(--shadow-md);
+      border-color: rgba(38, 196, 133, 0.2);
+    }
+    
+    .faq-item.active {
+      border-color: var(--c-brand-primary);
+      box-shadow: 0 0 0 1px var(--c-brand-primary), var(--shadow-sm);
+    }
+    
+    .faq-item__question {
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      padding: var(--space-6) var(--space-8);
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--c-text-primary);
+      transition: var(--transition-base);
+    }
+    
+    .faq-item__question:hover {
+      background-color: rgba(38, 196, 133, 0.03);
+    }
+    
+    .faq-item__question-icon {
+      color: var(--c-brand-primary);
+      font-size: 20px;
+      margin-right: var(--space-4);
+      width: 24px;
+      text-align: center;
+    }
+    
+    .faq-item__question::after {
+      content: '\f078';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      font-size: 14px;
+      transition: transform 0.3s ease;
+      color: var(--c-text-subtle);
+    }
+    
+    .faq-item.active .faq-item__question::after {
+      transform: rotate(180deg);
+    }
+    
+    .faq-item__answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      color: var(--c-text-muted);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    
+    .faq-item.active .faq-item__answer {
+      max-height: 300px;
+    }
+    
+    .faq-item__answer-content {
+      padding: 0 var(--space-8) var(--space-6);
+      border-top: 1px solid var(--c-border);
+    }
+
+    .faq-item__answer-content p {
+      margin-bottom: var(--space-4);
+    }
+    .faq-item__answer-content ol {
+      padding-left: var(--space-6);
+      margin-bottom: var(--space-4);
+    }
+    .faq-item__answer-content li {
+      margin-bottom: var(--space-2);
+    }
+
+    /* Helpfulness Feedback */
+    .faq-feedback {
+      margin-top: var(--space-6);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--c-border);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      font-size: 14px;
+    }
+    .faq-feedback__question {
+      color: var(--c-text-muted);
+      font-weight: 500;
+    }
+    .faq-feedback__btn {
+      background: none;
+      border: 1px solid var(--c-border);
+      border-radius: 50px;
+      padding: var(--space-1) var(--space-4);
+      transition: var(--transition-base);
+    }
+    .faq-feedback__btn:hover {
+      background-color: var(--c-brand-primary-light);
+      border-color: var(--c-brand-primary);
+      color: var(--c-brand-primary-dark);
+    }
+
+    /* Contact Section */
+    .contact-card {
+      background-color: var(--c-surface);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-lg);
+      position: sticky;
+      top: 120px;
+      transition: var(--transition-base);
+    }
+    
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,.12);
+    }
+    
+    .contact-card__header { 
+      text-align: center; 
+      margin-bottom: var(--space-8); 
+      padding-bottom: var(--space-6);
+      border-bottom: 1px solid var(--c-border);
+    }
+    
+    .contact-card__icon { 
+      font-size: 48px; 
+      color: var(--c-brand-primary); 
+      margin-bottom: var(--space-4); 
+      background: var(--c-brand-primary-light);
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin: 0 auto var(--space-4);
+    }
+    
+    .contact-card h3 { 
+      font-size: 24px; 
+      margin-bottom: var(--space-3); 
+      color: var(--c-text-primary); 
+      font-weight: 700;
+    }
+    
+    .contact-card p {
+      color: var(--c-text-muted);
+      font-size: 15px;
+    }
+    
+    .contact-form { 
+      display: flex; 
+      flex-direction: column; 
+      gap: var(--space-5); 
+    }
+    
+    .form-group { 
+      display: flex; 
+      flex-direction: column; 
+    }
+    
+    .form-group label {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--c-text-muted);
+      margin-bottom: var(--space-2);
+    }
+    
+    .form-group .form-control {
+      font-family: var(--font-sans);
+      font-size: 15px;
+      padding: var(--space-4);
+      border: 1px solid var(--c-border);
+      border-radius: var(--radius-md);
+      background-color: var(--c-bg);
+      transition: var(--transition-base);
+    }
+    
+    .form-group .form-control:focus {
+      outline: none;
+      border-color: var(--c-brand-primary);
+      box-shadow: 0 0 0 3px rgba(38, 196, 133, .15);
+      background-color: var(--c-surface);
+    }
+    
+    .form-group textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .contact-form .btn--primary {
+      width: 100%;
+      padding: var(--space-5) 0;
+      margin-top: var(--space-2);
+      font-size: 16px;
+    }
+
+    /* Additional Resources */
+    .resources-section {
+      margin-top: var(--space-16);
+      padding: var(--space-10) 0;
+      background-color: var(--c-surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-6);
+      margin-top: var(--space-8);
+    }
+    
+    .resource-card {
+      background: var(--c-white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-base);
+      border: 1px solid var(--c-border);
+    }
+    
+    .resource-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--c-brand-primary);
+    }
+    
+    .resource-card i {
+      font-size: 32px;
+      color: var(--c-brand-primary);
+      margin-bottom: var(--space-4);
+    }
+    
+    .resource-card h4 {
+      font-size: 18px;
+      margin-bottom: var(--space-3);
+      color: var(--c-text-primary);
+    }
+    
+    .resource-card p {
+      font-size: 14px;
+      color: var(--c-text-muted);
+      margin-bottom: var(--space-4);
+    }
+    
+    .resource-link {
+      color: var(--c-brand-primary);
+      font-weight: 600;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    
+    .resource-link:hover {
+      color: var(--c-brand-primary-dark);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .support-body { 
+        grid-template-columns: 1fr; 
+      }
+      .contact-card { 
+        position: static; 
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .page-wrapper { 
+        padding: 0 var(--space-5); 
+      }
+      .support-header__title {
+        font-size: 36px;
+      }
+      .support-header {
+        padding: var(--space-12) 0;
+      }
+      .section-heading {
+        font-size: 28px;
+      }
+      .resources-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ========================================================================
+     HEADER
+     ======================================================================== -->
+  <%- include('partials/header') %>
+
+  <!-- ========================================================================
+     MAIN CONTENT
+     ======================================================================== -->
+  <main id="main-content">
+    <!-- Support Header -->
+    <header class="support-header">
+      <div class="main-content">
+        <div class="support-header__content">
+          <h1 class="support-header__title">How can we help?</h1>
+          <p class="support-header__subtitle">
+            Have a question or experiencing an issue? Search our knowledge base or contact us directly.
+          </p>
+          <div class="search-bar" role="search">
+            <input type="search" id="faq-search" class="search-bar__input" placeholder="Search for answers...">
+            <button class="search-bar__btn" aria-label="Search">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-wrapper">
+      <div class="main-content">
+        <div class="support-body">
+          <!-- FAQ Section -->
+          <section aria-labelledby="faq-heading">
+            <h2 id="faq-heading" class="section-heading">
+              <i class="fas fa-question-circle"></i>
+              Frequently Asked Questions
+            </h2>
+            <div class="faq-accordion">
+              <!-- FAQ Item 1 -->
+              <div class="faq-item">
+                <button class="faq-item__question" aria-expanded="false">
+                  <span class="faq-item__question-icon"><i class="fas fa-map-marked-alt"></i></span>How do I create a new journey?
+                </button>
+                <div class="faq-item__answer">
+                  <div class="faq-item__answer-content">
+                    <p>To create a new journey, simply navigate to the "My Journeys" page and click the "Create New Journey" button. You'll be prompted to give your journey a name, and then you can start adding destinations from the Explore page.</p>
+                    <p>Creating a new journey is simple! Just follow these steps:</p>
+                    <ol>
+                      <li>Navigate to the <strong>"My Journeys"</strong> page from the main menu.</li>
+                      <li>Click the prominent <strong>"Create New Journey"</strong> button.</li>
+                      <li>Give your journey a memorable name and set your start date.</li>
+                      <li>Start adding destinations from the <strong>Explore</strong> page to build your itinerary!</li>
+                    </ol>
+                    <div class="faq-feedback"><span class="faq-feedback__question">Was this helpful?</span>
+                      <button class="faq-feedback__btn">Yes</button><button class="faq-feedback__btn">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ Item 2 -->
+              <div class="faq-item">
+                <button class="faq-item__question" aria-expanded="false">
+                  <span class="faq-item__question-icon"><i class="fas fa-share-alt"></i></span>Can I share my itinerary with friends?
+                </button>
+                <div class="faq-item__answer">
+                  <div class="faq-item__answer-content">
+                    <p>Yes! Sharing is a core feature of Traveezy. In your journey's dashboard, you will find a "Share" button. You can generate a unique link to send to your friends and family, allowing them to view your planned itinerary in real-time.</p>
+                    <p>Absolutely! Sharing is a core feature of Traveezy. Inside your journey's dashboard, look for the <strong>"Share"</strong> button. Clicking it will generate a unique, private link that you can send to friends and family. They'll be able to view your planned itinerary in real-time, but they won't be able to make changes.</p>
+                    <div class="faq-feedback"><span class="faq-feedback__question">Was this helpful?</span>
+                      <button class="faq-feedback__btn">Yes</button><button class="faq-feedback__btn">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ Item 3 -->
+              <div class="faq-item">
+                <button class="faq-item__question" aria-expanded="false">
+                  <span class="faq-item__question-icon"><i class="fas fa-route"></i></span>How does the journey tracking work?
+                </button>
+                <div class="faq-item__answer">
+                  <div class="faq-item__answer-content">
+                    <p>Our journey tracking system uses the time slots you define for each stop. It automatically updates a stop's status to "active" when the current time falls within its scheduled window. Once the time has passed, it will prompt you to confirm if you've completed that leg of the journey.</p>
+                    <p>Our journey tracking system uses the time slots you define for each stop. It automatically updates a stop's status to <strong>"Active"</strong> when the current time falls within its scheduled window. Once the time has passed, the status will change to <strong>"Pending Confirmation"</strong>, and the app will prompt you to confirm if you've completed that leg of the journey. This keeps your timeline accurate and up-to-date.</p>
+                    <div class="faq-feedback"><span class="faq-feedback__question">Was this helpful?</span>
+                      <button class="faq-feedback__btn">Yes</button><button class="faq-feedback__btn">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FAQ Item 4 -->
+              <div class="faq-item">
+                <button class="faq-item__question" aria-expanded="false">
+                  <span class="faq-item__question-icon"><i class="fas fa-edit"></i></span>What if I need to change my plan mid-trip?
+                </button>
+                <div class="faq-item__answer">
+                  <div class="faq-item__answer-content">
+                    <p>No problem at all. You can edit your journey at any time, even while you're on your trip. Simply go to your journey, and you can reorder stops, change times, or add and remove destinations as your plans evolve.</p>
+                    <p>No problem at all. Your itinerary is fully flexible. You can edit your journey at any time, even while you're on your trip. Simply go to your journey dashboard, and you can easily reorder stops, change times, or add and remove destinations as your plans evolve on the road.</p>
+                    <div class="faq-feedback"><span class="faq-feedback__question">Was this helpful?</span>
+                      <button class="faq-feedback__btn">Yes</button><button class="faq-feedback__btn">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- FAQ Item 5 -->
+              <div class="faq-item">
+                <button class="faq-item__question" aria-expanded="false">
+                  <span class="faq-item__question-icon"><i class="fas fa-mobile-alt"></i></span>Is there a mobile app available?
+                </button>
+                <div class="faq-item__answer">
+                  <div class="faq-item__answer-content">
+                    <p>Yes! Traveezy is available as a mobile app for both iOS and Android. You can download it from the App Store or Google Play Store. The mobile app offers all the features of the web version with the added convenience of on-the-go access.</p>
+                    <p>Yes! Traveezy is available as a progressive web app (PWA) and native apps for both iOS and Android. You can download it from the App Store or Google Play Store. The mobile app offers all the features of the web version, plus offline access to your itineraries and push notifications for your journey.</p>
+                    <div class="faq-feedback"><span class="faq-feedback__question">Was this helpful?</span>
+                      <button class="faq-feedback__btn">Yes</button><button class="faq-feedback__btn">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- FAQ Item 6 -->
+              <div class="faq-item">
+                <button class="faq-item__question" aria-expanded="false">
+                  <span class="faq-item__question-icon"><i class="fas fa-lock"></i></span>How secure is my data with Traveezy?
+                </button>
+                <div class="faq-item__answer">
+                  <div class="faq-item__answer-content">
+                    <p>We take data security very seriously. All your personal information and journey data are encrypted both in transit and at rest. We never share your data with third parties without your explicit consent. You can read more in our Privacy Policy.</p>
+                    <p>We take data security very seriously. All your personal information and journey data are encrypted both in transit (using TLS/SSL) and at rest on our servers. We use industry-standard security practices and never share your data with third parties without your explicit consent. You can read more in our Privacy Policy.</p>
+                    <div class="faq-feedback"><span class="faq-feedback__question">Was this helpful?</span>
+                      <button class="faq-feedback__btn">Yes</button><button class="faq-feedback__btn">No</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="no-results" class="no-results">
+              <h3>No results found</h3>
+              <p>We couldn't find any answers matching your search. Try different keywords or contact our support team.</p>
+            </div>
+          </section>
+
+          <!-- Contact Section -->
+          <aside aria-labelledby="contact-heading">
+            <div class="contact-card">
+              <div class="contact-card__header">
+                <div class="contact-card__icon">
+                  <i class="fas fa-envelope"></i>
+                </div>
+                <h3 id="contact-heading">Contact Our Team</h3>
+                <p>Can't find an answer? We're here to help.</p>
+              </div>
+              <form action="/support/contact" method="POST" class="contact-form">
+                <div class="form-group">
+                  <label for="contact-email">Your Email</label>
+                  <input type="email" id="contact-email" name="email" class="form-control" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                  <label for="contact-subject">Subject</label>
+                  <input type="text" id="contact-subject" name="subject" class="form-control" placeholder="e.g., Issue with my journey" required>
+                </div>
+                <div class="form-group">
+                  <label for="contact-message">Message</label>
+                  <textarea id="contact-message" name="message" class="form-control" placeholder="Please describe your issue in detail..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn--primary">
+                  <i class="fas fa-paper-plane"></i>
+                  <span>Send Message</span>
+                </button>
+              </form>
+            </div>
+          </aside>
+        </div>
+        
+       
+  <!-- ========================================================================
+     FOOTER
+     ======================================================================== -->
+  <%- include('partials/footer') %>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // --- Accordion Logic ---
+      const accordionItems = document.querySelectorAll('.faq-item');
+      accordionItems.forEach(item => {
+        const questionButton = item.querySelector('.faq-item__question');
+        questionButton.addEventListener('click', () => {
+          const isActive = item.classList.contains('active');
+          
+          // Close all items
+          accordionItems.forEach(otherItem => {
+            if (otherItem !== item) {
+              otherItem.classList.remove('active');
+              otherItem.querySelector('.faq-item__question').setAttribute('aria-expanded', 'false');
+            }
+          });
+          
+          // Toggle current item
+          if (!isActive) {
+            item.classList.add('active');
+            questionButton.setAttribute('aria-expanded', 'true');
+          } else {
+            item.classList.remove('active');
+            questionButton.setAttribute('aria-expanded', 'false');
+          }
+        });
+      });
+
+      // --- Live Search Logic ---
+      const searchInput = document.getElementById('faq-search');
+      const noResultsMessage = document.getElementById('no-results');
+
+      function filterFAQs() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        accordionItems.forEach(item => {
+          const questionText = item.querySelector('.faq-item__question').textContent.toLowerCase();
+          const answerText = item.querySelector('.faq-item__answer p').textContent.toLowerCase();
+          const isMatch = questionText.includes(searchTerm) || answerText.includes(searchTerm);
+
+          if (isMatch) {
+            item.style.display = 'block';
+            visibleCount++;
+          } else {
+            item.style.display = 'none';
+          }
+        });
+
+        // Show or hide the "no results" message
+        if (visibleCount === 0 && searchTerm !== '') {
+          noResultsMessage.classList.add('visible');
+        } else {
+          noResultsMessage.classList.remove('visible');
+        }
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', filterFAQs);
+      }
+    });
+  </script>
+</body>
+</html>
