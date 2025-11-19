@@ -40,7 +40,9 @@ router.get('/reset', authController.resetPasswordPage);         // Show email in
 router.post('/send-otp', authController.sendResetOTP); 
 router.get('/verify-otp', authController.verifyOtpPage); 
 router.post('/verify-otp', authController.verifyOtp); 
-router.post('/newOtpverification', authController.newOtpverification); 
+router.post('/newOtpverification', authController.newOtpverification);
+router.post('/resend-signup-otp', authController.resendSignupOTP);
+ 
 router.get('/new-password', authController.newPasswordPage);           // Verify OTP
 router.post('/new-password', authController.updatePassword);   
 router.post('/logout',authController.logout);

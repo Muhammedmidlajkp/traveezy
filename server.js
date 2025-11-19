@@ -60,8 +60,12 @@ app.use('/user',userrouter);
 
 
 
+// app.get('/', (req, res) => {
+//   res.redirect('/auth/login');
+// });
+
 app.get('/', (req, res) => {
-  res.redirect('/auth/login');
+  res.render('landing', { title: "Traveezy - Travel Smarter" });
 });
 
 

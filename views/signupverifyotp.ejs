@@ -184,7 +184,7 @@
     e.preventDefault();
 
     try {
-      const res = await fetch("/auth/send-otp", {
+      const res = await fetch("/auth/verify-signup-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })

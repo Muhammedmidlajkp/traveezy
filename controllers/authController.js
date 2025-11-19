@@ -127,69 +127,69 @@ exports.verifySignupOtp = async (req, res) => {
 
 
 
-exports.login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// exports.login = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
 
     
-    if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+//     if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
       
-      const token = jwt.sign({ role: "admin" }, process.env.JWT_SECRET, {
-        expiresIn: "1d",
-      });
+//       const token = jwt.sign({ role: "admin" }, process.env.JWT_SECRET, {
+//         expiresIn: "1d",
+//       });
 
    
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: false, 
-        maxAge: 24 * 60 * 60 * 1000,
-      });
+//       res.cookie("token", token, {
+//         httpOnly: true,
+//         secure: false, 
+//         maxAge: 24 * 60 * 60 * 1000,
+//       });
 
     
-      return res.redirect("/admin/dashboard");
-    }
+//       return res.redirect("/admin/dashboard");
+//     }
 
-    // 🔍 Otherwise check if user exists in DB
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).send("Invalid email or password");
-    }
+//     // 🔍 Otherwise check if user exists in DB
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(400).send("Invalid email or password");
+//     }
 
-    // ✅ Check if the user is blocked
-    if (user.status === 'Blocked') {
-      // User is blocked, prevent login
-      return res.status(403).send("Your account has been blocked. Please contact an administrator.");
-    }
+//     // ✅ Check if the user is blocked
+//     if (user.status === 'Blocked') {
+//       // User is blocked, prevent login
+//       return res.status(403).send("Your account has been blocked. Please contact an administrator.");
+//     }
 
-    // 🔐 Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).send("Invalid email or password");
-    }
+//     // 🔐 Compare password
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//       return res.status(400).send("Invalid email or password");
+//     }
 
-    user.lastLogin = new Date();
-    await user.save();
+//     user.lastLogin = new Date();
+//     await user.save();
 
-    // 🪪 Generate JWT token for normal user
-    const token = jwt.sign({ id: user._id, role: "user" }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
+//     // 🪪 Generate JWT token for normal user
+//     const token = jwt.sign({ id: user._id, role: "user" }, process.env.JWT_SECRET, {
+//       expiresIn: "1d",
+//     });
 
-    // 🍪 Store token in cookie
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: false, // set true in production
-      maxAge: 24 * 60 * 60 * 1000,
-    });
+//     // 🍪 Store token in cookie
+//     res.cookie("token", token, {
+//       httpOnly: true,
+//       secure: false, // set true in production
+//       maxAge: 24 * 60 * 60 * 1000,
+//     });
 
-    // ✅ Redirect user to home
-    return res.redirect("/user/onboarding");
+//     // ✅ Redirect user to home
+//     return res.redirect("/user/onboarding");
 
-  } catch (error) {
-    console.error("Login Error:", error.message);
-    res.status(500).send("Server Error");
-  }
-};
+//   } catch (error) {
+//     console.error("Login Error:", error.message);
+//     res.status(500).send("Server Error");
+//   }
+// };
 
 
 
@@ -197,6 +197,62 @@ exports.login = async (req, res) => {
 
 
 // ✅ Render reset password page
+
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+      const token = jwt.sign({ role: "admin" }, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+      });
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
+      return res.redirect("/admin/dashboard");
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.render("login", { error: "Invalid email or password" });
+    }
+
+    if (user.status === "Blocked") {
+      return res.render("login", { error: "Your account has been blocked. Please contact an administrator." });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.render("login", { error: "Invalid email or password" });
+    }
+
+    user.lastLogin = new Date();
+    await user.save();
+
+    const token = jwt.sign({ id: user._id, role: "user" }, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
+
+    return res.redirect("/user/onboarding");
+
+  } catch (error) {
+    console.error("Login Error:", error.message);
+    return res.render("login", { error: "Server Error. Please try again later." });
+  }
+};
+  
+
+
 exports.resetPasswordPage = (req, res) => {
   res.render('resetpassword'); // your EJS file
 };
@@ -630,5 +686,46 @@ exports.logout = (req, res) => {
   } catch (error) {
     console.error('Logout Error:', error.message);
     res.status(500).json({ message: 'Logout failed. Try again later.' });
+  }
+};
+
+
+
+
+exports.resendSignupOTP = async (req, res) => {
+  try {
+    const { email } = req.body;
+    
+    const record = OTPs[email];
+    if (!record) {
+      return res.status(400).json({ message: "Session expired. Signup again." });
+    }
+
+    // Generate new OTP
+    const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    record.otp = newOtp;
+    record.expiresAt = Date.now() + 5 * 60 * 1000; 
+
+    // Send Email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Your new OTP - Traveesy",
+      html: `<h1>${newOtp}</h1><p>This OTP will expire in 5 minutes.</p>`
+    });
+
+    res.json({ message: "New OTP sent!" });
+
+  } catch (err) {
+    console.error("Resend OTP Error:", err);
+    res.status(500).json({ message: "Server Error" });
   }
 };
