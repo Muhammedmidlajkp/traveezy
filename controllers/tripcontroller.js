@@ -20,35 +20,18 @@ exports.aiTripPlannerPage = async (req, res) => {
       });
     }
 
-    // 🧩 Extract onboarding info
     const { location, travelStart, travelEnd, interests } = user.onboarding || {};
 
-    // 🧮 Calculate trip days
+    
     let days = 3;
     if (travelStart && travelEnd) {
       const diff = Math.ceil(
         (new Date(travelEnd) - new Date(travelStart)) / (1000 * 60 * 60 * 24)
       );
-      days = diff <= 0 ? 1 : diff; // Same-day trips = 1 day
+      days = diff <= 0 ? 1 : diff; 
     }
 
-    // 🧠 Create the AI query
-//     const q = `
-// You are a professional tour planner with over 40 years of experience in Indian tourism.
-// Plan a ${days}-day trip for ${user.name}, starting from ${location || "Kerala"}.
-
-// Your goal:
-// - Create a realistic, local-style itinerary.
-// - Suggest nearby locations, ordered from nearest to farthest.
-// - Each day should have meaningful travel flow (no backtracking).
-// - Include hidden gems, authentic food spots, and local experiences.
-// - Consider travel time and distance between each spot.
-
-// Traveler’s interests: ${interests?.length ? interests.join(", ") : "nature, adventure, culture"}.
-
-// Output only the best trip plan that feels curated by a local guide, not AI.
-// `;
-
+    
 
 const q = `
 You are a professional tour planner with over 40 years of experience in Indian tourism.
@@ -97,7 +80,7 @@ Output only the best trip plan that feels curated by a local guide with realisti
       }
     };
 
-    // 🔮 Ask Perplexity AI
+    
     const completion = await client.chat.completions.create({
       model: "sonar-pro",
       messages: [
@@ -120,22 +103,7 @@ Output only the best trip plan that feels curated by a local guide with realisti
       });
     }
 
-   // 🧩 Normalize AI response into EJS-friendly format
-// const images = completion.images || [];
-// const normalizedPlaces = json.cards.map((card, i) => ({
-//   name: card.title || "Untitled Place",
-//   loc: card.location || "Unknown Location",
-//   time: card.time || "Anytime",
-//   desc: card.description || "No description available.",
-//   image: images[i]?.image_url || "https://via.placeholder.com/400x250?text=No+Image",
-//   rating: (Math.random() * (5 - 3.5) + 3.5).toFixed(1), // Random 3.5–5 rating
-//   reviews: Math.floor(Math.random() * 400) + 20, // Random number of reviews
-//   dist: `${Math.floor(Math.random() * 20) + 1} km away`, // Random distance
-//   status: "upcoming",
-//   dur: "Flexible",
-//   icon: "📍"
-// }));
-
+   
 
 const getUnsplashImage = require("../helpers/getUnsplashImage");
 
@@ -160,7 +128,6 @@ const normalizedPlaces = await Promise.all(
 
 
 
-    // ✅ Render the Explore page with AI data
     res.render("user/Explore", {
       title: `AI Trip Planner - ${user.name}`,
       query: q,

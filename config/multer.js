@@ -2,13 +2,11 @@
     const path = require('path');
     const fs = require('fs');
 
-    // Directory for uploads
     const uploadPath = path.join(__dirname, '../public/uploads/profileImages');
     if (!fs.existsSync(uploadPath)) {
     fs.mkdirSync(uploadPath, { recursive: true });
     }
 
-    // Multer Storage Config
     const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, uploadPath);
@@ -20,7 +18,6 @@
     },
     });
 
-    // File type filter (only images)
     const fileFilter = (req, file, cb) => {
     const allowed = /jpeg|jpg|png|gif/;
     const extname = allowed.test(path.extname(file.originalname).toLowerCase());
