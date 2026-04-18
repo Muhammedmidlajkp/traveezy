@@ -1,17 +1,14 @@
 const User = require('../models/user');
 const Place = require('../models/place');
-const { Perplexity } = require("@perplexity-ai/perplexity_ai");
+const Groq = require("groq-sdk");
 require("dotenv").config();
 const getUnsplashImage = require("../helpers/getUnsplashImage");
 const path = require('path');
 const fs = require('fs');
 const Booking = require('../models/booking');
 
-
-
-
-
-
+// In-memory cache for Home page AI content
+const homeCache = new Map();
 
 exports.onboardingpage = (req,res)=>{
 
@@ -62,7 +59,7 @@ exports.onboardingpage = (req,res)=>{
 //   }
 // };
 
-const client = new Perplexity({ apiKey: process.env.PERPLEXITY_API_KEY });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 
 // exports.homePage = async (req, res) => {
@@ -226,87 +223,103 @@ exports.homePage = async (req, res) => {
       heroPlace = userLocation;
     }
 
-    // ✅ 1️⃣ Fetch Top Spots dynamically
+    const userIdStr = user && user._id ? user._id.toString() : 'guest';
+    const regenerate = req.query.regenerate === 'true';
+
     let topSpots = [];
-    try {
-      const completion = await client.chat.completions.create({
-        model: "sonar-pro",
-        messages: [
-          {
-            role: "system",
-            content:
-              "Return only a valid JSON array of 3 tourist attractions with fields: name and description.",
-          },
-          {
-            role: "user",
-            content: `List 3 must-visit tourist attractions in ${userLocation}, India. Include short descriptions.`,
-          },
-        ],
-      });
+    let topFoods = [];
 
-      const rawResponse = completion.choices[0].message.content;
-      const jsonMatch = rawResponse.match(/\[.*\]/s);
-
-      if (jsonMatch) {
-        topSpots = JSON.parse(
-          jsonMatch[0].replace(/```json\n?/, "").replace(/```$/, "")
-        );
+    // Check Cache First
+    if (!regenerate && homeCache.has(userIdStr)) {
+      const cached = homeCache.get(userIdStr);
+      if (cached.location === userLocation) {
+        topSpots = cached.topSpots;
+        topFoods = cached.topFoods;
       }
-
-      // ✅ Add Unsplash image to each spot
-      await Promise.all(
-        topSpots.map(async (spot) => {
-          const imageUrl = await getUnsplashImage(
-            `${spot.name} ${userLocation}`
-          );
-          spot.image =
-            imageUrl ||
-            "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop";
-        })
-      );
-    } catch (err) {
-      console.error("❌ Perplexity API error (spots):", err);
     }
 
-    // ✅ 2️⃣ Fetch Top Foods dynamically
-    let topFoods = [];
-    try {
-      const completionFood = await client.chat.completions.create({
-        model: "sonar-pro",
-        messages: [
-          {
-            role: "system",
-            content:
-              "Return only valid JSON array — 3 traditional or trending local foods in the given city with keys: name, description.",
-          },
-          {
-            role: "user",
-            content: `List 3 famous local dishes or trending foods in ${userLocation}, India. Include short descriptions.`,
-          },
-        ],
-      });
+    // Refresh if cache empty (or invalidated by location change/regenerate flag)
+    if (topSpots.length === 0 || topFoods.length === 0) {
+      // ✅ 1️⃣ Fetch Top Spots dynamically
+      try {
+        const result = await groq.chat.completions.create({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            {
+              role: "system",
+              content: "Return ONLY a valid JSON object with a key 'spots' containing an array of 3 tourist attractions. Each item must have: name (string) and description (string). No markdown, no extra text."
+            },
+            {
+              role: "user",
+              content: `List 3 must-visit tourist attractions in ${userLocation}, India. Include short descriptions.`
+            }
+          ],
+          temperature: 0.3,
+          response_format: { type: "json_object" },
+        });
 
-      const rawFoodResponse = completionFood.choices[0].message.content;
-      const jsonMatchFood = rawFoodResponse.match(/\[.*\]/s);
-      if (jsonMatchFood) {
-        topFoods = JSON.parse(
-          jsonMatchFood[0].replace(/```json\n?/, "").replace(/```$/, "")
+        const rawResponse = result.choices[0].message.content;
+        const parsed = JSON.parse(rawResponse);
+        topSpots = parsed.spots || parsed.attractions || Object.values(parsed)[0] || [];
+
+        // ✅ Add Unsplash image to each spot
+        await Promise.all(
+          topSpots.map(async (spot) => {
+            const imageUrl = await getUnsplashImage(
+              `${spot.name} ${userLocation}`
+            );
+            spot.image =
+              imageUrl ||
+              "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200&auto=format&fit=crop";
+          })
         );
+      } catch (err) {
+        console.error("❌ Groq API error (spots):", err);
       }
 
-      // ✅ Add Unsplash images for each food item
-      await Promise.all(
-        topFoods.map(async (food) => {
-          const imageUrl = await getUnsplashImage(
-            `${food.name} food ${userLocation}`
-          );
-          food.image =
-            imageUrl ||
-            "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200&auto=format&fit=crop";
-        })
-      );
-    } catch (err) {
-      console.error("❌ Perplexity API error (food):", err);
+      // ✅ 2️⃣ Fetch Top Foods dynamically
+      try {
+        const foodResult = await groq.chat.completions.create({
+          model: "llama-3.3-70b-versatile",
+          messages: [
+            {
+              role: "system",
+              content: "Return ONLY a valid JSON object with a key 'foods' containing an array of 3 local dishes. Each item must have: name (string) and description (string). No markdown, no extra text."
+            },
+            {
+              role: "user",
+              content: `List 3 famous local dishes or trending foods in ${userLocation}, India. Include short descriptions.`
+            }
+          ],
+          temperature: 0.3,
+          response_format: { type: "json_object" },
+        });
+
+        const rawFoodResponse = foodResult.choices[0].message.content;
+        const parsedFood = JSON.parse(rawFoodResponse);
+        topFoods = parsedFood.foods || parsedFood.dishes || Object.values(parsedFood)[0] || [];
+
+        // ✅ Add Unsplash images for each food item
+        await Promise.all(
+          topFoods.map(async (food) => {
+            const imageUrl = await getUnsplashImage(
+              `${food.name} food ${userLocation}`
+            );
+            food.image =
+              imageUrl ||
+              "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200&auto=format&fit=crop";
+          })
+        );
+      } catch (err) {
+        console.error("❌ Groq API error (food):", err);
+      }
+      
+      // Save to cache
+      homeCache.set(userIdStr, {
+          location: userLocation,
+          topSpots,
+          topFoods
+      });
     }
 
     // ✅ 3️⃣ Fetch Resorts from DB
@@ -557,6 +570,12 @@ exports.updateProfile = async (req, res) => {
     // Update fields
     user.name = req.body.name || user.name;
     user.bio = req.body.bio || user.bio;
+
+    // ✅ Save location to onboarding data
+    if (req.body.location) {
+      if (!user.onboarding) user.onboarding = {};
+      user.onboarding.location = req.body.location;
+    }
 
     // If image uploaded
     if (req.file) {

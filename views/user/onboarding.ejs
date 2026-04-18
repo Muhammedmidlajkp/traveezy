@@ -1,503 +1,512 @@
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title || 'Travecy - Save and Plan Your Perfect Trip' %></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="/assets/images/traveezy  bg no.png" />
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    <%= title || 'Travecy - Save and Plan Your Perfect Trip' %>
+  </title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="icon" type="image/png" href="/assets/images/logonobg.png" />
 
 
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f8f9fa;
-        color: #333;
-      }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+    }
 
-      .navbar-custom {
-        background-color: #fff;
-        padding: 15px 30px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      }
+    .navbar-custom {
+      background-color: #fff;
+      padding: 15px 30px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
 
-      .logo img {
-        width: auto;
-        height: 50px;
-        margin-left: 25px;
-        vertical-align: middle;
-      }
+    .logo img {
+      width: auto;
+      height: 50px;
+      margin-left: 25px;
+      vertical-align: middle;
+    }
 
-      .hero-section {
-        background-color: #fff;
-        padding: 60px 30px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-      }
+    .hero-section {
+      background-color: #fff;
+      padding: 60px 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
 
+    .hero-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .hero-illustration {
+      flex: 0 0 300px;
+      text-align: center;
+    }
+
+    .hero-illustration img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .hero-text {
+      flex: 1;
+      text-align: left;
+    }
+
+    .hero-text h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 15px;
+    }
+
+    .hero-text p {
+      font-size: 16px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .main-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px;
+    }
+
+    .location-section {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .location-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .location-header i {
+      color: #20c997;
+      margin-right: 10px;
+      font-size: 20px;
+    }
+
+    .location-description {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+    }
+
+    #searchResults {
+      z-index: 9999;
+      max-height: 200px;
+      overflow-y: auto;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    .btn-enable {
+      width: 100%;
+      background-color: #20c997;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn-enable:hover {
+      background-color: #1aa179;
+    }
+
+    .interests-section,
+    .dates-section,
+    .notification-section {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .interests-header {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 20px;
+    }
+
+    .interests-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag {
+      padding: 8px 16px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      background-color: #f8f9fa;
+      color: #666;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+
+    .tag.active {
+      background-color: #20c997;
+      color: white;
+      border-color: #20c997;
+    }
+
+    .tag:hover {
+      border-color: #20c997;
+    }
+
+    .dates-header {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 20px;
+    }
+
+    .dates-header i {
+      color: #20c997;
+      margin-right: 10px;
+      font-size: 20px;
+    }
+
+    .dates-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .date-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .date-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 10px;
+    }
+
+    .date-input {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background-color: #f8f9fa;
+      color: #666;
+      font-size: 14px;
+    }
+
+    .date-input i {
+      margin-right: 10px;
+      color: #999;
+    }
+
+    .notification-header {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 20px;
+    }
+
+    .notification-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .notification-content h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 5px;
+    }
+
+    .notification-content p {
+      font-size: 13px;
+      color: #999;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 28px;
+      background-color: #ddd;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .toggle-switch.active {
+      background-color: #20c997;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      background-color: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: left 0.3s;
+    }
+
+    .toggle-switch.active::after {
+      left: 24px;
+    }
+
+    .footer-section {
+      text-align: center;
+      padding: 30px;
+    }
+
+    .btn-get-started {
+      background-color: #20c997;
+      color: white;
+      border: none;
+      padding: 12px 40px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      margin-bottom: 15px;
+    }
+
+    .btn-get-started:hover {
+      background-color: #1aa179;
+    }
+
+    .skip-link {
+      display: block;
+      color: #999;
+      text-decoration: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .skip-link:hover {
+      color: #666;
+    }
+
+    @media (max-width: 768px) {
       .hero-content {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 40px;
-        flex-wrap: wrap;
+        flex-direction: column;
+        gap: 20px;
       }
 
       .hero-illustration {
-        flex: 0 0 300px;
-        text-align: center;
-      }
-
-      .hero-illustration img {
-        max-width: 100%;
-        height: auto;
+        flex: 0 0 200px;
       }
 
       .hero-text {
-        flex: 1;
-        text-align: left;
+        text-align: center;
       }
 
       .hero-text h1 {
-        font-size: 32px;
-        font-weight: 700;
-        color: #1a1a1a;
-        margin-bottom: 15px;
-      }
-
-      .hero-text p {
-        font-size: 16px;
-        color: #666;
-        line-height: 1.6;
-      }
-
-      .main-container {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 30px;
-      }
-
-      .location-section {
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 8px;
-        margin-bottom: 30px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      }
-
-      .location-header {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-        font-size: 18px;
-        font-weight: 600;
-        color: #1a1a1a;
-      }
-
-      .location-header i {
-        color: #20c997;
-        margin-right: 10px;
-        font-size: 20px;
-      }
-
-      .location-description {
-        color: #666;
-        font-size: 14px;
-        margin-bottom: 20px;
-        line-height: 1.6;
-      }
-
-      .search-box {
-        position: relative;
-        margin-bottom: 15px;
-      }
-
-      .search-box input {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 14px;
-      }
-
-      .search-box i {
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #999;
-      }
-
-      #searchResults {
-        z-index: 9999;
-        max-height: 200px;
-        overflow-y: auto;
-        background: white;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-      }
-
-      .btn-enable {
-        width: 100%;
-        background-color: #20c997;
-        color: white;
-        border: none;
-        padding: 12px;
-        border-radius: 4px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-
-      .btn-enable:hover {
-        background-color: #1aa179;
-      }
-
-      .interests-section,
-      .dates-section,
-      .notification-section {
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 8px;
-        margin-bottom: 30px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      }
-
-      .interests-header {
-        font-size: 18px;
-        font-weight: 600;
-        color: #1a1a1a;
-        margin-bottom: 20px;
-      }
-
-      .interests-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-
-      .tag {
-        padding: 8px 16px;
-        border: 1px solid #ddd;
-        border-radius: 20px;
-        background-color: #f8f9fa;
-        color: #666;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 14px;
-      }
-
-      .tag.active {
-        background-color: #20c997;
-        color: white;
-        border-color: #20c997;
-      }
-
-      .tag:hover {
-        border-color: #20c997;
-      }
-
-      .dates-header {
-        display: flex;
-        align-items: center;
-        font-size: 18px;
-        font-weight: 600;
-        color: #1a1a1a;
-        margin-bottom: 20px;
-      }
-
-      .dates-header i {
-        color: #20c997;
-        margin-right: 10px;
-        font-size: 20px;
+        font-size: 24px;
       }
 
       .dates-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
+        grid-template-columns: 1fr;
       }
 
-      .date-group {
-        display: flex;
-        flex-direction: column;
+      .interests-tags {
+        justify-content: center;
       }
+    }
 
-      .date-label {
-        font-size: 14px;
-        font-weight: 600;
-        color: #1a1a1a;
-        margin-bottom: 10px;
-      }
+    /* --- Notification Section Improvements --- */
 
-      .date-input {
-        display: flex;
-        align-items: center;
-        padding: 10px 15px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        background-color: #f8f9fa;
-        color: #666;
-        font-size: 14px;
-      }
+    .notification-section {
+      padding: 24px;
+    }
 
-      .date-input i {
-        margin-right: 10px;
-        color: #999;
-      }
+    .notification-item {
+      gap: 16px;
+      padding: 18px 0;
+    }
 
-      .notification-header {
-        font-size: 18px;
-        font-weight: 600;
-        color: #1a1a1a;
-        margin-bottom: 20px;
-      }
+    .notification-item:not(:last-child) {
+      border-bottom: 1px solid #f1f1f1;
+    }
 
+    .notification-content {
+      max-width: calc(100% - 70px);
+    }
+
+    .notification-content h4 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .notification-content p {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #777;
+    }
+
+    /* Cleaner toggle */
+    .toggle-switch {
+      width: 44px;
+      height: 24px;
+      border-radius: 14px;
+      background-color: #e0e0e0;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch::after {
+      width: 20px;
+      height: 20px;
+      top: 2px;
+      left: 2px;
+    }
+
+    .toggle-switch.active {
+      background-color: #20c997;
+    }
+
+    .toggle-switch.active::after {
+      left: 22px;
+    }
+
+    /* Mobile breathing room */
+    @media (max-width: 480px) {
       .notification-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 0;
-        border-bottom: 1px solid #eee;
-      }
-
-      .notification-content h4 {
-        font-size: 14px;
-        font-weight: 600;
-        color: #1a1a1a;
-        margin-bottom: 5px;
-      }
-
-      .notification-content p {
-        font-size: 13px;
-        color: #999;
+        align-items: flex-start;
       }
 
       .toggle-switch {
-        position: relative;
-        width: 50px;
-        height: 28px;
-        background-color: #ddd;
-        border-radius: 14px;
-        cursor: pointer;
-        transition: background-color 0.3s;
+        margin-top: 4px;
       }
+    }
+  </style>
+</head>
 
-      .toggle-switch.active {
-        background-color: #20c997;
-      }
+<body>
+  <!-- Header -->
+  <nav class="navbar-custom">
+    <div class="logo">
+      <img src="/assets/images/mainlogotz.png" alt="">
+    </div>
+  </nav>
 
-      .toggle-switch::after {
-        content: '';
-        position: absolute;
-        width: 24px;
-        height: 24px;
-        background-color: white;
-        border-radius: 50%;
-        top: 2px;
-        left: 2px;
-        transition: left 0.3s;
-      }
-
-      .toggle-switch.active::after {
-        left: 24px;
-      }
-
-      .footer-section {
-        text-align: center;
-        padding: 30px;
-      }
-
-      .btn-get-started {
-        background-color: #20c997;
-        color: white;
-        border: none;
-        padding: 12px 40px;
-        border-radius: 4px;
-        font-weight: 600;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s;
-        margin-bottom: 15px;
-      }
-
-      .btn-get-started:hover {
-        background-color: #1aa179;
-      }
-
-      .skip-link {
-        display: block;
-        color: #999;
-        text-decoration: none;
-        font-size: 14px;
-        cursor: pointer;
-        transition: color 0.3s;
-      }
-
-      .skip-link:hover {
-        color: #666;
-      }
-
-      @media (max-width: 768px) {
-        .hero-content {
-          flex-direction: column;
-          gap: 20px;
-        }
-
-        .hero-illustration {
-          flex: 0 0 200px;
-        }
-
-        .hero-text {
-          text-align: center;
-        }
-
-        .hero-text h1 {
-          font-size: 24px;
-        }
-
-        .dates-row {
-          grid-template-columns: 1fr;
-        }
-
-        .interests-tags {
-          justify-content: center;
-        }
-      }
-      /* --- Notification Section Improvements --- */
-
-.notification-section {
-  padding: 24px;
-}
-
-.notification-item {
-  gap: 16px;
-  padding: 18px 0;
-}
-
-.notification-item:not(:last-child) {
-  border-bottom: 1px solid #f1f1f1;
-}
-
-.notification-content {
-  max-width: calc(100% - 70px);
-}
-
-.notification-content h4 {
-  font-size: 15px;
-  margin-bottom: 6px;
-}
-
-.notification-content p {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #777;
-}
-
-/* Cleaner toggle */
-.toggle-switch {
-  width: 44px;
-  height: 24px;
-  border-radius: 14px;
-  background-color: #e0e0e0;
-  flex-shrink: 0;
-}
-
-.toggle-switch::after {
-  width: 20px;
-  height: 20px;
-  top: 2px;
-  left: 2px;
-}
-
-.toggle-switch.active {
-  background-color: #20c997;
-}
-
-.toggle-switch.active::after {
-  left: 22px;
-}
-
-/* Mobile breathing room */
-@media (max-width: 480px) {
-  .notification-item {
-    align-items: flex-start;
-  }
-
-  .toggle-switch {
-    margin-top: 4px;
-  }
-}
-
-    </style>
-  </head>
-
-  <body>
-    <!-- Header -->
-    <nav class="navbar-custom">
-      <div class="logo">
-        <img src="/assets/images/mainlogotz.png" alt="">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <div class="hero-illustration">
+        <img src="/assets/images/MAN WITHMAP.png" alt="">
       </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <div class="hero-content">
-        <div class="hero-illustration">
-          <img src="/assets/images/MAN WITHMAP.png" alt="">
-        </div>
-        <div class="hero-text">
-          <h1>Save and plan your perfect trip</h1>
-          <p><%= heroDescription || 'Organize your favorite places, create custom itineraries, and share your adventures effortlessly.' %></p>
-        </div>
-      </div>
-    </section>
-
-    <div class="main-container">
-      <!-- Enable Location -->
-      <div class="location-section">
-        <div class="location-header">
-          <i class="fas fa-map-marker-alt"></i>
-          Enable Location Services
-        </div>
-        <p class="location-description">
-          <%= locationText || 'Allow Wanderlust Explorer to access your location for personalized recommendations.' %>
+      <div class="hero-text">
+        <h1>Save and plan your perfect trip</h1>
+        <p>
+          <%= heroDescription
+            || 'Organize your favorite places, create custom itineraries, and share your adventures effortlessly.' %>
         </p>
-        <div class="search-box">
-          <input type="text" id="locationInput" placeholder="Search for destinations or places...">
-          <i class="fas fa-search"></i>
-          <ul id="searchResults" class="list-group position-absolute w-100"></ul>
-
-
-        </div>
-        <div id="selectedLocation" class="mt-3"></div>
-        <button class="btn-enable">Enable Location</button>
       </div>
+    </div>
+  </section>
 
-      <!-- Interests -->
-      <div class="interests-section">
-        <div class="interests-header">What are your travel interests?</div>
-        <div class="interests-tags">
-          <% const interests = ['Adventure', 'Culture', 'Nature', 'Food & Drink', 'Historical', 'Art & Design', 'Family Fun', 'Shopping', 'All']; %>
-
-
-          <% interests.forEach(interest => { %>
-            <span class="tag <%= selectedInterests && selectedInterests.includes(interest) ? 'active' : '' %>"><%= interest %></span>
-          <% }) %>
-        </div>
+  <div class="main-container">
+    <!-- Enable Location -->
+    <div class="location-section">
+      <div class="location-header">
+        <i class="fas fa-map-marker-alt"></i>
+        Enable Location Services
       </div>
+      <p class="location-description">
+        <%= locationText || 'Allow Wanderlust Explorer to access your location for personalized recommendations.' %>
+      </p>
+      <div class="search-box">
+        <input type="text" id="locationInput" placeholder="Search for destinations or places...">
+        <i class="fas fa-search"></i>
+        <ul id="searchResults" class="list-group position-absolute w-100"></ul>
 
-      <!-- Dates -->
-      <!-- <div class="dates-section">
+
+      </div>
+      <div id="selectedLocation" class="mt-3"></div>
+      <button class="btn-enable">Enable Location</button>
+    </div>
+
+    <!-- Interests -->
+    <div class="interests-section">
+      <div class="interests-header">What are your travel interests?</div>
+      <div class="interests-tags">
+        <% const interests=['Adventure', 'Culture' , 'Nature' , 'Food & Drink' , 'Historical' , 'Art & Design'
+          , 'Family Fun' , 'Shopping' , 'All' ]; %>
+
+
+          <% interests.forEach(interest=> { %>
+            <span class="tag <%= selectedInterests && selectedInterests.includes(interest) ? 'active' : '' %>">
+              <%= interest %>
+            </span>
+            <% }) %>
+      </div>
+    </div>
+
+    <!-- Dates -->
+    <!-- <div class="dates-section">
         <div class="dates-header"><i class="fas fa-calendar"></i> Travel Dates</div>
         <div class="dates-row">
           <div class="date-group">
@@ -512,61 +521,70 @@
       </div> -->
 
 
-      <!-- Dates -->
-  <div class="dates-section">
-    <div class="dates-header"><i class="fas fa-calendar"></i> Travel Dates</div>
-    <div class="dates-row">
-      <div class="date-group">
-        <label class="date-label">Travel Start Date</label>
-        <div class="date-input" id="openStartModal" style="cursor: pointer;">
-          <i class="fas fa-calendar-alt"></i> 
-          <span id="startDateText"><%= startDate || 'Select your start date' %></span>
+    <!-- Dates -->
+    <div class="dates-section">
+      <div class="dates-header"><i class="fas fa-calendar"></i> Travel Dates</div>
+      <div class="dates-row">
+        <div class="date-group">
+          <label class="date-label">Travel Start Date</label>
+          <div class="date-input" id="openStartModal" style="cursor: pointer;">
+            <i class="fas fa-calendar-alt"></i>
+            <span id="startDateText">
+              <%= startDate || 'Select your start date' %>
+            </span>
+          </div>
+        </div>
+        <div class="date-group">
+          <label class="date-label">Travel End Date</label>
+          <div class="date-input" id="openEndModal" style="cursor: pointer;">
+            <i class="fas fa-calendar-alt"></i>
+            <span id="endDateText">
+              <%= endDate || 'Select your end date' %>
+            </span>
+          </div>
         </div>
       </div>
-      <div class="date-group">
-        <label class="date-label">Travel End Date</label>
-        <div class="date-input" id="openEndModal" style="cursor: pointer;">
-          <i class="fas fa-calendar-alt"></i> 
-          <span id="endDateText"><%= endDate || 'Select your end date' %></span>
-        </div>
-      </div>
+    </div>
+
+
+
+    <!-- Notifications -->
+    <div class="notification-section">
+      <div class="notification-header">Notification Preferences</div>
+      <% const notifications=[ { title: 'New Discoveries & Tips' ,
+        desc: 'Receive updates on new destinations and travel advice.' , active: false }, {
+        title: 'Personalized Recommendations' , desc: 'Get suggestions tailored to your interests and past trips.' ,
+        active: false }, { title: 'Trip Plan Reminders' , desc: 'Alerts for upcoming trips and key planning milestones.'
+        , active: false } ]; %>
+        <% notifications.forEach(note=> { %>
+          <div class="notification-item">
+            <div class="notification-content">
+              <h4>
+                <%= note.title %>
+              </h4>
+              <p>
+                <%= note.desc %>
+              </p>
+            </div>
+            <div class="toggle-switch <%= note.active ? 'active' : '' %>"
+              data-notification-type="<%= note.title.toLowerCase().replace(/ & /g, '-').split(' ')[0] %>"></div>
+          </div>
+          <% }) %>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer-section">
+      <form action="/user/homepage" method="get">
+        <button class="btn-get-started" id="getStartedBtn">Get Started</button>
+        <a href="#" class="skip-link">Skip for now</a>
+      </form>
     </div>
   </div>
 
 
 
-      <!-- Notifications -->
-      <div class="notification-section">
-        <div class="notification-header">Notification Preferences</div>
-        <% const notifications = [
-          { title: 'New Discoveries & Tips', desc: 'Receive updates on new destinations and travel advice.', active: false },
-          { title: 'Personalized Recommendations', desc: 'Get suggestions tailored to your interests and past trips.', active: false },
-          { title: 'Trip Plan Reminders', desc: 'Alerts for upcoming trips and key planning milestones.', active: false }
-        ]; %>
-        <% notifications.forEach(note => { %>
-          <div class="notification-item">
-            <div class="notification-content">
-              <h4><%= note.title %></h4>
-              <p><%= note.desc %></p>
-            </div>
-            <div class="toggle-switch <%= note.active ? 'active' : '' %>" data-notification-type="<%= note.title.toLowerCase().replace(/ & /g, '-').split(' ')[0] %>"></div>
-          </div>
-        <% }) %>
-      </div>
 
-      <!-- Footer -->
-      <div class="footer-section">
-        <form action="/user/homepage" method="get">
-          <button class="btn-get-started" id="getStartedBtn">Get Started</button>
-        <a href="#" class="skip-link">Skip for now</a>
-        </form>
-      </div>
-    </div>
-
-  
-
-
-    <!-- Start Date Modal -->
+  <!-- Start Date Modal -->
   <div class="modal fade" id="startDateModal" tabindex="-1" aria-labelledby="startDateModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content p-3">
@@ -613,10 +631,10 @@
   </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // 🌍 Location Search with OpenStreetMap (India Only)
+
     const input = document.getElementById("locationInput");
     const resultsList = document.getElementById("searchResults");
     const selectedDiv = document.getElementById("selectedLocation");
@@ -624,6 +642,7 @@
 
     let timeout = null;
 
+    // --- Search Autocomplete Handler ---
     input.addEventListener("input", () => {
       const query = input.value.trim();
       clearTimeout(timeout);
@@ -635,64 +654,106 @@
 
       timeout = setTimeout(async () => {
         try {
+          // Switched to Photon (Komoot) API which allows "search-as-you-type" autocomplete without strict IP limits
           const response = await fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&countrycodes=in&addressdetails=1&limit=5&q=${encodeURIComponent(query)}`,
-            {
-              headers: {
-                "User-Agent": "TraveezyApp/1.0 (midl@example.com)", // Replace with your email or app name (required)
-              },
-            }
+            `https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`
           );
 
-          if (!response.ok) throw new Error("Network error while fetching location.");
+          if (!response.ok) throw new Error("Network error while fetching from Photon.");
 
           const data = await response.json();
           resultsList.innerHTML = "";
 
-          if (data.length === 0) {
-            const noResult = document.createElement("li");
-            noResult.classList.add("list-group-item", "text-muted");
-            noResult.textContent = "No locations found in India.";
-            resultsList.appendChild(noResult);
+          if (!data.features || data.features.length === 0) {
+            resultsList.innerHTML = `
+              <li class="list-group-item text-muted bg-light border-bottom-0">No results found. You can still proceed:</li>
+              <li class="list-group-item list-group-item-action text-success fw-bold" style="cursor:pointer;" onclick="window.updateLocationSelection('${query}')">
+                👉 Use exactly: "${query}"
+              </li>
+            `;
             return;
           }
 
-          data.forEach((loc) => {
+          data.features.forEach((feature) => {
+            const props = feature.properties;
+            const geom = feature.geometry;
+            
+            // Reconstruct a display name
+            const locationParts = [props.name, props.city, props.state, props.country].filter(Boolean);
+            const displayName = [...new Set(locationParts)].join(", ");
+            
+            const lat = geom.coordinates[1];
+            const lon = geom.coordinates[0];
+
             const li = document.createElement("li");
             li.classList.add("list-group-item", "list-group-item-action");
-            li.textContent = loc.display_name;
+            li.textContent = displayName;
 
             li.addEventListener("click", () => {
-              input.value = loc.display_name;
-              resultsList.innerHTML = "";
-              selectedDiv.innerHTML = `
-                <div class="alert alert-info mt-2">
-                  <strong>Selected Location:</strong><br>
-                  ${loc.display_name}<br>
-                  <strong>Latitude:</strong> ${loc.lat} | <strong>Longitude:</strong> ${loc.lon}
-                </div>
-              `;
+               window.updateLocationSelection(displayName, String(lat), String(lon));
             });
 
             resultsList.appendChild(li);
           });
         } catch (error) {
           console.error("Error fetching locations:", error);
-          resultsList.innerHTML = `<li class="list-group-item text-danger">⚠️ Failed to fetch locations.</li>`;
+          resultsList.innerHTML = `
+            <li class="list-group-item text-muted bg-light border-bottom-0">Unable to load suggestions automatically.</li>
+            <li class="list-group-item list-group-item-action text-success fw-bold" style="cursor:pointer;" onclick="window.updateLocationSelection('${query}')">
+              👉 Use exactly: "${query}"
+            </li>
+          `;
         }
-      }, 300);
+      }, 500); // 500ms debounce
     });
 
-    // 📍 Enable Geolocation
-    enableLocationBtn.addEventListener("click", () => {
-      if (!navigator.geolocation) {
-        alert("❌ Geolocation is not supported by your browser.");
+    // Must attach to window so onclick inline handlers can reach it
+    window.selectedLat = null;
+    window.selectedLon = null;
+
+    window.updateLocationSelection = function(displayName, lat = null, lon = null) {
+      input.value = displayName.split(',')[0]; // simplify input display
+      resultsList.innerHTML = "";
+      
+      // Store in global vars for the Get Started button
+      window.selectedLat = lat !== null ? parseFloat(lat) : 0;
+      window.selectedLon = lon !== null ? parseFloat(lon) : 0;
+      
+      let html = `<div class="alert alert-success mt-3 d-flex justify-content-between align-items-center shadow-sm">
+        <div><strong><i class="fas fa-check-circle me-1"></i> Selected:</strong> ${displayName}</div>`;
+      if (lat && lon) {
+         html += `<small class="text-muted ms-2">Lat: ${lat.slice(0,6)}... </small>`;
+      }
+      html += `</div>`;
+      
+      selectedDiv.innerHTML = html;
+      const hiddenPlaceInput = document.getElementById("hiddenPlace");
+      if (hiddenPlaceInput) hiddenPlaceInput.value = window.updateLocationSelection.name;
+    };
+
+    // --- Geolocation Handler ---
+    enableLocationBtn.addEventListener("click", () => getUserLocation());
+
+    // Must attach to window so retry button can call it
+    window.getUserLocation = function() {
+      // 1. Detect Secure Origin
+      if (!window.isSecureContext && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        handleError("Location access requires HTTPS. Please open via secure link or type your location manually.");
         return;
       }
 
-      enableLocationBtn.textContent = "Fetching your location...";
-      enableLocationBtn.disabled = true;
+      // 2. Detect Geolocation Support
+      if (!navigator.geolocation) {
+        handleError("Geolocation is not supported by your browser. Please type your location manually.");
+        return;
+      }
 
+      // 3. Show Loading State
+      enableLocationBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching location...';
+      enableLocationBtn.disabled = true;
+      selectedDiv.innerHTML = ""; // Clear previous errors
+
+      // 4. Fetch Position
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const lat = position.coords.latitude;
@@ -701,11 +762,7 @@
           try {
             const response = await fetch(
               `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`,
-              {
-                headers: {
-                  "User-Agent": "TraveezyApp/1.0 (midl@example.com)",
-                },
-              }
+              { headers: { "User-Agent": "TraveezyApp/1.0" } }
             );
 
             if (!response.ok) throw new Error("Reverse geocoding failed.");
@@ -713,38 +770,38 @@
             const data = await response.json();
             const placeName = data.display_name || "Unknown location";
 
-            selectedDiv.innerHTML = `
-              <div class="alert alert-success mt-3">
-                <strong>✅ Location Enabled!</strong><br>
-                ${placeName}<br>
-                <strong>Latitude:</strong> ${lat.toFixed(6)} |
-                <strong>Longitude:</strong> ${lon.toFixed(6)}
-              </div>
-            `;
-            input.value = placeName;
-
+            updateLocationSelection(placeName, String(lat), String(lon));
             enableLocationBtn.textContent = "Location Enabled";
             enableLocationBtn.style.backgroundColor = "#1aa179";
           } catch (error) {
-            console.error("Error reverse geocoding:", error);
-            selectedDiv.innerHTML = `<div class="alert alert-danger mt-3">⚠️ Unable to fetch location details.</div>`;
-            enableLocationBtn.textContent = "Enable Location";
-            enableLocationBtn.disabled = false;
+            handleError("Unable to fetch location details from coordinates. Please type your location manually below.");
           }
         },
         (error) => {
-          const messages = {
-            1: "❌ Permission denied.",
-            2: "⚠️ Position unavailable.",
-            3: "⏳ Timeout.",
-          };
-          selectedDiv.innerHTML = `<div class="alert alert-danger mt-3">${messages[error.code] || "⚠️ Unknown error."}</div>`;
-          enableLocationBtn.textContent = "Enable Location";
-          enableLocationBtn.disabled = false;
+           let msg = "Unknown error occurred.";
+           if (error.code === 1) msg = "Permission denied. Please allow location access or type manually.";
+           if (error.code === 2) msg = "Position unavailable. Please type your location manually.";
+           if (error.code === 3) msg = "Location request timed out. Please type your location manually.";
+           handleError(msg);
         },
         { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
       );
-    });
+    };
+
+    window.handleError = function(message) {
+      // Soft warning UI, add retry and manual input focus buttons
+      selectedDiv.innerHTML = `
+        <div class="alert alert-warning mt-3 shadow-sm d-flex flex-column gap-2 border-0" style="background-color: #fff9e6;">
+          <div class="text-dark"><i class="fas fa-exclamation-circle text-warning me-2"></i>${message}</div>
+          <div class="d-flex gap-2 mt-2">
+             <button class="btn btn-sm btn-outline-secondary flex-grow-1" onclick="document.getElementById('locationInput').focus()">Type Manually</button>
+             <button class="btn btn-sm btn-warning flex-grow-1 text-dark" onclick="getUserLocation()">Retry</button>
+          </div>
+        </div>
+      `;
+      enableLocationBtn.textContent = "Enable Location";
+      enableLocationBtn.disabled = false;
+    };
 
     // 🎯 Travel Interests Toggle
     const allInterestTags = document.querySelectorAll(".interests-tags .tag");
@@ -764,7 +821,7 @@
         } else {
           // Toggle the individual tag
           tag.classList.toggle('active');
-          
+
           // Check if all other tags are active to update the 'All' button state
           const allOthersActive = otherTags.every(t => t.classList.contains('active'));
           allOthersActive ? allButton.classList.add('active') : allButton.classList.remove('active');
@@ -813,14 +870,8 @@
       // 📍 Location
       const locationInput = document.getElementById("locationInput");
       const location = locationInput.value;
-      let latitude = null;
-      let longitude = null;
-
-      if (selectedDiv.innerHTML.includes("Latitude:")) {
-        const locationText = selectedDiv.textContent;
-        latitude = parseFloat(locationText.match(/Latitude:\s*([-\d.]+)/)[1]);
-        longitude = parseFloat(locationText.match(/Longitude:\s*([-\d.]+)/)[1]);
-      }
+      const latitude = window.selectedLat !== undefined && window.selectedLat !== null ? window.selectedLat : 0;
+      const longitude = window.selectedLon !== undefined && window.selectedLon !== null ? window.selectedLon : 0;
 
       // 🗺️ Interests
       const interestTags = document.querySelectorAll(".tag.active");
@@ -843,8 +894,8 @@
       });
 
       // --- VALIDATION ---
-      if (!location || !latitude || !longitude) {
-        alert("Please select a location from the search results or enable location services.");
+      if (!location) {
+        alert("Please select a location from the search results or type your desired destination.");
         return;
       }
       if (finalInterests.length === 0) {
@@ -890,6 +941,7 @@
     });
   </script>
 
-    
-  </body>
-  </html>
+
+</body>
+
+</html>

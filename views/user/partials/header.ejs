@@ -1,100 +1,545 @@
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title><%= title %></title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="/assets/images/traveezy  bg no.png" />
-    <style>
-      html { scroll-behavior: smooth; }
-      .logomain { margin-left: 50px; }
-      body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans'; }
-      .glass { background: rgba(255,255,255,0.7); backdrop-filter: saturate(160%) blur(10px); }
-      .card-hover { transition: transform .35s ease, box-shadow .35s ease; }
-      .card-hover:hover { transform: translateY(-6px); box-shadow: 0 22px 40px -16px rgba(0,0,0,0.25); }
-      .img-zoom { transition: transform .6s cubic-bezier(.2,.6,.2,1); }
-      .group:hover .img-zoom { transform: scale(1.06); }
-      .btn { transition: transform .2s ease, box-shadow .3s ease, background-color .3s ease; }
-      .btn:hover { transform: translateY(-1px) scale(1.02); box-shadow: 0 18px 30px -12px rgba(16,185,129,.45); }
-      .shadow-soft { box-shadow: 0 8px 28px rgba(0,0,0,0.08); }
-      .shadow-soft-lg { box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
-      .logomain img { width: auto; height: 40px; }
-    </style>
-  </head>
+<!DOCTYPE html>
+<html lang="en">
 
-  <body class="bg-white text-gray-800">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    <%= title %>
+  </title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/assets/images/logonobg.png" />
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
 
-    <!-- Header -->
-    <header id="siteHeader" class="bg-white/95 sticky top-0 z-50 shadow-sm border-b border-gray-100">
-      <div class="container mx-auto flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
-        <!-- Logo -->
-        <a href="/user/homepage" class="flex items-center">
-          <img src="/assets/images/mainlogotz.png" alt="Traveezy Logo" class="h-8 sm:h-9 w-auto">
-        </a>
+    .logomain {
+      margin-left: 50px;
+    }
 
-        <!-- Nav -->
-        <nav class="hidden md:flex items-center gap-6 lg:gap-8">
-          <a href="/user/homepage" class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'home') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Home</a>
-          <a href="/user/aitripplan" class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'explore') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Explore</a>
-          <a href="/user/onboarding" class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'explore') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Onboarding</a>
-          <a href="/user/resorts" class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'resorts') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Resorts</a>
-          <a href="/user/support" class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'support') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Support</a>
-        </nav>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, 'Noto Sans';
+    }
 
-        <!-- Icons -->
-        <div class="flex items-center gap-4">
-          <!-- Search Icon -->
-          <!-- <button class="text-gray-500 hover:text-[#35D6A7] p-2 rounded-full transition" aria-label="Search">
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: saturate(160%) blur(10px);
+    }
+
+    .card-hover {
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 40px -16px rgba(0, 0, 0, 0.25);
+    }
+
+    .img-zoom {
+      transition: transform .6s cubic-bezier(.2, .6, .2, 1);
+    }
+
+    .group:hover .img-zoom {
+      transform: scale(1.06);
+    }
+
+    .btn {
+      transition: transform .2s ease, box-shadow .3s ease, background-color .3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 18px 30px -12px rgba(16, 185, 129, .45);
+    }
+
+    .shadow-soft {
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+    }
+
+    .shadow-soft-lg {
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .logomain img {
+      width: auto;
+      height: 40px;
+    }
+
+    /* Mobile Nav Styles */
+    .mobile-nav-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 998;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .mobile-nav-overlay.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .mobile-nav-panel {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 280px;
+      max-width: 85vw;
+      height: 100%;
+      background: #fff;
+      z-index: 999;
+      box-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+      transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mobile-nav-panel.active {
+      right: 0;
+    }
+
+    .mobile-nav-panel__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .mobile-nav-panel__close {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #f3f4f6;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-nav-panel__close:hover {
+      background: #e5e7eb;
+    }
+
+    .mobile-nav-panel__links {
+      padding: 12px 0;
+      flex: 1;
+    }
+
+    .mobile-nav-panel__links a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #374151;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-nav-panel__links a:hover,
+    .mobile-nav-panel__links a.active-link {
+      background: #f0fdf4;
+      color: #35D6A7;
+    }
+
+    .mobile-nav-panel__links a .nav-icon {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+    }
+
+    .mobile-nav-panel__footer {
+      padding: 16px 20px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .mobile-nav-panel__footer form button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      background: #fef2f2;
+      color: #dc2626;
+      font-weight: 600;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-nav-panel__footer form button:hover {
+      background: #fee2e2;
+    }
+
+    .hamburger-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+    }
+
+    .hamburger-btn:hover {
+      background: #f3f4f6;
+    }
+
+    .hamburger-btn span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: #374151;
+      margin: 5px auto;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+      .hamburger-btn {
+        display: block;
+      }
+    }
+  </style>
+  <script>
+    // Global robust fallback for broken image proxies
+    window.handleImageFallback = function (img, name, explicitCategory) {
+      img.onerror = null; // Prevent loop
+      const lowName = (name || '').toLowerCase();
+
+      let category = 'default';
+      if (explicitCategory) {
+        category = explicitCategory;
+      } else if (lowName.includes('mall') || lowName.includes('city') || lowName.includes('street') || lowName.includes('market') || lowName.includes('town')) {
+        category = 'city';
+      } else if (lowName.includes('river') || lowName.includes('beach') || lowName.includes('lake') || lowName.includes('water')) {
+        category = 'beach';
+      } else if (lowName.includes('park') || lowName.includes('garden') || lowName.includes('hill') || lowName.includes('falls') || lowName.includes('nature') || lowName.includes('forest') || lowName.includes('peak')) {
+        category = 'nature';
+      } else if (lowName.includes('trek') || lowName.includes('hike') || lowName.includes('camp')) {
+        category = 'adventure';
+      } else if (lowName.includes('food') || lowName.includes('restaurant') || lowName.includes('cafe')) {
+        category = 'food';
+      }
+
+      const pools = {
+        nature: [
+          "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+          "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
+          "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05"
+        ],
+        beach: [
+          "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+          "https://images.unsplash.com/photo-1519046904884-53103b34b206",
+          "https://images.unsplash.com/photo-1473116763249-2faaef81ccda"
+        ],
+        city: [
+          "https://images.unsplash.com/photo-1449824913935-59a10b8d2000",
+          "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df",
+          "https://images.unsplash.com/photo-1514565131-fce0801e5785"
+        ],
+        food: [
+          "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+          "https://images.unsplash.com/photo-1476224484781-aec29a1c28bc",
+          "https://images.unsplash.com/photo-1493770348161-369560ae357d"
+        ],
+        adventure: [
+          "https://images.unsplash.com/photo-1533240332313-0db36245e4a2",
+          "https://images.unsplash.com/photo-1500673922987-e212871fec22",
+          "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4"
+        ],
+        default: [
+          "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800",
+          "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1",
+          "https://images.unsplash.com/photo-1488646953014-85cb44e25828"
+        ]
+      };
+
+      const pool = pools[category] || pools.default;
+      img.src = pool[Math.floor(Math.random() * pool.length)] + '?q=80&w=1200&auto=format&fit=crop';
+    };
+  </script>
+</head>
+
+<body class="bg-white text-gray-800">
+
+  <!-- Loading Screen -->
+  <div id="pageLoader" style="
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  ">
+    <div style="position:relative;width:80px;height:80px;margin-bottom:24px;">
+      <!-- Pulse ring -->
+      <div style="
+        position:absolute;inset:0;
+        border-radius:50%;
+        border:3px solid #35D6A7;
+        animation: loaderPulse 1.5s ease-in-out infinite;
+      "></div>
+      <!-- Logo -->
+      <img src="/assets/images/traveezy  bg no.png" alt="Loading" style="
+        position:absolute;
+        top:50%;left:50%;
+        transform:translate(-50%,-50%);
+        width:44px;height:44px;
+        object-fit:contain;
+      ">
+    </div>
+    <div
+      style="font-family:'Inter',sans-serif;font-size:15px;font-weight:600;color:#1a1a1a;letter-spacing:0.5px;margin-bottom:16px;">
+      Traveezy
+    </div>
+    <!-- Progress bar -->
+    <div style="width:160px;height:3px;background:#e5e7eb;border-radius:4px;overflow:hidden;">
+      <div id="loaderBar" style="
+        width:0%;
+        height:100%;
+        background:linear-gradient(90deg,#35D6A7,#1eb06f);
+        border-radius:4px;
+        transition: width 0.3s ease;
+      "></div>
+    </div>
+  </div>
+  <style>
+    @keyframes loaderPulse {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      50% {
+        transform: scale(1.25);
+        opacity: 0.3;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+  </style>
+  <script>
+    (function () {
+      var bar = document.getElementById('loaderBar');
+      var progress = 0;
+      var interval = setInterval(function () {
+        progress += Math.random() * 15 + 5;
+        if (progress > 90) progress = 90;
+        if (bar) bar.style.width = progress + '%';
+      }, 200);
+
+      window.addEventListener('load', function () {
+        clearInterval(interval);
+        if (bar) bar.style.width = '100%';
+        setTimeout(function () {
+          var loader = document.getElementById('pageLoader');
+          if (loader) {
+            loader.style.opacity = '0';
+            loader.style.visibility = 'hidden';
+            setTimeout(function () { loader.remove(); }, 400);
+          }
+        }, 300);
+      });
+    })();
+  </script>
+
+  <!-- Header -->
+  <header id="siteHeader" class="bg-white/95 sticky top-0 z-50 shadow-sm border-b border-gray-100">
+    <div class="container mx-auto flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
+      <!-- Logo -->
+      <a href="/user/homepage" class="flex items-center">
+        <img src="/assets/images/mainlogotz.png" alt="Traveezy Logo" class="h-8 sm:h-9 w-auto">
+      </a>
+
+      <!-- Nav -->
+      <nav class="hidden md:flex items-center gap-6 lg:gap-8">
+        <a href="/user/homepage"
+          class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'home') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Home</a>
+        <a href="/user/aitripplan"
+          class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'explore') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Explore</a>
+        <a href="/user/onboarding"
+          class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'onboarding') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Onboarding</a>
+        <a href="/user/resorts"
+          class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'resorts') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Resorts</a>
+        <a href="/user/support"
+          class="text-sm transition <%= (typeof currentPage !== 'undefined' && currentPage === 'support') ? 'text-[#35D6A7] font-semibold' : 'text-gray-600 hover:text-[#35D6A7]' %>">Support</a>
+      </nav>
+
+      <!-- Icons -->
+      <div class="flex items-center gap-4">
+        <!-- Search Icon -->
+        <!-- <button class="text-gray-500 hover:text-[#35D6A7] p-2 rounded-full transition" aria-label="Search">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
           </button> -->
 
-          <!-- Profile Dropdown -->
-          <div class="relative">
-            <button id="profileDropdownBtn" class="flex items-center gap-2 focus:outline-none">
-              <img 
-                src="<%= user?.profileImage || '/assets/images/default-avatar.png' %>" 
-                alt="Profile" 
-                class="w-9 h-9 rounded-full border border-gray-200 object-cover shadow-sm hover:shadow-md transition-all duration-200"
-              >
-              <span class="hidden sm:inline text-sm font-medium text-gray-700"><%= user ? user.name : 'Guest' %></span>
-              <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </button>
+        <!-- Profile Dropdown -->
+        <button id="profileDropdownBtn" class="flex items-center gap-2 focus:outline-none">
+          <% if (user && user.profileImage && user.profileImage !=='/assets/images/default-avatar.png' ) { %>
+            <img src="<%= user.profileImage %>" alt="Profile"
+              class="w-9 h-9 rounded-full border border-gray-200 object-cover shadow-sm hover:shadow-md transition-all duration-200">
+            <% } else { %>
+              <div
+                class="w-9 h-9 rounded-full bg-[#35D6A7] flex items-center justify-center text-white font-bold text-sm shadow-sm hover:shadow-md transition-all duration-200 border border-gray-200">
+                <%= user?.name ? user.name.charAt(0).toUpperCase() : 'G' %>
+              </div>
+              <% } %>
+                <span class="hidden sm:inline text-sm font-medium text-gray-700">
+                  <%= user ? user.name : 'Guest' %>
+                </span>
+                <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+        </button>
 
-            <!-- Dropdown Menu -->
-            <div id="profileDropdownMenu" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-lg shadow-lg py-2 z-50">
-              <a href="/user/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">My Profile</a>
-              <a href="/user/profile#edit-profile-heading" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">Edit Profile</a>
-              <div class="border-t border-gray-100 my-1"></div>
-              <form action="/auth/logout" method="POST">
-                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</button>
-              </form>
-            </div>
-          </div>
+        <!-- Dropdown Menu -->
+        <div id="profileDropdownMenu"
+          class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-lg shadow-lg py-2 z-50">
+          <a href="/user/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">My
+            Profile</a>
+          <a href="/user/profile#edit-profile-heading"
+            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900">Edit Profile</a>
+          <div class="border-t border-gray-100 my-1"></div>
+          <form action="/auth/logout" method="POST">
+            <button type="submit"
+              class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">Logout</button>
+          </form>
         </div>
+
+        <!-- Hamburger Menu Button (mobile) -->
+        <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
-    </header>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('profileDropdownBtn');
-        const menu = document.getElementById('profileDropdownMenu');
-        if (btn && menu) {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            menu.classList.toggle('hidden');
-          });
-          document.addEventListener('click', (e) => {
-            if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !btn.contains(e.target)) {
-              menu.classList.add('hidden');
-            }
-          });
-        }
-      });
-    </script>
+    </div>
+  </header>
+
+  <!-- Mobile Nav Overlay -->
+  <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+  <!-- Mobile Nav Panel -->
+  <div class="mobile-nav-panel" id="mobileNavPanel">
+    <div class="mobile-nav-panel__header">
+      <a href="/user/homepage">
+        <img src="/assets/images/mainlogotz.png" alt="Traveezy" style="height:32px;width:auto;">
+      </a>
+      <button class="mobile-nav-panel__close" id="mobileNavClose" aria-label="Close menu">✕</button>
+    </div>
+
+    <!-- User Info -->
+    <div style="padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #f0f0f0;">
+      <% if (user && user.profileImage && user.profileImage !=='/assets/images/default-avatar.png' ) { %>
+        <img src="<%= user.profileImage %>" alt="Profile"
+          style="width:40px;height:40px;border-radius:50%;object-fit:cover;border:2px solid #e5e7eb;">
+        <% } else { %>
+          <div
+            style="width:40px;height:40px;border-radius:50%;background:#35D6A7;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:16px;">
+            <%= user?.name ? user.name.charAt(0).toUpperCase() : 'G' %>
+          </div>
+          <% } %>
+            <div>
+              <div style="font-weight:600;font-size:15px;color:#111;">
+                <%= user ? user.name : 'Guest' %>
+              </div>
+              <div style="font-size:13px;color:#6b7280;">
+                <%= user ? user.email : '' %>
+              </div>
+            </div>
+    </div>
+
+    <div class="mobile-nav-panel__links">
+      <a href="/user/homepage"
+        class="<%= (typeof currentPage !== 'undefined' && currentPage === 'home') ? 'active-link' : '' %>">
+        <span class="nav-icon">🏠</span> Home
+      </a>
+      <a href="/user/aitripplan"
+        class="<%= (typeof currentPage !== 'undefined' && currentPage === 'explore') ? 'active-link' : '' %>">
+        <span class="nav-icon">🧭</span> Explore
+      </a>
+      <a href="/user/onboarding"
+        class="<%= (typeof currentPage !== 'undefined' && currentPage === 'onboarding') ? 'active-link' : '' %>">
+        <span class="nav-icon">✈️</span> Onboarding
+      </a>
+      <a href="/user/resorts"
+        class="<%= (typeof currentPage !== 'undefined' && currentPage === 'resorts') ? 'active-link' : '' %>">
+        <span class="nav-icon">🏨</span> Resorts
+      </a>
+      <a href="/user/support"
+        class="<%= (typeof currentPage !== 'undefined' && currentPage === 'support') ? 'active-link' : '' %>">
+        <span class="nav-icon">💬</span> Support
+      </a>
+      <div style="height:1px;background:#f0f0f0;margin:4px 0;"></div>
+      <a href="/user/profile"
+        class="<%= (typeof currentPage !== 'undefined' && currentPage === 'profile') ? 'active-link' : '' %>">
+        <span class="nav-icon">👤</span> My Profile
+      </a>
+    </div>
+
+    <div class="mobile-nav-panel__footer">
+      <form action="/auth/logout" method="POST">
+        <button type="submit">🚪 Logout</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Desktop profile dropdown
+      const btn = document.getElementById('profileDropdownBtn');
+      const menu = document.getElementById('profileDropdownMenu');
+      if (btn && menu) {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          menu.classList.toggle('hidden');
+        });
+        document.addEventListener('click', (e) => {
+          if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !btn.contains(e.target)) {
+            menu.classList.add('hidden');
+          }
+        });
+      }
+
+      // Mobile hamburger menu
+      const hamburger = document.getElementById('hamburgerBtn');
+      const overlay = document.getElementById('mobileNavOverlay');
+      const panel = document.getElementById('mobileNavPanel');
+      const closeBtn = document.getElementById('mobileNavClose');
+
+      function openMobileNav() {
+        overlay.classList.add('active');
+        panel.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMobileNav() {
+        panel.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      if (hamburger) hamburger.addEventListener('click', openMobileNav);
+      if (closeBtn) closeBtn.addEventListener('click', closeMobileNav);
+      if (overlay) overlay.addEventListener('click', closeMobileNav);
+    });
+  </script>

@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@perplexity-ai/perplexity_ai": "^0.15.0",
+    "@google/generative-ai": "^0.24.1",
     "axios": "^1.13.0",
     "bcrypt": "^6.0.0",
     "chart.js": "^4.5.1",
@@ -20,6 +20,7 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-ejs-layouts": "^2.5.1",
+    "groq-sdk": "^1.1.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.1",
     "multer": "^2.0.2",

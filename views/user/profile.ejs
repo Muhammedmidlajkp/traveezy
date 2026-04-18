@@ -1,171 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title><%= title %></title>
-  <meta name="description" content="Manage your Traveezy profile, update your details, and view your travel stats."/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="icon" type="image/png" href="/assets/images/traveezy  bg no.png" />
-  <style>
-    /* NOTE: For maintainability, these styles should be moved to a shared CSS file. */
-    :root {
-      --c-brand-primary: #26C485; --c-brand-primary-dark: #1eb06f; --c-brand-secondary: #FF6B35;
-      --c-bg: #f8f9fa; --c-surface: #fff; --c-text-primary: #1a1a1a; --c-text-muted: #5a5a5a;
-      --c-border: #e8e8e8; --c-white: #fff;
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      --space-2: 8px; --space-4: 16px; --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
-      --max-width: 1200px; --radius-lg: 12px; --radius-xl: 16px;
-      --shadow-md: 0 8px 20px rgba(0,0,0,.07); --shadow-lg: 0 12px 28px rgba(0,0,0,.1);
-      --transition-base: all 0.3s ease;
-    }
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-    *, *::before, *::after { box-sizing: border-box; }
-    body, h1, h2, h3, p { margin: 0; padding: 0; }
-    body { font-family: var(--font-sans); color: var(--c-text-primary); background-color: var(--c-bg); line-height: 1.6; }
-    .page-wrapper { max-width: var(--max-width); margin: 0 auto; padding: var(--space-10) var(--space-6); }
-    .page-header { text-align: center; margin-bottom: var(--space-10); }
-    .page-header__title { font-size: 42px; font-weight: 800; color: var(--c-text-primary); }
-    .page-header__subtitle { font-size: 18px; color: var(--c-text-muted); max-width: 600px; margin: var(--space-2) auto 0; }
+<%- include('partials/header') %>
 
-    /* Profile Layout */
-    .profile-layout {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: var(--space-8);
-      align-items: start;
-    }
-
-    /* Base Card Style */
-    .card {
-      background-color: var(--c-surface);
-      border: 1px solid var(--c-border);
-      border-radius: var(--radius-xl);
-      padding: var(--space-8);
-      box-shadow: var(--shadow-md);
-    }
-
-    /* Profile Card */
-    .profile-card { text-align: center; }
-    .profile-card__avatar-wrapper {
-      position: relative;
-      width: 120px;
-      height: 120px;
-      margin: 0 auto var(--space-6);
-    }
-    .profile-card__avatar {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid var(--c-white);
-      box-shadow: var(--shadow-lg);
-    }
-    .profile-card__name { font-size: 24px; font-weight: 700; margin-bottom: var(--space-2); }
-    .profile-card__email { font-size: 15px; color: var(--c-text-muted); margin-bottom: var(--space-5); }
-    .profile-card__bio { font-size: 15px; color: var(--c-text-muted); font-style: italic; margin-bottom: var(--space-6); }
-    .profile-stats {
-      display: flex;
-      justify-content: space-around;
-      padding-top: var(--space-6);
-      border-top: 1px solid var(--c-border);
-    }
-    .profile-stat { text-align: center; }
-    .profile-stat__value { font-size: 22px; font-weight: 700; color: var(--c-brand-primary); }
-    .profile-stat__label { font-size: 13px; color: var(--c-text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-
-    /* Edit Profile Card */
-    .edit-profile-card h2 {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: var(--space-6);
-      padding-bottom: var(--space-4);
-      border-bottom: 1px solid var(--c-border);
-    }
-    .form-group { margin-bottom: var(--space-6); }
-    .form-group label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--c-text-muted);
-      margin-bottom: var(--space-2);
-    }
-    .form-control {
-      width: 100%;
-      font-family: var(--font-sans);
-      font-size: 15px;
-      padding: var(--space-4);
-      border: 1px solid var(--c-border);
-      border-radius: var(--radius-lg);
-      background-color: var(--c-bg);
-      transition: var(--transition-base);
-    }
-    .form-control:focus {
-      outline: none;
-      border-color: var(--c-brand-primary);
-      box-shadow: 0 0 0 3px rgba(38, 196, 133, .15);
-      background-color: var(--c-surface);
-    }
-    textarea.form-control { min-height: 120px; resize: vertical; }
-
-    /* Avatar Upload */
-    .avatar-upload { display: flex; align-items: center; gap: var(--space-5); }
-    .avatar-upload__preview {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid var(--c-border);
-    }
-    .avatar-upload__input { display: none; }
-    .avatar-upload__label {
-      display: inline-block;
-      padding: var(--space-2) var(--space-4);
-      background-color: var(--c-surface);
-      border: 1px solid var(--c-border);
-      border-radius: var(--radius-lg);
-      cursor: pointer;
-      font-weight: 500;
-      transition: var(--transition-base);
-    }
-    .avatar-upload__label:hover {
-      background-color: var(--c-bg);
-      border-color: var(--c-brand-primary);
-      color: var(--c-brand-primary);
-    }
-
-    .btn {
-      border: none;
-      border-radius: var(--radius-lg);
-      padding: var(--space-4) var(--space-6);
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition-base);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-2);
-    }
-    .btn--primary {
-      background: linear-gradient(135deg, #26C485 0%, #1eb06f 100%);
-      color: var(--c-white);
-      box-shadow: 0 4px 12px rgba(38, 196, 133, .3);
-    }
-    .btn--primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(38, 196, 133, .3);
-    }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .profile-layout { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-<body>
-
-  <%- include('partials/header') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  /* Profile Page Styles */
+  .page-wrapper { max-width: 1200px; margin: 0 auto; padding: 40px 24px; }
+  .page-header { text-align: center; margin-bottom: 40px; }
+  .page-header__title { font-size: 42px; font-weight: 800; color: #1a1a1a; }
+  .page-header__subtitle { font-size: 18px; color: #5a5a5a; max-width: 600px; margin: 8px auto 0; }
+  .profile-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 32px; align-items: start; }
+  .card { background-color: #fff; border: 1px solid #e8e8e8; border-radius: 16px; padding: 32px; box-shadow: 0 8px 20px rgba(0,0,0,.07); }
+  .profile-card { text-align: center; }
+  .profile-card__avatar-wrapper { position: relative; width: 120px; height: 120px; margin: 0 auto 24px; }
+  .profile-card__avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid #fff; box-shadow: 0 12px 28px rgba(0,0,0,.1); display: flex; align-items: center; justify-content: center; }
+  .profile-card__avatar--letter { background-color: #26C485; color: #fff; font-size: 48px; font-weight: 700; text-transform: uppercase; }
+  .avatar-upload__preview--letter { display: flex; align-items: center; justify-content: center; background-color: #26C485; color: #fff; font-weight: 700; font-size: 24px; text-transform: uppercase; }
+  .hidden { display: none !important; }
+  .profile-card__name { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .profile-card__email { font-size: 15px; color: #5a5a5a; margin-bottom: 20px; }
+  .profile-card__bio { font-size: 15px; color: #5a5a5a; font-style: italic; margin-bottom: 24px; }
+  .profile-stats { display: flex; justify-content: space-around; padding-top: 24px; border-top: 1px solid #e8e8e8; }
+  .profile-stat { text-align: center; }
+  .profile-stat__value { font-size: 22px; font-weight: 700; color: #26C485; }
+  .profile-stat__label { font-size: 13px; color: #5a5a5a; text-transform: uppercase; letter-spacing: 0.5px; }
+  .edit-profile-card h2 { font-size: 24px; font-weight: 700; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #e8e8e8; }
+  .form-group { margin-bottom: 24px; }
+  .form-group label { display: block; font-size: 14px; font-weight: 600; color: #5a5a5a; margin-bottom: 8px; }
+  .form-control { width: 100%; font-family: 'Inter', sans-serif; font-size: 15px; padding: 16px; border: 1px solid #e8e8e8; border-radius: 12px; background-color: #f8f9fa; transition: all 0.3s ease; box-sizing: border-box; }
+  .form-control:focus { outline: none; border-color: #26C485; box-shadow: 0 0 0 3px rgba(38,196,133,.15); background-color: #fff; }
+  textarea.form-control { min-height: 120px; resize: vertical; }
+  .avatar-upload { display: flex; align-items: center; gap: 20px; }
+  .avatar-upload__preview { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid #e8e8e8; }
+  .avatar-upload__input { display: none; }
+  .avatar-upload__label { display: inline-block; padding: 8px 16px; background-color: #fff; border: 1px solid #e8e8e8; border-radius: 12px; cursor: pointer; font-weight: 500; transition: all 0.3s ease; }
+  .avatar-upload__label:hover { background-color: #f8f9fa; border-color: #26C485; color: #26C485; }
+  .btn-save { border: none; border-radius: 12px; padding: 16px 24px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #26C485 0%, #1eb06f 100%); color: #fff; box-shadow: 0 4px 12px rgba(38,196,133,.3); }
+  .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(38,196,133,.3); }
+  @media (max-width: 900px) { .profile-layout { grid-template-columns: 1fr; } }
+</style>
 
   <main id="main-content" class="page-wrapper">
     <header class="page-header">
@@ -177,10 +48,21 @@
       <!-- Profile Display Card -->
       <aside class="profile-card card">
         <div class="profile-card__avatar-wrapper">
-          <img src="<%= user.profileImage || '/assets/images/default-avatar.png' %>" alt="Your Avatar" class="profile-card__avatar" id="avatar-display">
+          <% if (user && user.profileImage && user.profileImage !== '/assets/images/default-avatar.png') { %>
+            <img src="<%= user.profileImage %>" alt="Your Avatar" class="profile-card__avatar" id="avatar-display">
+          <% } else { %>
+            <div class="profile-card__avatar profile-card__avatar--letter" id="avatar-placeholder">
+              <%= user.name ? user.name.charAt(0).toUpperCase() : '?' %>
+            </div>
+            <img src="" alt="Your Avatar" class="profile-card__avatar hidden" id="avatar-display">
+          <% } %>
         </div>
         <h2 class="profile-card__name"><%= user.name %></h2>
         <p class="profile-card__email"><%= user.email %></p>
+        <p class="profile-card__location">
+          <i class="fas fa-map-marker-alt"></i> 
+          <%= (user.onboarding && user.onboarding.location) ? user.onboarding.location : 'Location not set' %>
+        </p>
         <p class="profile-card__bio"><%= user.bio || 'No bio provided. Add one to personalize your profile!' %></p>
         <div class="profile-stats">
           <div class="profile-stat">
@@ -205,7 +87,14 @@
           <div class="form-group">
             <label for="profile-avatar">Profile Picture</label>
             <div class="avatar-upload">
-              <img src="<%= user.profileImage || '/assets/images/default-avatar.png' %>" alt="Current Avatar" class="avatar-upload__preview" id="avatar-preview">
+              <% if (user && user.profileImage && user.profileImage !== '/assets/images/default-avatar.png') { %>
+                <img src="<%= user.profileImage %>" alt="Current Avatar" class="avatar-upload__preview" id="avatar-preview">
+              <% } else { %>
+                <div class="avatar-upload__preview avatar-upload__preview--letter" id="avatar-preview-placeholder">
+                  <%= user.name ? user.name.charAt(0).toUpperCase() : '?' %>
+                </div>
+                <img src="" alt="Current Avatar" class="avatar-upload__preview hidden" id="avatar-preview">
+              <% } %>
               <label for="profile-avatar" class="avatar-upload__label">
                 <i class="fas fa-upload"></i> Choose File
               </label>
@@ -223,7 +112,16 @@
             <textarea id="profile-bio" name="bio" class="form-control" placeholder="Tell us a little about your travel style..."><%= user.bio || '' %></textarea>
           </div>
 
-          <button type="submit" class="btn btn--primary">
+          <div class="form-group position-relative">
+            <label for="location-input">Preferred Travel Location</label>
+            <input type="text" id="location-input" name="location" class="form-control" 
+                   value="<%= (user.onboarding && user.onboarding.location) ? user.onboarding.location : '' %>" 
+                   placeholder="Search for a city or destination..." autocomplete="off">
+            <div id="location-results" class="list-group position-absolute w-100 shadow-lg z-[99]" style="display:none;"></div>
+            <small class="text-muted mt-2 d-block">This location will be used to generate your AI Trip Itineraries.</small>
+          </div>
+
+          <button type="submit" class="btn-save">
             <i class="fas fa-save"></i> Save Changes
           </button>
         </form>
@@ -245,13 +143,74 @@
           if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
+              // Ensure images are shown and placeholders are hidden
+              const placeholderMain = document.getElementById('avatar-placeholder');
+              const placeholderPreview = document.getElementById('avatar-preview-placeholder');
+              
+              if (placeholderMain) placeholderMain.classList.add('hidden');
+              if (placeholderPreview) placeholderPreview.classList.add('hidden');
+              
+              avatarPreview.classList.remove('hidden');
               avatarPreview.src = e.target.result;
-              // Also update the main display for immediate feedback
+              
               if(avatarDisplay) {
+                avatarDisplay.classList.remove('hidden');
                 avatarDisplay.src = e.target.result;
               }
             };
             reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // --- Location Autocomplete (Photon API) ---
+      const locInput = document.getElementById('location-input');
+      const locResults = document.getElementById('location-results');
+      let locTimeout = null;
+
+      if (locInput) {
+        locInput.addEventListener('input', () => {
+          const query = locInput.value.trim();
+          clearTimeout(locTimeout);
+
+          if (query.length < 3) {
+            locResults.innerHTML = '';
+            locResults.style.display = 'none';
+            return;
+          }
+
+          locTimeout = setTimeout(async () => {
+             try {
+               const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`);
+               const data = await res.json();
+               locResults.innerHTML = '';
+               
+               if (data.features && data.features.length > 0) {
+                 locResults.style.display = 'block';
+                 data.features.forEach(f => {
+                   const p = f.properties;
+                   const name = [p.name, p.city, p.country].filter(Boolean).join(', ');
+                   const item = document.createElement('a');
+                   item.href = '#';
+                   item.className = 'list-group-item list-group-item-action text-sm';
+                   item.textContent = name;
+                   item.onclick = (e) => {
+                     e.preventDefault();
+                     locInput.value = name;
+                     locResults.innerHTML = '';
+                     locResults.style.display = 'none';
+                   };
+                   locResults.appendChild(item);
+                 });
+               }
+             } catch (err) { console.error('Location search failed:', err); }
+          }, 400);
+        });
+
+        // Close results on outside click
+        document.addEventListener('click', (e) => {
+          if (!locInput.contains(e.target) && !locResults.contains(e.target)) {
+            locResults.style.display = 'none';
           }
         });
       }
