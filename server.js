@@ -2,33 +2,38 @@ const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const path = require('path');
-const connectDB = require('./config/db');
-const authrouter = require('./routes/auth');
-const adminrouter = require('./routes/admin')
-const userrouter = require('./routes/user');
 const cookieParser = require('cookie-parser');
 const nodemailer = require('nodemailer');
-const http = require('http');              // 🧩 NEW: Required for Socket.io server
-const { Server } = require('socket.io');   // 🧩 NEW: Import Socket.io
-// const expressLayouts = require('express-ejs-layouts');  // 👈 ADD THIS LINE
+const http = require('http');
+const { Server } = require('socket.io');
 
-
+const authrouter = require('./routes/auth');
+const adminrouter = require('./routes/admin');
+const userrouter = require('./routes/user');
 
 dotenv.config();
+
 const app = express();
 
-
+const connectDB = async () => {
+  try {
+    if (!process.env.MONGODB_URI) {
+      console.warn('MONGODB_URI is missing in environment variables.');
+      return;
+    }
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('MongoDB Connected...');
+  } catch (err) {
+    console.error('MongoDB Connection Error:', err);
+  }
+};
 connectDB();
 
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.static('public'));
-// app.use('/uploads', express.static('public/uploads'));
 
 app.use(express.static(path.join(__dirname, 'public')));
-
-
 
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
@@ -37,45 +42,28 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-// app.use(expressLayouts);            // 👈 Enable layouts
-// app.set('layout', 'layout');
-
-
-
 
 app.use('/auth', authrouter);
 app.use('/admin', adminrouter);
 app.use('/user', userrouter);
 
-// app.get('/test',(req,res)=>{
-//    res.render("user/home", {
-//   title: "Traveezy - Discover Vythiri",
-//   heroImage: "https://yourcdn.com/vythiri-banner.jpg"
-// });
-
-// });
-
-
-
-// app.get('/', (req, res) => {
-//   res.redirect('/auth/login');
-// });
-
 app.get('/', (req, res) => {
   res.render('landing', { title: "Traveezy - Travel Smarter" });
 });
 
+app.use((err, req, res, next) => {
+  console.error('Serverless Error:', err);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
 
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+});
 
-
-if (process.env.NODE_ENV !== 'production') {
-  const Port = process.env.PORT || 3000;
-  app.listen(Port, () => {
-    console.log(`server is running on: http://localhost:${Port}`);
-  });
-}
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
 
 module.exports = app;
