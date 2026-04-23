@@ -4,8 +4,10 @@ const fs = require('fs');
 
 const uploadDir = 'public/uploads/profileImages';
 
-// Ensure the directory exists
-fs.mkdirSync(uploadDir, { recursive: true });
+// Ensure the directory exists (Only if NOT on Vercel)
+if (process.env.NODE_ENV !== 'production' && !fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 
 // Configure storage
 const storage = multer.diskStorage({

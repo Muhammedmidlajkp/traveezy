@@ -3,8 +3,9 @@
     const fs = require('fs');
 
     const uploadPath = path.join(__dirname, '../public/uploads/profileImages');
-    if (!fs.existsSync(uploadPath)) {
-    fs.mkdirSync(uploadPath, { recursive: true });
+    // Only create directory if NOT running on Vercel (read-only filesystem)
+    if (process.env.NODE_ENV !== 'production' && !fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
     }
 
     const storage = multer.diskStorage({
