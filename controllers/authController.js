@@ -3,7 +3,7 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const { render } = require('ejs');
-const OTPs = {}; // Temporary store (can use DB in production)
+const OTP = require('../models/otp');
 
 // Render signup and login pages
 exports.signupPage = (req, res) => {
@@ -31,10 +31,16 @@ exports.signup = async (req, res) => {
     // Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Store OTP temporarily
-    OTPs[email] = {
-      otp, expiresAt: Date.now() + 5 * 60 * 1000, tempUser: { name, email, password }
-    }; // 5 minutes
+    // Store OTP in Database
+    await OTP.findOneAndUpdate(
+      { email },
+      { 
+        otp, 
+        expiresAt: new Date(Date.now() + 5 * 60 * 1000), 
+        tempData: { name, email, password } 
+      },
+      { upsert: true, new: true }
+    );
 
     // Send OTP email
     const transporter = nodemailer.createTransport({
@@ -78,18 +84,11 @@ exports.verifySignupOtppage = (req, res) => {
 // ✅ Verify OTP for signup
 exports.verifySignupOtp = async (req, res) => {
   try {
-    const { email, otp } = req.body;
-    const record = OTPs[email]; // get the existing OTP data
+    const record = await OTP.findOne({ email });
 
     // ✅ Check if OTP exists
     if (!record) {
       return res.status(400).json({ message: 'OTP expired or invalid' });
-    }
-
-    // ✅ Check expiration
-    if (Date.now() > record.expiresAt) {
-      delete OTPs[email];
-      return res.status(400).json({ message: 'OTP expired' });
     }
 
     // ✅ Compare entered OTP
@@ -98,24 +97,22 @@ exports.verifySignupOtp = async (req, res) => {
     }
 
     // ✅ OTP is valid → SAVE USER TO DATABASE NOW
-    const { name, password } = record.tempUser;
+    const { name, password } = record.tempData;
 
     let user = await User.findOne({ email });
     if (!user) {
       user = await User.create({
         name,
         email,
-        password, // password will be hashed if model has pre-save hook
+        password, 
         isVerified: true
       });
     } else {
       user.isVerified = true;
       await user.save();
     }
-    console.log("TempUser:", record.tempUser);
-
-
-    delete OTPs[email]; // remove from temporary storage
+    
+    await OTP.deleteOne({ email }); 
 
     return res.status(200).json({ message: 'Email verified successfully! ✅' });
 
@@ -277,8 +274,12 @@ exports.sendResetOTP = async (req, res) => {
 
 
 
-    // Store OTP temporarily
-    OTPs[email] = { otp, expiresAt: Date.now() + 5 * 60 * 1000 }; // 5 min
+    // Store OTP in Database
+    await OTP.findOneAndUpdate(
+      { email },
+      { otp, expiresAt: new Date(Date.now() + 5 * 60 * 1000) },
+      { upsert: true, new: true }
+    );
 
 
     // Send email
@@ -488,8 +489,12 @@ exports.newOtpverification = async (req, res) => {
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Store OTP temporarily for 5 minutes
-    OTPs[email] = { otp, expiresAt: Date.now() + 5 * 60 * 1000 };
+    // Store OTP in Database for 5 minutes
+    await OTP.findOneAndUpdate(
+      { email },
+      { otp, expiresAt: new Date(Date.now() + 5 * 60 * 1000) },
+      { upsert: true, new: true }
+    );
 
     // Create mail transporter
     const transporter = nodemailer.createTransport({
@@ -594,25 +599,22 @@ exports.verifyOtpPage = (req, res) => {
 
 
 // ✅ Verify OTP
-exports.verifyOtp = (req, res) => {
+exports.verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
-  const record = OTPs[email];
+    const record = await OTP.findOne({ email });
 
-  if (!record) {
-    return res.status(400).json({ message: 'OTP expired or invalid' });
-  }
-  if (Date.now() > record.expiresAt) {
-    return res.status(400).json({ message: 'OTP expired' });
-  }
-  if (record.otp !== otp) {
-    return res.status(400).json({ message: 'Invalid OTP' });
-  }
+    if (!record) {
+      return res.status(400).json({ message: 'OTP expired or invalid' });
+    }
+    if (record.otp !== otp) {
+      return res.status(400).json({ message: 'Invalid OTP' });
+    }
 
-  // ✅ OTP is valid
-  return res.status(200).json({
-    message: 'OTP Verified Successfully!',
-    email
-  });
+    // ✅ OTP is valid
+    return res.status(200).json({
+      message: 'OTP Verified Successfully!',
+      email
+    });
 };
 
 
@@ -634,7 +636,7 @@ exports.updatePassword = async (req, res) => {
     user.password = password; // just assign plain text
     await user.save(); // pre-save hook will hash automatically
 
-    delete OTPs[email];
+    await OTP.deleteOne({ email });
     return res.status(200).json({ message: 'Password reset successfully!' });
   } catch (error) {
     console.error('Error updating password:', error);
@@ -697,7 +699,7 @@ exports.resendSignupOTP = async (req, res) => {
   try {
     const { email } = req.body;
 
-    const record = OTPs[email];
+    const record = await OTP.findOne({ email });
     if (!record) {
       return res.status(400).json({ message: "Session expired. Signup again." });
     }
@@ -705,7 +707,8 @@ exports.resendSignupOTP = async (req, res) => {
     // Generate new OTP
     const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
     record.otp = newOtp;
-    record.expiresAt = Date.now() + 5 * 60 * 1000;
+    record.expiresAt = new Date(Date.now() + 5 * 60 * 1000);
+    await record.save();
 
     // Send Email
     const transporter = nodemailer.createTransport({
