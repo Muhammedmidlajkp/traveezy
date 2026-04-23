@@ -1,13 +1,13 @@
 const express = require('express');
-const  dotenv = require('dotenv');
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const path = require('path');
-const connectDB =require('./config/db');
+const connectDB = require('./config/db');
 const authrouter = require('./routes/auth');
 const adminrouter = require('./routes/admin')
 const userrouter = require('./routes/user');
 const cookieParser = require('cookie-parser');
-const nodemailer = require('nodemailer'); 
+const nodemailer = require('nodemailer');
 const http = require('http');              // 🧩 NEW: Required for Socket.io server
 const { Server } = require('socket.io');   // 🧩 NEW: Import Socket.io
 // const expressLayouts = require('express-ejs-layouts');  // 👈 ADD THIS LINE
@@ -22,7 +22,7 @@ connectDB();
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({ extended: true }));
 // app.use(express.static('public'));
 // app.use('/uploads', express.static('public/uploads'));
 
@@ -46,9 +46,9 @@ app.set('views', path.join(__dirname, 'views'));
 
 
 
-app.use('/auth',authrouter);
-app.use('/admin',adminrouter);
-app.use('/user',userrouter);
+app.use('/auth', authrouter);
+app.use('/admin', adminrouter);
+app.use('/user', userrouter);
 
 // app.get('/test',(req,res)=>{
 //    res.render("user/home", {
@@ -72,10 +72,10 @@ app.get('/', (req, res) => {
 
 
 if (process.env.NODE_ENV !== 'production') {
-    const Port = process.env.PORT || 3000;
-    app.listen(Port, () => {
-        console.log(`server is running on: http://localhost:${Port}`);
-    });
+  const Port = process.env.PORT || 3000;
+  app.listen(Port, () => {
+    console.log(`server is running on: http://localhost:${Port}`);
+  });
 }
 
 module.exports = app;

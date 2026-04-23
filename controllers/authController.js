@@ -25,15 +25,16 @@ exports.signup = async (req, res) => {
       return res.status(400).json({ message: 'User already exists with this email' });
     }
 
-   // Create new user but not verified yet
+    // Create new user but not verified yet
     // const user = await User.create({ name, email, password, isVerified: false });
 
     // Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     // Store OTP temporarily
-    OTPs[email] = { otp, expiresAt: Date.now() + 5 * 60 * 1000, tempUser: { name, email, password }
- }; // 5 minutes
+    OTPs[email] = {
+      otp, expiresAt: Date.now() + 5 * 60 * 1000, tempUser: { name, email, password }
+    }; // 5 minutes
 
     // Send OTP email
     const transporter = nodemailer.createTransport({
@@ -131,21 +132,21 @@ exports.verifySignupOtp = async (req, res) => {
 //   try {
 //     const { email, password } = req.body;
 
-    
+
 //     if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-      
+
 //       const token = jwt.sign({ role: "admin" }, process.env.JWT_SECRET, {
 //         expiresIn: "1d",
 //       });
 
-   
+
 //       res.cookie("token", token, {
 //         httpOnly: true,
 //         secure: false, 
 //         maxAge: 24 * 60 * 60 * 1000,
 //       });
 
-    
+
 //       return res.redirect("/admin/dashboard");
 //     }
 
@@ -250,7 +251,7 @@ exports.login = async (req, res) => {
     return res.render("login", { error: "Server Error. Please try again later." });
   }
 };
-  
+
 
 
 exports.resetPasswordPage = (req, res) => {
@@ -260,12 +261,12 @@ exports.resetPasswordPage = (req, res) => {
 // ✅ Send OTP to email
 exports.sendResetOTP = async (req, res) => {
   try {
-    const { email,flag } = req.body;
+    const { email, flag } = req.body;
     let status = flag
     console.log(req.body);
     const user = await User.findOne({ email });
 
-    
+
     if (!user) {
       return res.send('No account found with this email');
     }
@@ -273,13 +274,13 @@ exports.sendResetOTP = async (req, res) => {
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-    
-    
+
+
 
     // Store OTP temporarily
     OTPs[email] = { otp, expiresAt: Date.now() + 5 * 60 * 1000 }; // 5 min
 
-    
+
     // Send email
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -289,12 +290,12 @@ exports.sendResetOTP = async (req, res) => {
       },
     });
 
-    
+
     await transporter.sendMail({
-  from: process.env.EMAIL_USER,
-  to: email,
-  subject: 'Your Password Reset OTP Code',
-  html: `
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Your Password Reset OTP Code',
+      html: `
     <!DOCTYPE html>
     <html>
     <head>
@@ -464,8 +465,8 @@ exports.sendResetOTP = async (req, res) => {
     </body>
     </html>
   `,
-  text: `Password Reset OTP\n\nYour OTP code is: ${otp}\n\nThis OTP will expire in 5 minutes.\n\nIf you didn't request this password reset, please ignore this email.\n\nBest regards,\nYourApp Team`
-});
+      text: `Password Reset OTP\n\nYour OTP code is: ${otp}\n\nThis OTP will expire in 5 minutes.\n\nIf you didn't request this password reset, please ignore this email.\n\nBest regards,\nYourApp Team`
+    });
 
     res.render('verifyotp', { email });
   } catch (error) {
@@ -608,9 +609,9 @@ exports.verifyOtp = (req, res) => {
   }
 
   // ✅ OTP is valid
-  return res.status(200).json({ 
+  return res.status(200).json({
     message: 'OTP Verified Successfully!',
-    email 
+    email
   });
 };
 
@@ -618,7 +619,7 @@ exports.verifyOtp = (req, res) => {
 
 // ✅ Render new password page
 exports.newPasswordPage = (req, res) => {
-    const { email } = req.query;
+  const { email } = req.query;
   res.render('newpassword', { email });
 };
 
@@ -679,7 +680,7 @@ exports.updatePassword = async (req, res) => {
 exports.logout = (req, res) => {
   try {
     res.clearCookie('token', { httpOnly: true, sameSite: 'lax', secure: false });
-    if (req.session) req.session.destroy(() => {});
+    if (req.session) req.session.destroy(() => { });
     const referer = req.headers.referer || '';
     if (referer.includes('/admin')) return res.redirect('/auth/login');
     return res.redirect('/auth/login');
@@ -695,7 +696,7 @@ exports.logout = (req, res) => {
 exports.resendSignupOTP = async (req, res) => {
   try {
     const { email } = req.body;
-    
+
     const record = OTPs[email];
     if (!record) {
       return res.status(400).json({ message: "Session expired. Signup again." });
@@ -704,7 +705,7 @@ exports.resendSignupOTP = async (req, res) => {
     // Generate new OTP
     const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
     record.otp = newOtp;
-    record.expiresAt = Date.now() + 5 * 60 * 1000; 
+    record.expiresAt = Date.now() + 5 * 60 * 1000;
 
     // Send Email
     const transporter = nodemailer.createTransport({

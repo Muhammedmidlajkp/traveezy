@@ -14,15 +14,15 @@ router.get('/login', authController.loginPage);
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 
-router.get('/reset', authController.resetPasswordPage);         
-router.post('/send-otp', authController.sendResetOTP); 
-router.get('/verify-otp', authController.verifyOtpPage); 
-router.post('/verify-otp', authController.verifyOtp); 
+router.get('/reset', authController.resetPasswordPage);
+router.post('/send-otp', authController.sendResetOTP);
+router.get('/verify-otp', authController.verifyOtpPage);
+router.post('/verify-otp', authController.verifyOtp);
 router.post('/newOtpverification', authController.newOtpverification);
 router.post('/resend-signup-otp', authController.resendSignupOTP);
- 
-router.get('/new-password', authController.newPasswordPage);           
-router.post('/new-password', authController.updatePassword);   
-router.post('/logout',authController.logout);
+
+router.get('/new-password', authController.newPasswordPage);
+router.post('/new-password', authController.updatePassword);
+router.post('/logout', authController.logout);
 
 module.exports = router;

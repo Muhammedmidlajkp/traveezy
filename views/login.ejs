@@ -1,222 +1,206 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login | Traveezy</title>
 
-    <!-- Bootstrap -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link rel="icon" type="image/png" href="/assets/images/logonobg.png" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Traveezy</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="icon" type="image/png" href="/assets/images/logonobg.png" />
 
 
-    <!-- Bootstrap Icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
-    />
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
 
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .card {
+      border: none;
+      border-radius: 20px;
+      max-width: 850px;
+      width: 100%;
+      overflow: hidden;
+      /* clip children so border-radius is visible */
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .left-panel {
+      padding: 50px;
+    }
+
+    .imglogo {
+      width: 100px;
+    }
+
+    .right-panel {
+      background: url("/assets/images/loginbg.png") center/cover no-repeat;
+      min-height: 300px;
+
+      /* match card radius on the right */
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+    }
+
+    .form-control:focus {
+      border-color: #20c997;
+      box-shadow: 0 0 0 0.2rem rgba(32, 201, 151, 0.2);
+    }
+
+    .btn-success {
+      background-color: #20c997;
+      border: none;
+    }
+
+    .btn-success:hover {
+      background-color: #18a078;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 767px) {
       body {
-        background-color: #f8f9fa;
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px 0;
+        padding: 0;
+        align-items: flex-start;
       }
 
+      /* keep card rounded on mobile (optional:
+           if you want full-bleed set radius:0) */
       .card {
-        border: none;
         border-radius: 20px;
-        max-width: 850px;
-        width: 100%;
-        overflow: hidden; /* clip children so border-radius is visible */
-        box-shadow: 0 0 25px rgba(0, 0, 0, 0.05);
+        width: calc(100% - 16px);
+        margin: 8px;
+      }
+
+      /* place image panel above the form */
+      .right-panel {
+        order: -1;
+        /* move to top */
+        min-height: 220px;
+        display: block;
+        /* ensure visible */
+        border-top-left-radius: 20px;
+        /* round top corners when stacked */
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 0;
+        /* remove bottom-right rounding for stacked layout */
+        border-bottom-left-radius: 0;
+        background-position: center;
+        background-size: cover;
       }
 
       .left-panel {
-        padding: 50px;
+        padding: 30px 25px;
       }
+    }
+  </style>
+</head>
 
-      .imglogo {
-        width: 100px;
-      }
+<body>
+  <div class="card">
+    <div class="row g-0">
 
-      .right-panel {
-        background: url("/assets/images/loginbg.png") center/cover no-repeat;
-        min-height: 300px;
+      <!-- LEFT PANEL -->
+      <div class="col-md-6 left-panel">
+        <div class="text-center mb-4">
+          <img src="/assets/images/traveezy  bg no.png" alt="Traveezy Logo" class="imglogo" />
+          <h3 class="mt-2">Welcome Back!</h3>
+          <p class="text-muted">Discover your next adventure.</p>
+        </div>
 
-        /* match card radius on the right */
-        border-top-right-radius: 20px;
-        border-bottom-right-radius: 20px;
-      }
-
-      .form-control {
-        border-radius: 10px;
-        padding: 12px 15px;
-        border: 1px solid #ddd;
-      }
-      .form-control:focus {
-        border-color: #20c997;
-        box-shadow: 0 0 0 0.2rem rgba(32, 201, 151, 0.2);
-      }
-      .btn-success {
-        background-color: #20c997;
-        border: none;
-      }
-      .btn-success:hover {
-        background-color: #18a078;
-      }
-
-      /* ---------- Responsive ---------- */
-      @media (max-width: 767px) {
-        body {
-          padding: 0;
-          align-items: flex-start;
-        }
-
-        /* keep card rounded on mobile (optional:
-           if you want full-bleed set radius:0) */
-        .card {
-          border-radius: 20px;
-          width: calc(100% - 16px);
-          margin: 8px;
-        }
-
-        /* place image panel above the form */
-        .right-panel {
-          order: -1; /* move to top */
-          min-height: 220px;
-          display: block; /* ensure visible */
-          border-top-left-radius: 20px;   /* round top corners when stacked */
-          border-top-right-radius: 20px;
-          border-bottom-right-radius: 0;  /* remove bottom-right rounding for stacked layout */
-          border-bottom-left-radius: 0;
-          background-position: center;
-          background-size: cover;
-        }
-
-        .left-panel {
-          padding: 30px 25px;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="card">
-      <div class="row g-0">
-
-        <!-- LEFT PANEL -->
-        <div class="col-md-6 left-panel">
-          <div class="text-center mb-4">
-            <img
-              src="/assets/images/traveezy  bg no.png"
-              alt="Traveezy Logo"
-              class="imglogo"
-            />
-            <h3 class="mt-2">Welcome Back!</h3>
-            <p class="text-muted">Discover your next adventure.</p>
+        <form action="/auth/login" method="POST">
+          <!-- EMAIL -->
+          <div class="mb-3">
+            <label>Email Address</label>
+            <input type="email" name="email" class="form-control" placeholder="john.doe@example.com" required />
           </div>
 
-          <form action="/auth/login" method="POST">
-            <!-- EMAIL -->
-            <div class="mb-3">
-              <label>Email Address</label>
-              <input
-                type="email"
-                name="email"
-                class="form-control"
-                placeholder="john.doe@example.com"
-                required
-              />
-            </div>
+          <!-- PASSWORD WITH SHOW/HIDE -->
+          <div class="mb-3 position-relative">
+            <label>Password</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password"
+              required />
 
-            <!-- PASSWORD WITH SHOW/HIDE -->
-            <div class="mb-3 position-relative">
-              <label>Password</label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                class="form-control"
-                placeholder="Enter your password"
-                required
-              />
-
-              <!-- Eye Icon -->
-              <i
-                class="bi bi-eye-slash"
-                id="togglePassword"
-                style="
+            <!-- Eye Icon -->
+            <i class="bi bi-eye-slash" id="togglePassword" style="
                   position: absolute;
                   right: 15px;
                   top: 57%;
                   font-size: 20px;
                   cursor: pointer;
                   color: #555;
-                "
-              ></i>
-            </div>
+                "></i>
+          </div>
 
-            <button type="submit" class="btn btn-success w-100">
-              Sign In
-            </button>
+          <button type="submit" class="btn btn-success w-100">
+            Sign In
+          </button>
 
-            <div class="text-center mt-3">
-              <a href="/auth/reset" class="text-success text-small text-decoration-none">
-                Forgot Password?
-              </a>
-            </div>
+          <div class="text-center mt-3">
+            <a href="/auth/reset" class="text-success text-small text-decoration-none">
+              Forgot Password?
+            </a>
+          </div>
 
-            <div class="d-flex align-items-center my-3">
-              <hr class="flex-grow-1" />
-              <span class="mx-2 text-muted text-small">OR</span>
-              <hr class="flex-grow-1" />
-            </div>
+          <div class="d-flex align-items-center my-3">
+            <hr class="flex-grow-1" />
+            <span class="mx-2 text-muted text-small">OR</span>
+            <hr class="flex-grow-1" />
+          </div>
 
-            <p class="text-center text-small mb-0">
-              Don't have an account?
-              <a href="/auth/signup" class="text-success fw-semibold">Sign Up</a>
-            </p>
-          </form>
-        </div>
+          <p class="text-center text-small mb-0">
+            Don't have an account?
+            <a href="/auth/signup" class="text-success fw-semibold">Sign Up</a>
+          </p>
+        </form>
+      </div>
 
-        <!-- RIGHT PANEL
+      <!-- RIGHT PANEL
              NOTE: removed "d-none d-md-block" so the image is always present.
              CSS controls its position on mobile (order:-1). -->
-        <div class="col-md-6 right-panel"></div>
-      </div>
+      <div class="col-md-6 right-panel"></div>
     </div>
+  </div>
 
-    <!-- Show/Hide Script -->
-    <script>
-      const togglePassword = document.getElementById("togglePassword");
-      const password = document.getElementById("password");
+  <!-- Show/Hide Script -->
+  <script>
+    const togglePassword = document.getElementById("togglePassword");
+    const password = document.getElementById("password");
 
-      togglePassword.addEventListener("click", () => {
-        const type =
-          password.getAttribute("type") === "password" ? "text" : "password";
-        password.setAttribute("type", type);
+    togglePassword.addEventListener("click", () => {
+      const type =
+        password.getAttribute("type") === "password" ? "text" : "password";
+      password.setAttribute("type", type);
 
-        // Toggle icon class
-        togglePassword.classList.toggle("bi-eye");
-        togglePassword.classList.toggle("bi-eye-slash");
-      });
-    </script>
-    <!-- SweetAlert CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      // Toggle icon class
+      togglePassword.classList.toggle("bi-eye");
+      togglePassword.classList.toggle("bi-eye-slash");
+    });
+  </script>
+  <!-- SweetAlert CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <% if (typeof error !== "undefined" && error) { %>
+  <% if (typeof error !=="undefined" && error) { %>
     <script>
       Swal.fire({
         icon: "error",
@@ -226,5 +210,6 @@
       });
     </script>
     <% } %>
-  </body>
+</body>
+
 </html>
