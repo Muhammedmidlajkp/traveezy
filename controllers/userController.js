@@ -5,7 +5,7 @@ require("dotenv").config();
 const getUnsplashImage = require("../helpers/getUnsplashImage");
 const path = require('path');
 const fs = require('fs');
-const Booking = require('../models/booking');
+const Booking = require('../models/bookingModel');
 
 // In-memory cache for Home page AI content
 const homeCache = new Map();

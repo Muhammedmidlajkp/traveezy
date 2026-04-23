@@ -2,7 +2,7 @@ const User = require('../models/user');
 const Place = require('../models/place');
 const path = require('path');
 const fs = require('fs');
-const Booking = require('../models/booking');
+const Booking = require('../models/bookingModel');
 
 
 // --- Middleware to load admin data for all admin routes ---

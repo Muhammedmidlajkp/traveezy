@@ -1,5 +1,5 @@
 const Razorpay = require("razorpay");
-const Booking = require("../models/booking");
+const Booking = require("../models/bookingModel");
 require("dotenv").config();
 
 const razorpay = new Razorpay({
