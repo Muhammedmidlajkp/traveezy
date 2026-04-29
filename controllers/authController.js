@@ -34,10 +34,10 @@ exports.signup = async (req, res) => {
     // Store OTP in Database
     await OTP.findOneAndUpdate(
       { email },
-      { 
-        otp, 
-        expiresAt: new Date(Date.now() + 5 * 60 * 1000), 
-        tempData: { name, email, password } 
+      {
+        otp,
+        expiresAt: new Date(Date.now() + 5 * 60 * 1000),
+        tempData: { name, email, password }
       },
       { upsert: true, new: true }
     );
@@ -104,15 +104,15 @@ exports.verifySignupOtp = async (req, res) => {
       user = await User.create({
         name,
         email,
-        password, 
+        password,
         isVerified: true
       });
     } else {
       user.isVerified = true;
       await user.save();
     }
-    
-    await OTP.deleteOne({ email }); 
+
+    await OTP.deleteOne({ email });
 
     return res.status(200).json({ message: 'Email verified successfully! ✅' });
 
@@ -207,8 +207,7 @@ exports.login = async (req, res) => {
 
       res.cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
+        secure: false,
         maxAge: 24 * 60 * 60 * 1000,
       });
 
@@ -238,8 +237,7 @@ exports.login = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: false,
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -603,20 +601,20 @@ exports.verifyOtpPage = (req, res) => {
 // ✅ Verify OTP
 exports.verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
-    const record = await OTP.findOne({ email });
+  const record = await OTP.findOne({ email });
 
-    if (!record) {
-      return res.status(400).json({ message: 'OTP expired or invalid' });
-    }
-    if (record.otp !== otp) {
-      return res.status(400).json({ message: 'Invalid OTP' });
-    }
+  if (!record) {
+    return res.status(400).json({ message: 'OTP expired or invalid' });
+  }
+  if (record.otp !== otp) {
+    return res.status(400).json({ message: 'Invalid OTP' });
+  }
 
-    // ✅ OTP is valid
-    return res.status(200).json({
-      message: 'OTP Verified Successfully!',
-      email
-    });
+  // ✅ OTP is valid
+  return res.status(200).json({
+    message: 'OTP Verified Successfully!',
+    email
+  });
 };
 
 
@@ -683,7 +681,7 @@ exports.updatePassword = async (req, res) => {
 
 exports.logout = (req, res) => {
   try {
-    res.clearCookie('token', { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production' });
+    res.clearCookie('token', { httpOnly: true, sameSite: 'lax', secure: false });
     if (req.session) req.session.destroy(() => { });
     const referer = req.headers.referer || '';
     if (referer.includes('/admin')) return res.redirect('/auth/login');

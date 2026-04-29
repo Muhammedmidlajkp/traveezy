@@ -2,29 +2,22 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const isProduction = process.env.NODE_ENV === 'production';
-
-let storage;
-
-if (isProduction) {
-  // Vercel has a read-only filesystem — use memory storage
-  storage = multer.memoryStorage();
-} else {
-  const uploadPath = path.join(__dirname, '../public/uploads/profileImages');
-  if (!fs.existsSync(uploadPath)) {
-    fs.mkdirSync(uploadPath, { recursive: true });
-  }
-  storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, uploadPath);
-    },
-    filename: (req, file, cb) => {
-      const ext = path.extname(file.originalname);
-      const filename = `${req.user._id}-${Date.now()}${ext}`;
-      cb(null, filename);
-    },
-  });
+const uploadPath = path.join(__dirname, '../public/uploads/profileImages');
+// Only create directory if NOT running on Vercel (read-only filesystem)
+if (process.env.NODE_ENV !== 'production' && !fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath, { recursive: true });
 }
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadPath);
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const filename = `${req.user._id}-${Date.now()}${ext}`;
+    cb(null, filename);
+  },
+});
 
 const fileFilter = (req, file, cb) => {
   const allowed = /jpeg|jpg|png|gif/;
