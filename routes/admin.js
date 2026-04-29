@@ -22,39 +22,9 @@ router.post('/users/:id/toggle-block', userController.toggleBlockUser);
 
 
 
-const placeStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadPath = path.join(__dirname, '../public/uploads/places');
-
-    fs.mkdir(uploadPath, { recursive: true }, (err) => {
-      if (err) {
-        return cb(err);
-      }
-      cb(null, uploadPath);
-    });
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
-
-
-const avatarStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadPath = path.join(__dirname, '../public/uploads/avatars');
-    fs.mkdir(uploadPath, { recursive: true }, (err) => {
-      if (err) return cb(err);
-      cb(null, uploadPath);
-    });
-  },
-  filename: function (req, file, cb) {
-
-    cb(null, 'admin-avatar-' + Date.now() + path.extname(file.originalname));
-  }
-});
-
-const uploadPlace = multer({ storage: placeStorage });
-const uploadAvatar = multer({ storage: avatarStorage });
+// Use memoryStorage for Vercel compatibility (read-only filesystem)
+const uploadPlace = multer({ storage: multer.memoryStorage() });
+const uploadAvatar = multer({ storage: multer.memoryStorage() });
 router.post('/addplace', uploadPlace.single('image'), admincontroller.addPlace);
 router.get('/deleteplace/:id', admincontroller.deletePlace);
 router.post('/updateplace', uploadPlace.single('image'), admincontroller.updatePlace);

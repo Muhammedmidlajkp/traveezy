@@ -58,81 +58,6 @@ exports.loadAdminData = (req, res, next) => {
 // };
 
 
-// --- Admin Dashboard (Dynamic) ---
-exports.dashboardPage = async (req, res) => {
-  try {
-    // 🧩 Fetch real data from MongoDB
-    const totalUsers = await User.countDocuments();
-    const totalPlaces = await Place.countDocuments();
-    const totalBookings = await Booking.countDocuments();
-
-    // 🧩 Count active bookings (status: Paid)
-    const activeBookings = await Booking.countDocuments({ status: "Paid" });
-
-    // 🧩 Calculate total revenue (sum of amounts where status is Paid)
-    const paidBookings = await Booking.find({ status: "Paid" });
-    const totalRevenue = paidBookings.reduce((sum, b) => sum + b.amount, 0);
-
-    // 🧩 Count cancelled bookings
-    const cancelledBookings = await Booking.countDocuments({ status: "Cancelled" });
-
-    // 🧩 Get last 5 recent bookings (for dashboard activity section)
-    const recentBookings = await Booking.find()
-      .populate("user", "name")
-      .populate("place", "name")
-      .sort({ bookedAt: -1 })
-      .limit(5)
-      .lean();
-
-    // Convert to friendly text
-    const activities = recentBookings.map(b => ({
-      icon: b.status === "Paid" ? "fas fa-check text-green-500" : "fas fa-times text-red-500",
-      text: `${b.user?.name || "Unknown"} ${b.status === "Paid" ? "booked" : "cancelled"} "${b.place?.name || "a resort"}"`,
-      time: new Date(b.bookedAt).toLocaleString("en-IN", {
-        day: "2-digit",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit"
-      })
-    }));
-
-    // 🧩 Example notifications (can extend with logic later)
-    const notifications = [
-      { type: 'info', title: 'System running smoothly.', time: 'Just now' },
-      { type: 'success', title: `${activeBookings} active bookings currently.`, time: '1 min ago' }
-    ];
-
-
-    // 🧩 Render page with all real data
-    res.render("admin/admindashboard", {
-      title: "Admin Dashboard",
-      activePage: "dashboard",
-      adminName: "Muhammed Midlaj",
-      adminEmail: "admin@traveezy.com",
-
-      // ✅ Real dynamic stats
-      totalUsers,
-      totalPlaces,
-      totalBookings,
-      activeBookings,
-      cancelledBookings,
-      totalRevenue: `₹${totalRevenue.toLocaleString('en-IN')}`,
-      newReviews: 0, // you can later replace with review model
-
-      // ✅ Dynamic activities and notifications
-      activities,
-      notifications,
-
-      page: "overview",
-    });
-
-  } catch (error) {
-    console.error("❌ Error loading admin dashboard:", error);
-    res.status(500).send("Server Error");
-  }
-};
-
-
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -241,7 +166,9 @@ exports.getPlaces = async (req, res) => {
 exports.addPlace = async (req, res) => {
   try {
     const { name, category, status, rating, location, price } = req.body;
-    let imagePath = req.file ? `/uploads/places/${req.file.filename}` : null;
+    // With memoryStorage on Vercel, req.file is in memory (req.file.buffer)
+    // For now we store a placeholder; to persist images use Cloudinary or similar
+    let imagePath = 'https://via.placeholder.com/120?text=No+Image';
 
     const newPlace = new Place({
       name,
@@ -250,7 +177,7 @@ exports.addPlace = async (req, res) => {
       rating,
       location,
       price,
-      image: imagePath || 'https://via.placeholder.com/120?text=No+Image'
+      image: imagePath
     });
 
     await newPlace.save();
@@ -374,25 +301,15 @@ exports.profilePage = async (req, res) => {
   exports.updateProfile = async (req, res) => {
   try {
     const { name, email } = req.body;
-    const profilePath = path.join(__dirname, '../data/adminProfile.json');
     const adminEmail = process.env.ADMIN_EMAIL || 'traveezy@gmail.com';
 
-    let adminData = { email: adminEmail };
+    // Use in-memory admin data (no filesystem write on Vercel)
+    let adminData = res.locals.admin || { email: adminEmail, name: 'Admin', avatar: '/assets/images/ADMIN IMG.jpg' };
 
-    // ✅ Load existing data
-    if (fs.existsSync(profilePath)) {
-      adminData = JSON.parse(fs.readFileSync(profilePath, 'utf8'));
-    }
-
-    // ✅ Update fields
+    // Update fields
     adminData.name = name || adminData.name;
     adminData.email = email || adminData.email;
-    if (req.file) {
-      adminData.avatar = `/uploads/avatars/${req.file.filename}`;
-    }
-
-    // ✅ Save back to file
-    fs.writeFileSync(profilePath, JSON.stringify(adminData, null, 2), 'utf8');
+    // Avatar uploads not persisted on Vercel (read-only fs) — skip file save
 
     res.redirect('/admin/profile');
   } catch (error) {

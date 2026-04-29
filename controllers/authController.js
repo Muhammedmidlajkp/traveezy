@@ -207,7 +207,8 @@ exports.login = async (req, res) => {
 
       res.cookie("token", token, {
         httpOnly: true,
-        secure: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         maxAge: 24 * 60 * 60 * 1000,
       });
 
@@ -237,7 +238,8 @@ exports.login = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -681,7 +683,11 @@ exports.updatePassword = async (req, res) => {
 
 exports.logout = (req, res) => {
   try {
-    res.clearCookie('token', { httpOnly: true, sameSite: 'lax', secure: false });
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+    });
     if (req.session) req.session.destroy(() => { });
     const referer = req.headers.referer || '';
     if (referer.includes('/admin')) return res.redirect('/auth/login');
