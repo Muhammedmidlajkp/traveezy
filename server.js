@@ -19,7 +19,7 @@ const connectDB = async () => {
     return cachedDb;
   }
   try {
-    const db = await mongoose.connect(process.env.MONGODB_URI);
+    const db = await mongoose.connect(process.env.MONGO_URI);
     cachedDb = db;
     console.log('MongoDB Connected (Serverless Mode)...');
   } catch (err) {
@@ -58,5 +58,13 @@ app.use((err, req, res, next) => {
   console.error('Vercel Serverless Error:', err);
   res.status(500).json({ error: 'Internal Server Error' });
 });
+
+// Start local server when run directly (not on Vercel)
+if (require.main === module) {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`🚀 Traveezy running locally at http://localhost:${PORT}`);
+  });
+}
 
 module.exports = app;

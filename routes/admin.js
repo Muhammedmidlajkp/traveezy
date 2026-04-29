@@ -22,36 +22,38 @@ router.post('/users/:id/toggle-block', userController.toggleBlockUser);
 
 
 
-const placeStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadPath = path.join(__dirname, '../public/uploads/places');
-   
-    fs.mkdir(uploadPath, { recursive: true }, (err) => {
-      if (err) {
-        return cb(err);
+// Use memory storage on Vercel (read-only filesystem), disk storage locally
+const isProduction = process.env.NODE_ENV === 'production';
+
+const placeStorage = isProduction
+  ? multer.memoryStorage()
+  : multer.diskStorage({
+      destination: function (req, file, cb) {
+        const uploadPath = path.join(__dirname, '../public/uploads/places');
+        fs.mkdir(uploadPath, { recursive: true }, (err) => {
+          if (err) return cb(err);
+          cb(null, uploadPath);
+        });
+      },
+      filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
       }
-      cb(null, uploadPath);
     });
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
 
-
-const avatarStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const uploadPath = path.join(__dirname, '../public/uploads/avatars');
-    fs.mkdir(uploadPath, { recursive: true }, (err) => {
-      if (err) return cb(err);
-      cb(null, uploadPath);
+const avatarStorage = isProduction
+  ? multer.memoryStorage()
+  : multer.diskStorage({
+      destination: function (req, file, cb) {
+        const uploadPath = path.join(__dirname, '../public/uploads/avatars');
+        fs.mkdir(uploadPath, { recursive: true }, (err) => {
+          if (err) return cb(err);
+          cb(null, uploadPath);
+        });
+      },
+      filename: function (req, file, cb) {
+        cb(null, 'admin-avatar-' + Date.now() + path.extname(file.originalname));
+      }
     });
-  },
-  filename: function (req, file, cb) {
-  
-    cb(null, 'admin-avatar-' + Date.now() + path.extname(file.originalname));
-  }
-});
 
 const uploadPlace = multer({ storage: placeStorage });
 const uploadAvatar = multer({ storage: avatarStorage });
