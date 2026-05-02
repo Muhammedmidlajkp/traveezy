@@ -4,4 +4,4 @@ Disallow: /admin/
 Disallow: /auth/
 Disallow: /user/profile/
 
-Sitemap: https://travezz.online/sitemap.xml
+Sitemap: https://traveezy.online/sitemap.xml
